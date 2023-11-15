@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/material.dart'; // Replace with your widget
 import 'package:ssi_wallet/main.dart'; // Replace with your app's import
 
 void main() {
