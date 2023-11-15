@@ -1,12 +1,11 @@
-name: flutter-CI
+name: flutter_ci
 
 on:
   push:
     branches: [ "test-branch" ]
   pull_request:
     branches: [ "test-branch" ]
-  workflow_dispatch: 
-    branches: [ "test-branch" ]
+  workflow_dispatch:
 
 jobs:
   android-build:
@@ -22,3 +21,15 @@ jobs:
     - run: flutter build apk
     - run: flutter build appbundle
 
+  ios-build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.13.x'
+        channel: 'stable'
+    - run: flutter pub get
+    - run: flutter analyze
+    - run: flutter test
+    - run: flutter build ios --release --no-codesign
