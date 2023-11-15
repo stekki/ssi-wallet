@@ -5,7 +5,8 @@ on:
     branches: [ "test-branch" ]
   pull_request:
     branches: [ "test-branch" ]
-  workflow_dispatch: #manually trigger workflow
+  workflow_dispatch: 
+    branches: [ "test-branch" ]
 
 jobs:
   android-build:
