@@ -1,0 +1,23 @@
+name: flutter-CI
+
+on:
+  push:
+    branches: [ "test-branch" ]
+  pull_request:
+    branches: [ "test-branch" ]
+  workflow_dispatch: #manually trigger workflow
+
+jobs:
+  android-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.13.x'
+        channel: 'stable'
+    - run: flutter pub get
+    - run: flutter test
+    - run: flutter build apk
+    - run: flutter build appbundle
+
