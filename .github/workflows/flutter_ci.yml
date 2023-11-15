@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "test-branch" ]
   pull_request:
-    branches: [ "test-branch" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -17,6 +17,7 @@ jobs:
         flutter-version: '3.13.x'
         channel: 'stable'
     - run: flutter pub get
+    - run: flutter analayze
     - run: flutter test
     - run: flutter build apk
     - run: flutter build appbundle
