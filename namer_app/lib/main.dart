@@ -39,6 +39,7 @@ class MyAppState extends ChangeNotifier {
   void toggleFavorite() {
     print("You liked the word: $current");
     print("You have liked the following words: ");
+    print("ttestit12w3");
     if (favorites.contains(current)) {
       favorites.remove(current);
     } else {
