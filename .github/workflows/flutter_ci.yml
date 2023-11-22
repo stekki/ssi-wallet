@@ -18,13 +18,13 @@ jobs:
         channel: 'stable'
     - run: flutter pub get
       working-directory: frontend
-    - run: flutter analyze
-      working-directory: frontend
-    - run: flutter test
-      working-directory: frontend
     - run: flutter build apk
       working-directory: frontend
     - run: flutter build appbundle
+      working-directory: frontend
+    - run: flutter analyze
+      working-directory: frontend
+    - run: flutter test
       working-directory: frontend
 
   ios-build:
@@ -37,9 +37,9 @@ jobs:
         channel: 'stable'
     - run: flutter pub get
       working-directory: frontend
+    - run: flutter build ios --release --no-codesign
+      working-directory: frontend
     - run: flutter analyze
       working-directory: frontend
     - run: flutter test
-      working-directory: frontend
-    - run: flutter build ios --release --no-codesign
       working-directory: frontend
