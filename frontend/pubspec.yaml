@@ -17,8 +17,6 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.1.5 <4.0.0'
 
- CupertinoIcons class for iOS style icons.
-=======
 dependencies:
   flutter:
     sdk: flutter
