@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import '../utils/custom_clippers.dart';
+import '../utils/styles.dart';
+import '../widgets/custom_button.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class LandingPage extends StatelessWidget {
+  const LandingPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -45,72 +48,26 @@ class Login extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(height: height * 0.065),
-                  const Text('FINDY',
-                      style: TextStyle(
-                          color: Color.fromARGB(255, 94, 136, 180),
-                          fontSize: 60,
-                          fontWeight: FontWeight.w500)),
+                  const Text('FINDY', style: TextStyles.lpTitle),
                   SizedBox(height: height * 0.15),
-                  const Text(
-                    'Welcome to the Findy Wallet',
-                    style: TextStyle(
-                        color: Color(0XFF07376F),
-                        fontStyle: FontStyle.normal,
-                        fontSize: 30,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Piazzolla"),
-                  ),
+                  const Text('Welcome to the Findy Wallet',
+                      style: TextStyles.lpWelcome),
                   SizedBox(height: height * 0.03875),
                   const Text('Login to the service to continue',
-                      style: TextStyle(
-                          color: Color(0XFF07376F),
-                          fontStyle: FontStyle.normal,
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Piazzolla")),
+                      style: TextStyles.lpText),
                   SizedBox(height: height * 0.25),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(20),
-                              right: Radius.circular(20))),
-                      backgroundColor: const Color(0XFF07376F),
-                    ),
-                    onPressed: () {},
-                    child: const Padding(
-                      padding: EdgeInsets.fromLTRB(60, 10, 60, 10),
-                      child: Text(
-                        'Login With Email',
-                        style: TextStyle(
-                            color: Color(0XFFE6EDFF),
-                            fontStyle: FontStyle.normal,
-                            fontSize: 23,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ),
+                  LandingPageButton(
+                    text: 'Login',
+                    onPressed: () {
+                      //login logic
+                    },
                   ),
                   SizedBox(height: height * 0.065),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(20),
-                              right: Radius.circular(20))),
-                      backgroundColor: const Color(0XFF07376F),
-                    ),
-                    onPressed: () {},
-                    child: const Padding(
-                      padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-                      child: Text(
-                        'Login With Face ID',
-                        style: TextStyle(
-                            color: Color(0XFFE6EDFF),
-                            fontStyle: FontStyle.normal,
-                            fontSize: 23,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ),
+                  LandingPageButton(
+                    text: 'Register',
+                    onPressed: () {
+                      //register logic
+                    },
                   ),
                 ],
               ),
