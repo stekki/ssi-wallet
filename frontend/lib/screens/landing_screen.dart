@@ -3,8 +3,8 @@ import '../utils/custom_clippers.dart';
 import '../utils/styles.dart';
 import '../widgets/custom_button.dart';
 
-class LandingPage extends StatelessWidget {
-  const LandingPage({super.key});
+class LandingScreen extends StatelessWidget {
+  const LandingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

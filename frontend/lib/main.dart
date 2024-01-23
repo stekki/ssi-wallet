@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/landing_page.dart';
+import './routes/routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,12 +10,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Login Page',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LandingPage(),
+      debugShowCheckedModeBanner: false,
+      routerConfig: router,
     );
   }
 }
