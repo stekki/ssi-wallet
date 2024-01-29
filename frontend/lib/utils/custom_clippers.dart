@@ -135,8 +135,8 @@ class ThirdClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
     final double xScaling = size.width / 414;
-    final double yScaling = size.height / 896;
-    final double offset = size.height * 0.9;
+    final double yScaling = size.height / 496;
+    final double offset = size.height * 0.75;
     path.moveTo(0, offset);
     path.lineTo(0.0000305176 * xScaling, 28.5155 * yScaling + offset);
     path.cubicTo(
