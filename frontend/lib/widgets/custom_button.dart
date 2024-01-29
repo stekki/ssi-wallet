@@ -14,21 +14,21 @@ class LandingPageButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.horizontal(
-                  left: Radius.circular(20),
-                  right: Radius.circular(20))),
-          backgroundColor: const Color(0XFF07376F),
-        ),
-        onPressed: () {},
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(60, 10, 60, 10),
-        child: Text(
-          text,
-          style: TextStyles.lpButton,
-        )
+      style: ElevatedButton.styleFrom(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.horizontal(
+          left: Radius.circular(40),
+          right: Radius.circular(40),
+        )),
+        backgroundColor: const Color(0XFF07376F),
       ),
+      onPressed: () {},
+      child: Padding(
+          padding: const EdgeInsets.fromLTRB(60, 10, 60, 10),
+          child: Text(
+            text,
+            style: TextStyles.lpButton,
+          )),
     );
   }
 }
