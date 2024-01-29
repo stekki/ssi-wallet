@@ -28,8 +28,7 @@ class LandingScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                      color: const Color.fromARGB(1, 182, 218, 255)
-                          .withOpacity(0.5),
+                      color: DesignColors().secondaryColor,
                     ),
                   )
                 ],
@@ -37,20 +36,19 @@ class LandingScreen extends StatelessWidget {
               ClipPath(
                 clipper: FirstClipper(),
                 child: Container(
-                  color:
-                      const Color.fromARGB(1, 182, 218, 255).withOpacity(0.5),
+                  color: DesignColors().secondaryColor,
                 ),
               ),
               ClipPath(
                 clipper: SecondClipper(),
                 child: Container(
-                  color: const Color(0XFFE6EDFF),
+                  color: DesignColors().tertiaryColor,
                 ),
               ),
               ClipPath(
                 clipper: ThirdClipper(),
                 child: Container(
-                  color: const Color(0XFFE6EDFF),
+                  color: DesignColors().tertiaryColor,
                 ),
               ),
               Center(
