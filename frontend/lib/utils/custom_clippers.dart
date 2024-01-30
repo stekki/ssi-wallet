@@ -195,3 +195,70 @@ class ThirdClipper extends CustomClipper<Path> {
     return false;
   }
 }
+
+// for register_screen
+class RegisterClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    final double xScaling = size.width / 414;
+    final double yScaling = size.height / 896;
+    final double offset = size.height * 0.87;
+    path.moveTo(0, offset);
+    path.lineTo(0.0000305176 * xScaling, 28.5155 * yScaling + offset);
+    path.cubicTo(
+      0.0000305176 * xScaling,
+      28.5155 * yScaling + offset,
+      30.3392 * xScaling,
+      -33.3944 * yScaling + offset,
+      147.612 * xScaling,
+      28.5155 * yScaling + offset,
+    );
+    path.cubicTo(
+      264.885 * xScaling,
+      90.4253 * yScaling + offset,
+      430 * xScaling,
+      28.5155 * yScaling + offset,
+      430 * xScaling,
+      28.5155 * yScaling + offset,
+    );
+    path.cubicTo(
+      430 * xScaling,
+      28.5155 * yScaling + offset,
+      430 * xScaling,
+      130 * yScaling + offset,
+      430 * xScaling,
+      130 * yScaling + offset,
+    );
+    path.cubicTo(
+      430 * xScaling,
+      130 * yScaling + offset,
+      0.0000305176 * xScaling,
+      130 * yScaling + offset,
+      0.0000305176 * xScaling,
+      130 * yScaling + offset,
+    );
+    path.cubicTo(
+      0.0000305176 * xScaling,
+      130 * yScaling + offset,
+      0.0000305176 * xScaling,
+      28.5155 * yScaling + offset,
+      0.0000305176 * xScaling,
+      28.5155 * yScaling + offset,
+    );
+    path.cubicTo(
+      0.0000305176 * xScaling,
+      28.5155 * yScaling + offset,
+      0.0000305176 * xScaling,
+      28.5155 * yScaling + offset,
+      0.0000305176 * xScaling,
+      28.5155 * yScaling + offset,
+    );
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+    return false;
+  }
+}
