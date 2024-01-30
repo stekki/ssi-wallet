@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+class DesignColors {
+  final mainColor = const Color(0XFF07376F);
+  final secondaryColor =
+      const Color.fromARGB(1, 182, 218, 255).withOpacity(0.5);
+  final tertiaryColor = const Color(0XFFE6EDFF);
+}
+
 class TextStyles {
   //Landing page title style
   static const TextStyle lpTitle = TextStyle(
@@ -12,7 +19,7 @@ class TextStyles {
   static const TextStyle lpWelcome = TextStyle(
     color: Color(0XFF07376F),
     fontStyle: FontStyle.normal,
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: FontWeight.w800,
     fontFamily: "Piazzolla",
   );
@@ -21,7 +28,7 @@ class TextStyles {
   static const TextStyle lpText = TextStyle(
     color: Color(0XFF07376F),
     fontStyle: FontStyle.normal,
-    fontSize: 24,
+    fontSize: 23,
     fontWeight: FontWeight.w600,
     fontFamily: "Piazzolla",
   );
@@ -35,12 +42,29 @@ class TextStyles {
   );
 
   static const TextStyle lpRegisterText = TextStyle(
-    fontWeight: FontWeight.w100,
+    fontWeight: FontWeight.w300,
+    fontSize: 17,
     color: Color(0XFF07376F),
   );
 
   static const TextStyle lpSignUpText = TextStyle(
     fontWeight: FontWeight.w900,
-    fontSize: 14,
+    fontSize: 20,
+  );
+
+  static const TextStyle rpRegisterText = TextStyle(
+    color: Color(0XFF07376F),
+    fontStyle: FontStyle.normal,
+    fontSize: 30,
+    fontWeight: FontWeight.w500,
+    fontFamily: "Piazzolla",
+  );
+
+  static const TextStyle rpEmailText = TextStyle(
+    color: Color(0XFF07376F),
+    fontStyle: FontStyle.normal,
+    fontSize: 30,
+    fontWeight: FontWeight.w900,
+    fontFamily: "Piazzolla",
   );
 }

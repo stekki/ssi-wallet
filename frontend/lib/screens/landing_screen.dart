@@ -28,8 +28,7 @@ class LandingScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                      color: const Color.fromARGB(1, 182, 218, 255)
-                          .withOpacity(0.5),
+                      color: DesignColors().secondaryColor,
                     ),
                   )
                 ],
@@ -37,20 +36,19 @@ class LandingScreen extends StatelessWidget {
               ClipPath(
                 clipper: FirstClipper(),
                 child: Container(
-                  color:
-                      const Color.fromARGB(1, 182, 218, 255).withOpacity(0.5),
+                  color: DesignColors().secondaryColor,
                 ),
               ),
               ClipPath(
                 clipper: SecondClipper(),
                 child: Container(
-                  color: const Color(0XFFE6EDFF),
+                  color: DesignColors().tertiaryColor,
                 ),
               ),
               ClipPath(
                 clipper: ThirdClipper(),
                 child: Container(
-                  color: const Color(0XFFE6EDFF),
+                  color: DesignColors().tertiaryColor,
                 ),
               ),
               Center(
@@ -71,7 +69,24 @@ class LandingScreen extends StatelessWidget {
                         //login logic
                       },
                     ),
-                    SizedBox(height: height * 0.220),
+                    //SizedBox(height: height * 0.220),
+
+                    // TODO: Remove this button before production
+                    SizedBox(height: height * 0.120),
+                    ElevatedButton(
+                        onPressed: () => context.go('/home'),
+                        style: ElevatedButton.styleFrom(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.horizontal(
+                            left: Radius.circular(40),
+                            right: Radius.circular(40),
+                          )),
+                          backgroundColor: const Color.fromARGB(255, 226, 2, 2),
+                        ),
+                        child: const Text('Skip login for devs')),
+                    SizedBox(height: height * 0.120),
+                    // Remove this button before production
+
                     RichText(
                       text: TextSpan(
                         text: "Don't have an account yet? ",
@@ -80,7 +95,7 @@ class LandingScreen extends StatelessWidget {
                           TextSpan(
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  context.pushNamed('register');
+                                  context.go('/register');
                                 },
                               text: 'Sign up',
                               style: TextStyles.lpSignUpText),
