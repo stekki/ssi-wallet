@@ -69,7 +69,24 @@ class LandingScreen extends StatelessWidget {
                         //login logic
                       },
                     ),
-                    SizedBox(height: height * 0.220),
+                    //SizedBox(height: height * 0.220),
+
+                    // TODO: Remove this button before production
+                    SizedBox(height: height * 0.120),
+                    ElevatedButton(
+                        onPressed: () => context.go('/home'),
+                        style: ElevatedButton.styleFrom(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.horizontal(
+                            left: Radius.circular(40),
+                            right: Radius.circular(40),
+                          )),
+                          backgroundColor: const Color.fromARGB(255, 226, 2, 2),
+                        ),
+                        child: const Text('Skip login for devs')),
+                    SizedBox(height: height * 0.120),
+                    // Remove this button before production
+
                     RichText(
                       text: TextSpan(
                         text: "Don't have an account yet? ",
@@ -78,7 +95,7 @@ class LandingScreen extends StatelessWidget {
                           TextSpan(
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  context.pushNamed('register');
+                                  context.go('/register');
                                 },
                               text: 'Sign up',
                               style: TextStyles.lpSignUpText),

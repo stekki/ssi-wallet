@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import './routes/routes.dart';
+import 'package:frontend/routes/navigation_helper.dart';
 
 void main() {
+  NavigationHelper.instance;
   runApp(const MyApp());
 }
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      routerConfig: router,
+      routerConfig: NavigationHelper.router,
     );
   }
 }

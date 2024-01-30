@@ -4,6 +4,7 @@ import '../utils/custom_clippers.dart';
 import '../utils/styles.dart';
 import '../widgets/custom_button.dart';
 
+
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
