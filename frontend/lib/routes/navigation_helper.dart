@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/landing_screen.dart';
-import 'package:frontend/screens/login_screen.dart';
-import 'package:frontend/screens/register_screen.dart';
-import 'package:frontend/widgets/navigation_screen_outline.dart';
 import 'package:go_router/go_router.dart';
+
+import '../screens/landing_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/chat_screen.dart';
 import '../screens/credential_screen.dart';
+import '../widgets/navigation_screen_outline.dart';
 
 class NavigationHelper {
   static final NavigationHelper _instance = NavigationHelper._internal();
@@ -105,24 +104,6 @@ class NavigationHelper {
         pageBuilder: (context, state) {
           return getPage(
             child: const LandingScreen(),
-            state: state,
-          );
-        },
-      ),
-      GoRoute(
-        path: '/register',
-        pageBuilder: (context, state) {
-          return getPage(
-            child: const RegisterScreen(),
-            state: state,
-          );
-        },
-      ),
-      GoRoute(
-        path: '/login',
-        pageBuilder: (context, state) {
-          return getPage(
-            child: const LoginScreen(),
             state: state,
           );
         },

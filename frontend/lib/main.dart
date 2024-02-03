@@ -1,7 +1,10 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:frontend/routes/navigation_helper.dart';
+
+import '../routes/navigation_helper.dart';
 
 void main() {
+  log('Starting App');
   NavigationHelper.instance;
   runApp(const MyApp());
 }
@@ -21,3 +24,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+                                                                                                                                                                                              

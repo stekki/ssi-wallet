@@ -1,112 +1,168 @@
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'dart:developer';
 import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
+
 import '../utils/custom_clippers.dart';
 import '../utils/styles.dart';
 import '../widgets/custom_button.dart';
 
-class LandingScreen extends StatelessWidget {
+class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _LandingScreenState createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Widget signInOptions() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        LandingPageButton(
+          text: 'Login with Email',
+          onPressed: () {
+            // Login with Email logic
+          },
+        ),
+        const SizedBox(height: Constants.lpLoginButtonSpacing),
+        LandingPageButton(
+          text: 'Login with FaceID',
+          onPressed: () {
+            // Login with FaceID logic
+          },
+        ),
+        const SizedBox(height: Constants.lpLoginButtonSpacing),
+        LandingPageButton(
+          text: 'Piss-Head Login',
+          onPressed: () {
+            // Login with Piss-Head
+            log('My man Piss-Head');
+            context.go('/home');
+          },
+          color: DesignColors.devRed,
+        ),
+      ],
+    );
+  }
+
+  Widget registerForm() {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: TextField(
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: 'Email',
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
-        backgroundColor: const Color(0XFFE6EDFF),
-        body: Container(
-          height: height,
-          width: width,
-          alignment: Alignment.center,
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              Column(
+      backgroundColor: DesignColors.tertiaryColor,
+      body: Container(
+        height: height,
+        width: width,
+        alignment: Alignment.center,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  child: Container(),
+                ),
+                Expanded(
+                  child: Container(
+                    color: DesignColors.secondaryColor,
+                  ),
+                )
+              ],
+            ),
+            ClipPath(
+              clipper: FirstClipper(),
+              child: Container(
+                color: DesignColors.secondaryColor,
+              ),
+            ),
+            ClipPath(
+              clipper: SecondClipper(),
+              child: Container(
+                color: DesignColors.tertiaryColor,
+              ),
+            ),
+            ClipPath(
+              clipper: ThirdClipper(),
+              child: Container(
+                color: DesignColors.tertiaryColor,
+              ),
+            ),
+            Positioned(
+              top: height * 0.05,
+              child: const Text('SSI Wallet!!!', style: TextStyles.lpTitle),
+            ),
+            Positioned.fill(
+              top: height * 0.15,
+              child: Column(
                 children: [
-                  Expanded(
-                    child: Container(),
+                  TabBar(
+                    controller: _tabController,
+                    tabs: const [
+                      Tab(text: 'Sign In'),
+                      Tab(text: 'Register'),
+                    ],
+                    labelColor: Colors.black,
                   ),
                   Expanded(
-                    child: Container(
-                      color: DesignColors().secondaryColor,
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        Center(
+                          child: SingleChildScrollView(
+                            child: signInOptions(),
+                          ),
+                        ),
+                        Center(
+                          child: Column(
+                            children: [
+                              registerForm(),
+                              LandingPageButton(
+                                text: 'Register',
+                                onPressed: () {
+                                  // Register logic
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  )
+                  ),
                 ],
               ),
-              ClipPath(
-                clipper: FirstClipper(),
-                child: Container(
-                  color: DesignColors().secondaryColor,
-                ),
-              ),
-              ClipPath(
-                clipper: SecondClipper(),
-                child: Container(
-                  color: DesignColors().tertiaryColor,
-                ),
-              ),
-              ClipPath(
-                clipper: ThirdClipper(),
-                child: Container(
-                  color: DesignColors().tertiaryColor,
-                ),
-              ),
-              Center(
-                child: Column(
-                  children: [
-                    SizedBox(height: height * 0.065),
-                    const Text('FINDY', style: TextStyles.lpTitle),
-                    SizedBox(height: height * 0.15),
-                    const Text('Welcome to the Findy Wallet',
-                        style: TextStyles.lpWelcome),
-                    SizedBox(height: height * 0.03875),
-                    const Text('Login to the service to continue',
-                        style: TextStyles.lpText),
-                    SizedBox(height: height * 0.20),
-                    LandingPageButton(
-                      text: 'Login',
-                      onPressed: () {
-                        //login logic
-                      },
-                    ),
-                    //SizedBox(height: height * 0.220),
-
-                    // TODO: Remove this button before production
-                    SizedBox(height: height * 0.120),
-                    ElevatedButton(
-                        onPressed: () => context.go('/home'),
-                        style: ElevatedButton.styleFrom(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(40),
-                            right: Radius.circular(40),
-                          )),
-                          backgroundColor: const Color.fromARGB(255, 226, 2, 2),
-                        ),
-                        child: const Text('Skip login for devs')),
-                    SizedBox(height: height * 0.120),
-                    // Remove this button before production
-
-                    RichText(
-                      text: TextSpan(
-                        text: "Don't have an account yet? ",
-                        style: TextStyles.lpRegisterText,
-                        children: [
-                          TextSpan(
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  context.go('/register');
-                                },
-                              text: 'Sign up',
-                              style: TextStyles.lpSignUpText),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ));
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
