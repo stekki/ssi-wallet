@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../routes/navigation_helper.dart';
 
@@ -14,14 +15,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Flutter Login Page',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ProviderScope(
+      child: MaterialApp.router(
+        title: 'Flutter Login Page',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        debugShowCheckedModeBanner: false,
+        routerConfig: NavigationHelper.router,
       ),
-      debugShowCheckedModeBanner: false,
-      routerConfig: NavigationHelper.router,
     );
   }
 }
-                                                                                                                                                                                              
