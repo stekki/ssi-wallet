@@ -55,61 +55,67 @@ class RegisterScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: height * 0.065),
-                    const Text('FINDY', style: TextStyles.lpTitle),
+                    Text('FINDY', style: TextStyles.lpTitle(height)),
                     SizedBox(height: height * 0.06),
-                    IconButton(
-                      padding: EdgeInsets.only(right: width * 0.9),
-                      onPressed: () => {
-                        context.pop(),
-                      },
-                      icon: Icon(
-                        Icons.arrow_circle_left,
-                        size: width * 0.18,
-                        color: DesignColors().mainColor,
+                    Expanded(
+                      child: IconButton(
+                        padding: EdgeInsets.only(right: width * 0.9),
+                        onPressed: () => {
+                          context.pop(),
+                        },
+                        icon: Icon(
+                          Icons.arrow_circle_left,
+                          size: width * 0.15,
+                          color: DesignColors().mainColor,
+                        ),
                       ),
                     ),
 
                     SizedBox(height: height * 0.12),
                     RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         text: "Sign up with ",
-                        style: TextStyles.rpRegisterText,
+                        style: TextStyles.rpRegisterText(height),
                         children: [
                           TextSpan(
-                              text: 'EMAIL', style: TextStyles.rpEmailText),
+                              text: 'EMAIL', style: TextStyles.rpEmailText(height)),
                         ],
                       ),
                     ),
                     SizedBox(height: height * 0.16),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: 0.15 * width, right: 0.15 * width),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                            labelText: 'Enter email',
-                            labelStyle:
-                                TextStyle(color: DesignColors().mainColor),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                              borderSide: BorderSide(
-                                  color: DesignColors().mainColor, width: 1.5),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(15.0)),
-                              borderSide: BorderSide(
-                                  color: DesignColors().mainColor, width: 3.0),
-                            )),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: 0.15 * width, right: 0.15 * width),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              labelText: 'Enter email',
+                              labelStyle:
+                              TextStyle(color: DesignColors().mainColor),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(height * 0.0225),
+                                borderSide: BorderSide(
+                                    color: DesignColors().mainColor, width: 1.5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(height * 0.0225)),
+                                borderSide: BorderSide(
+                                    color: DesignColors().mainColor, width: 3.0),
+                              )),
+                        ),
                       ),
                     ),
                     SizedBox(height: height * 0.070),
                     LandingPageButton(
+                      width: width,
+                      height: height,
                       text: 'Sign up',
                       onPressed: () {
                         // logic logic
                       },
                     ),
-                    //SizedBox(height: height * 0.010),
+                    SizedBox(height: height * 0.070),
                   ],
                 ),
               )

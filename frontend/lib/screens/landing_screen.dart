@@ -21,6 +21,7 @@ class LandingScreen extends StatelessWidget {
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
+              // First layer is
               Column(
                 children: [
                   Expanded(
@@ -55,42 +56,42 @@ class LandingScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: height * 0.065),
-                    const Text('FINDY', style: TextStyles.lpTitle),
+                    Text('FINDY', style: TextStyles.lpTitle(height)),
                     SizedBox(height: height * 0.15),
-                    const Text('Welcome to the Findy Wallet',
-                        style: TextStyles.lpWelcome),
+                    Text('Welcome to the Findy Wallet',
+                        style: TextStyles.lpWelcome(height)),
                     SizedBox(height: height * 0.03875),
-                    const Text('Login to the service to continue',
-                        style: TextStyles.lpText),
+                    Text('Login to the service to continue',
+                        style: TextStyles.lpText(height)),
                     SizedBox(height: height * 0.20),
                     LandingPageButton(
+                      width: width,
+                      height: height,
                       text: 'Login',
                       onPressed: () {
                         //login logic
                       },
                     ),
-                    //SizedBox(height: height * 0.220),
 
                     // TODO: Remove this button before production
-                    SizedBox(height: height * 0.120),
-                    ElevatedButton(
-                        onPressed: () => context.go('/home'),
-                        style: ElevatedButton.styleFrom(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(40),
-                            right: Radius.circular(40),
-                          )),
-                          backgroundColor: const Color.fromARGB(255, 226, 2, 2),
-                        ),
-                        child: const Text('Skip login for devs')),
-                    SizedBox(height: height * 0.120),
+                    // ElevatedButton(
+                    //     onPressed: () => context.go('/home'),
+                    //     style: ElevatedButton.styleFrom(
+                    //       shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.horizontal(
+                    //         left: Radius.circular(height * 0.06),
+                    //         right: Radius.circular(height * 0.06),
+                    //       )),
+                    //       backgroundColor: const Color.fromARGB(255, 226, 2, 2),
+                    //     ),
+                    //     child: const Text('Skip login for devs')),
+                    // SizedBox(height: height * 0.120),
                     // Remove this button before production
 
                     RichText(
                       text: TextSpan(
                         text: "Don't have an account yet? ",
-                        style: TextStyles.lpRegisterText,
+                        style: TextStyles.lpRegisterText(height),
                         children: [
                           TextSpan(
                               recognizer: TapGestureRecognizer()
@@ -98,7 +99,7 @@ class LandingScreen extends StatelessWidget {
                                   context.go('/register');
                                 },
                               text: 'Sign up',
-                              style: TextStyles.lpSignUpText),
+                              style: TextStyles.lpSignUpText(height)),
                         ],
                       ),
                     ),
