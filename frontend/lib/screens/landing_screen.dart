@@ -7,9 +7,10 @@ import '../utils/styles.dart';
 import '../widgets/custom_button.dart';
 
 class LandingScreen extends StatefulWidget {
-  const LandingScreen({Key? key}) : super(key: key);
+  const LandingScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _LandingScreenState createState() => _LandingScreenState();
 }
 
