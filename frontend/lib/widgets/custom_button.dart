@@ -4,25 +4,27 @@ import '../utils/styles.dart';
 class LandingPageButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
+  final Color? color;
 
   const LandingPageButton({
     super.key,
     required this.text,
     required this.onPressed,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
+        backgroundColor: color ?? const Color.fromARGB(255, 24, 94, 173),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.horizontal(
           left: Radius.circular(40),
           right: Radius.circular(40),
         )),
-        backgroundColor: const Color(0XFF07376F),
       ),
-      onPressed: () {},
+      onPressed: onPressed, 
       child: Padding(
           padding: const EdgeInsets.fromLTRB(60, 10, 60, 10),
           child: Text(
