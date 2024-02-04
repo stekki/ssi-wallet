@@ -5,13 +5,14 @@ class Constants {
 }
 
 class DesignColors {
-  static const mainColor          = Color(0XFF07376F);
-  static const secondaryColor     = Color.fromRGBO(101, 178, 255, 0.498);
-  static const tertiaryColor      = Color.fromARGB(255, 236, 241, 255);
-  static const lpTitleTextColor   = Color.fromARGB(255, 0, 0, 0);
-  static const lpButtonColor      = Color.fromARGB(255, 43, 142, 255);
-  static const lpButtonTextColor  = Color.fromARGB(255, 255, 255, 255);
-  static const devRed             = Color.fromARGB(192, 255, 61, 61);
+  static const mainColor = Color(0XFF07376F);
+  static const secondaryColor = Color.fromRGBO(101, 178, 255, 0.498);
+  static const tertiaryColor = Color.fromARGB(255, 236, 241, 255);
+  static const lpTitleTextColor = Color.fromARGB(255, 0, 0, 0);
+  static const lpButtonColor = Color.fromARGB(255, 43, 142, 255);
+  static const lpButtonTextColor = Color.fromARGB(255, 255, 255, 255);
+  static const devRed = Color.fromARGB(192, 255, 61, 61);
+  static const cpCardColor = Color.fromARGB(255, 236, 241, 255);
 }
 
 class TextStyles {

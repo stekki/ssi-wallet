@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:frontend/providers.dart';
+import 'package:frontend/providers/providers.dart';
 import 'package:frontend/widgets/credential_card.dart';
+import 'package:frontend/widgets/credential_card_info.dart';
 import '../utils/styles.dart';
 
 class CredentialScreen extends ConsumerStatefulWidget {
@@ -56,32 +57,54 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
           "Error loading venues",
           style: TextStyles.lsText,
         ),
-        data: (connections) => Padding(
+        data: (credentials) => Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: _searchController,
-                decoration: const InputDecoration(
-                  hintText: 'Search credential',
-                  prefixIcon: Icon(Icons.search),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                TextField(
+                  keyboardType: TextInputType.multiline,
+                  controller: _searchController,
+                  decoration: const InputDecoration(
+                    hintText: 'Search credential',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                  onChanged: (value) {
+                    setState(() => filterValue = value.toLowerCase());
+                  },
                 ),
-                onChanged: (value) {
-                  setState(() => filterValue = value.toLowerCase());
-                },
-              ),
-              SizedBox(
-                height: height * 0.02,
-              ),
-              Expanded(
-                child: ListView(
-                  children: connections
-                      .where((c) => c.toLowerCase().contains(filterValue))
-                      .map((c) => CredentialCard(name: c))
-                      .toList(),
+                SizedBox(
+                  height: height * 0.02,
                 ),
-              ),
-            ],
+                SingleChildScrollView(
+                  child: ExpansionPanelList(
+                    expandedHeaderPadding: EdgeInsets.zero,
+                    expansionCallback: (int index, bool isExpanded) {
+                      setState(
+                        () {
+                          credentials[index].isExpanded = !isExpanded;
+                        },
+                      );
+                    },
+                    children: credentials
+                        .where(
+                            (c) => c.name.toLowerCase().contains(filterValue))
+                        .map<ExpansionPanel>(
+                          (c) => ExpansionPanel(
+                            backgroundColor: DesignColors.cpCardColor,
+                            headerBuilder:
+                                (BuildContext context, bool isExpanded) {
+                              return CredentialCard(name: c.name);
+                            },
+                            body: CredentialCardInfo(name: c.name),
+                            isExpanded: !c.isExpanded,
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

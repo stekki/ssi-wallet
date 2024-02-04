@@ -4,10 +4,10 @@ import 'dart:math';
 
 import 'package:frontend/utils/styles.dart';
 
-class CredentialCard extends ConsumerWidget {
+class CredentialCardInfo extends ConsumerWidget {
   final String name;
 
-  const CredentialCard({
+  const CredentialCardInfo({
     required this.name,
     super.key,
   });
@@ -17,35 +17,17 @@ class CredentialCard extends ConsumerWidget {
     final height = MediaQuery.of(context).size.height;
 
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: Container(
         decoration: BoxDecoration(
           color: DesignColors.cpCardColor.withOpacity(0),
           borderRadius: BorderRadius.circular(8),
         ),
-        height: max(height * 0.12, 50),
+        height: max(height * 0.1, 50),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.fitHeight,
-                        alignment: FractionalOffset.center,
-                        image: AssetImage('assets/logos/findywallet.png'),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -54,13 +36,13 @@ class CredentialCard extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.only(
                       bottom: 7,
-                      top: 23,
+                      top: 7,
                     ),
                     child: Text(
-                      name,
+                      "Issued by $name",
                       textAlign: TextAlign.left,
                       style: const TextStyle(
-                          fontWeight: FontWeight.w900, fontSize: 16),
+                          fontWeight: FontWeight.w500, fontSize: 14),
                     ),
                   ),
                   const Expanded(
@@ -68,9 +50,10 @@ class CredentialCard extends ConsumerWidget {
                       padding: EdgeInsets.only(bottom: 5),
                       child: SingleChildScrollView(
                         child: Text(
-                          "description",
+                          "More info...",
                           textAlign: TextAlign.left,
-                          style: TextStyle(fontWeight: FontWeight.w500),
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 14),
                         ),
                       ),
                     ),
@@ -78,6 +61,24 @@ class CredentialCard extends ConsumerWidget {
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 10, 0),
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    child: const Text("Delete"),
+                    onPressed: () => {},
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                    child: const Text("Send"),
+                    onPressed: () => {},
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),

@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../utils/styles.dart';
 import 'package:frontend/widgets/connection_card.dart';
-import 'package:frontend/providers.dart';
+import 'package:frontend/providers/providers.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -61,6 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Column(
             children: [
               TextField(
+                keyboardType: TextInputType.multiline,
                 controller: _searchController,
                 decoration: const InputDecoration(
                   hintText: 'Search connection',
