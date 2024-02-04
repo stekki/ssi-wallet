@@ -95,7 +95,7 @@ class NavigationHelper {
                 path: '/profile',
                 pageBuilder: (context, state) {
                   return getPage(
-                    child: ProfileScreen(),
+                    child: const ProfileScreen(),
                     state: state,
                   );
                 },

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math';
 
@@ -24,7 +23,7 @@ class CredentialCard extends ConsumerWidget {
         children: [
           Ink(
             decoration: BoxDecoration(
-              color: Color.fromARGB(125, 222, 222, 222),
+              color: const Color.fromARGB(125, 222, 222, 222),
               borderRadius: BorderRadius.circular(8),
             ),
             height: max(height * 0.12, 50),
@@ -82,9 +81,9 @@ class CredentialCard extends ConsumerWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: const Icon(
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Icon(
                     Icons.expand_more,
                     size: 40,
                   ),
