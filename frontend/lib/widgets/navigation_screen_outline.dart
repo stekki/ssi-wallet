@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../token.dart';
+import '../utils/secure_storage.dart';
+
 class NavigationScreenOutline extends StatefulWidget {
   const NavigationScreenOutline({
     super.key,
@@ -15,6 +18,25 @@ class NavigationScreenOutline extends StatefulWidget {
 }
 
 class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
+  String username = 'Stranger'; // Default username
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchAndSetUsername();
+  }
+
+  Future<void> _fetchAndSetUsername() async {
+    // Assume SecureStorageUtil is your utility class for secure storage
+    String? token =
+        await SecureStorageUtil().getToken(); // Fetch token asynchronously
+    String? usernameFromToken =
+        getUsernameJwt(token); // Parse username from token
+    setState(() {
+      username = usernameFromToken ?? 'Stranger'; // Update state with username
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final ButtonStyle style = TextButton.styleFrom(
@@ -26,7 +48,7 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
     );
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Findy Wallet"),
+        title: Text("Findy Wallet | $username"),
         backgroundColor: Colors.purple,
         actions: [
           TextButton(

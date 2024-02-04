@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-class Constants {
-  static const lpLoginButtonSpacing = 40.0;
-}
-
 class DesignColors {
   static const mainColor          = Color(0XFF07376F);
   static const secondaryColor     = Color.fromRGBO(101, 178, 255, 0.498);
@@ -46,33 +42,6 @@ class TextStyles {
     fontStyle: FontStyle.normal,
     fontSize: 23,
     fontWeight: FontWeight.w700,
-  );
-
-  static const TextStyle lpRegisterText = TextStyle(
-    color: DesignColors.mainColor,
-    fontWeight: FontWeight.w300,
-    fontSize: 17,
-  );
-
-  static const TextStyle lpSignUpText = TextStyle(
-    fontWeight: FontWeight.w900,
-    fontSize: 20,
-  );
-
-  static const TextStyle rpRegisterText = TextStyle(
-    color: DesignColors.mainColor,
-    fontStyle: FontStyle.normal,
-    fontSize: 30,
-    fontWeight: FontWeight.w500,
-    fontFamily: "Piazzolla",
-  );
-
-  static const TextStyle rpEmailText = TextStyle(
-    color: DesignColors.mainColor,
-    fontStyle: FontStyle.normal,
-    fontSize: 30,
-    fontWeight: FontWeight.w900,
-    fontFamily: "Piazzolla",
   );
 
   static const lsText = TextStyle(
