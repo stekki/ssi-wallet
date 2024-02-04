@@ -19,10 +19,10 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final credetialsFuture = ref.watch(credentialsFutureProvider);
+    final credentialsFuture = ref.watch(credentialsFutureProvider);
     final height = MediaQuery.of(context).size.height;
 
-    if (credetialsFuture.isLoading) {
+    if (credentialsFuture.isLoading) {
       return Scaffold(
         body: Center(
           child: SpinKitFadingCircle(
@@ -47,7 +47,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: credetialsFuture.when(
+      body: credentialsFuture.when(
         loading: () => const Text(
           "Loading...",
           style: TextStyles.lsText,

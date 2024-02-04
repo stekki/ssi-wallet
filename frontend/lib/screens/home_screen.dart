@@ -67,7 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   prefixIcon: Icon(Icons.search),
                 ),
                 onChanged: (value) {
-                  setState(() => filterValue = value);
+                  setState(() => filterValue = value.toLowerCase());
                 },
               ),
               SizedBox(

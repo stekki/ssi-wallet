@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../utils/custom_clippers.dart';
 import '../utils/styles.dart';
-import '../widgets/custom_button.dart';
+import '../widgets/landing_page_button.dart';
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
