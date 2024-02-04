@@ -6,6 +6,7 @@ import '../screens/home_screen.dart';
 import '../screens/chat_screen.dart';
 import '../screens/scan_screen.dart';
 import '../screens/credential_screen.dart';
+import '../screens/profile_screen.dart';
 import '../widgets/navigation_screen_outline.dart';
 
 class NavigationHelper {
@@ -57,6 +58,21 @@ class NavigationHelper {
             ],
           ),
           StatefulShellBranch(
+            //navigatorKey: credentialTabNavigatorKey,
+            routes: [
+              GoRoute(
+                name: 'credential',
+                path: '/credential',
+                pageBuilder: (context, state) {
+                  return getPage(
+                    child: const CredentialScreen(),
+                    state: state,
+                  );
+                },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
             //navigatorKey: chatTabNavigatorKey,
             routes: [
               GoRoute(
@@ -75,11 +91,11 @@ class NavigationHelper {
             //navigatorKey: credentialTabNavigatorKey,
             routes: [
               GoRoute(
-                name: 'credential',
-                path: '/credential',
+                name: 'profile',
+                path: '/profile',
                 pageBuilder: (context, state) {
                   return getPage(
-                    child: const CredentialScreen(),
+                    child: ProfileScreen(),
                     state: state,
                   );
                 },

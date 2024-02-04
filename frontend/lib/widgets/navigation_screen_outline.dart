@@ -57,11 +57,15 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
             label: 'home',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.wallet),
+            label: 'credentials',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.qr_code_scanner),
             label: 'scan',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.all_inbox),
+            icon: Icon(Icons.person),
             label: 'profile',
           ),
         ],
