@@ -34,7 +34,7 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
                 context.go('/');
               },
               style: style,
-              child: const Row(
+              child: const Column(
                   children: [Icon(Icons.logout_rounded), Text('Logout')]))
         ],
       ),
@@ -53,16 +53,16 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_work),
             label: 'home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.message_rounded),
-            label: 'chat',
+            icon: Icon(Icons.qr_code_scanner),
+            label: 'scan',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'credentials',
+            icon: Icon(Icons.all_inbox),
+            label: 'profile',
           ),
         ],
       ),
