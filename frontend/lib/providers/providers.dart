@@ -16,10 +16,6 @@ final credentialsFutureProvider = FutureProvider<List<Credential>>(
               Credential(name: "Verkkokauppa"),
               Credential(name: "Aalto University"),
               Credential(name: "Findy Agency"),
-              Credential(name: "Findy Agency"),
-              Credential(name: "Findy Agency"),
-              Credential(name: "Findy Agency"),
-              Credential(name: "Findy Agency"),
             ]);
   },
 );

@@ -56,11 +56,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           "Error loading venues",
           style: TextStyles.lsText,
         ),
-        data: (connections) => Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              TextField(
+        data: (connections) => CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              backgroundColor: DesignColors.cpCardColor,
+              pinned: true,
+              floating: true,
+              title: TextField(
                 keyboardType: TextInputType.multiline,
                 controller: _searchController,
                 decoration: const InputDecoration(
@@ -71,19 +73,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   setState(() => filterValue = value.toLowerCase());
                 },
               ),
-              SizedBox(
-                height: height * 0.02,
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return SizedBox(
+                    height: height,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            children: connections
+                                .where((c) =>
+                                    c.toLowerCase().contains(filterValue))
+                                .map((c) => ConnectionCard(name: c))
+                                .toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                childCount: 1,
               ),
-              Expanded(
-                child: ListView(
-                  children: connections
-                      .where((c) => c.toLowerCase().contains(filterValue))
-                      .map((c) => ConnectionCard(name: c))
-                      .toList(),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -23,7 +23,7 @@ class CredentialCard extends ConsumerWidget {
           color: DesignColors.cpCardColor.withOpacity(0),
           borderRadius: BorderRadius.circular(8),
         ),
-        height: max(height * 0.12, 50),
+        height: max(height * 0.1, 50),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

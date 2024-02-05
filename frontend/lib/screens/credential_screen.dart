@@ -57,55 +57,61 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
           "Error loading venues",
           style: TextStyles.lsText,
         ),
-        data: (credentials) => Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                  keyboardType: TextInputType.multiline,
-                  controller: _searchController,
-                  decoration: const InputDecoration(
-                    hintText: 'Search credential',
-                    prefixIcon: Icon(Icons.search),
-                  ),
-                  onChanged: (value) {
-                    setState(() => filterValue = value.toLowerCase());
-                  },
+        data: (credentials) => CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              backgroundColor: DesignColors.cpCardColor,
+              pinned: true,
+              floating: true,
+              title: TextField(
+                keyboardType: TextInputType.multiline,
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  hintText: 'Search credential',
+                  prefixIcon: Icon(Icons.search),
                 ),
-                SizedBox(
-                  height: height * 0.02,
-                ),
-                SingleChildScrollView(
-                  child: ExpansionPanelList(
-                    expandedHeaderPadding: EdgeInsets.zero,
-                    expansionCallback: (int index, bool isExpanded) {
-                      setState(
-                        () {
-                          credentials[index].isExpanded = !isExpanded;
-                        },
-                      );
-                    },
-                    children: credentials
-                        .where(
-                            (c) => c.name.toLowerCase().contains(filterValue))
-                        .map<ExpansionPanel>(
-                          (c) => ExpansionPanel(
-                            backgroundColor: DesignColors.cpCardColor,
-                            headerBuilder:
-                                (BuildContext context, bool isExpanded) {
-                              return CredentialCard(name: c.name);
-                            },
-                            body: CredentialCardInfo(name: c.name),
-                            isExpanded: !c.isExpanded,
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-              ],
+                onChanged: (value) {
+                  setState(() => filterValue = value.toLowerCase());
+                },
+              ),
             ),
-          ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      ExpansionPanelList(
+                        expandedHeaderPadding: EdgeInsets.zero,
+                        expansionCallback: (int index, bool isExpanded) {
+                          setState(
+                            () {
+                              credentials[index].isExpanded = !isExpanded;
+                            },
+                          );
+                        },
+                        children: credentials
+                            .where((c) =>
+                                c.name.toLowerCase().contains(filterValue))
+                            .map<ExpansionPanel>(
+                              (c) => ExpansionPanel(
+                                backgroundColor: DesignColors.cpCardColor,
+                                headerBuilder:
+                                    (BuildContext context, bool isExpanded) {
+                                  return CredentialCard(name: c.name);
+                                },
+                                body: CredentialCardInfo(name: c.name),
+                                isExpanded: !c.isExpanded,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                  );
+                },
+                childCount: 1,
+              ),
+            ),
+          ],
         ),
       ),
     );
