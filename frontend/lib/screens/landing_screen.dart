@@ -87,7 +87,7 @@ class _LandingScreenState extends State<LandingScreen>
         ),
         const SizedBox(height: Constants.lpLoginButtonSpacing),
         LandingPageButton(
-          text: 'Sign in with token',
+          text: 'Sign in with token (dev)',
           onPressed: () {
             // Sign in with token
             promptForToken(context);
@@ -96,7 +96,7 @@ class _LandingScreenState extends State<LandingScreen>
         ),
         const SizedBox(height: Constants.lpLoginButtonSpacing),
         LandingPageButton(
-          text: 'Piss-Head',
+          text: 'Skip to home (dev)',
           onPressed: () {
             // Sign in with Piss-Head
             log('My man, Piss-Head');
