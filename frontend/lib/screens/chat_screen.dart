@@ -28,12 +28,15 @@ class ChatScreen extends StatelessWidget {
         backgroundColor: Colors.purple,
         actions: [
           TextButton(
-              onPressed: () {
-                context.go('/');
-              },
-              style: style,
-              child: const Column(
-                  children: [Icon(Icons.logout_rounded), Text('Logout')]))
+            onPressed: () {
+              context.go('/');
+            },
+            style: style,
+            child: const Tooltip(
+              message: "Log out",
+              child: Icon(Icons.logout_rounded),
+            ),
+          )
         ],
       ),
       body: const Center(

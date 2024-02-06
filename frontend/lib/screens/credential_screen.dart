@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:frontend/providers.dart';
+import 'package:frontend/providers/providers.dart';
 import 'package:frontend/widgets/credential_card.dart';
+import 'package:frontend/widgets/credential_card_info.dart';
 import '../utils/styles.dart';
 
 class CredentialScreen extends ConsumerStatefulWidget {
@@ -19,10 +20,10 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final credetialsFuture = ref.watch(credentialsFutureProvider);
+    final credentialsFuture = ref.watch(credentialsFutureProvider);
     final height = MediaQuery.of(context).size.height;
 
-    if (credetialsFuture.isLoading) {
+    if (credentialsFuture.isLoading) {
       return Scaffold(
         body: Center(
           child: SpinKitFadingCircle(
@@ -47,7 +48,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      body: credetialsFuture.when(
+      body: credentialsFuture.when(
         loading: () => const Text(
           "Loading...",
           style: TextStyles.lsText,
@@ -56,11 +57,14 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
           "Error loading venues",
           style: TextStyles.lsText,
         ),
-        data: (connections) => Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              TextField(
+        data: (credentials) => CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              backgroundColor: DesignColors.cpCardColor,
+              pinned: true,
+              floating: true,
+              title: TextField(
+                keyboardType: TextInputType.multiline,
                 controller: _searchController,
                 decoration: const InputDecoration(
                   hintText: 'Search credential',
@@ -70,19 +74,44 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                   setState(() => filterValue = value.toLowerCase());
                 },
               ),
-              SizedBox(
-                height: height * 0.02,
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      ExpansionPanelList(
+                        expandedHeaderPadding: EdgeInsets.zero,
+                        expansionCallback: (int index, bool isExpanded) {
+                          setState(
+                            () {
+                              credentials[index].isExpanded = !isExpanded;
+                            },
+                          );
+                        },
+                        children: credentials
+                            .where((c) =>
+                                c.name.toLowerCase().contains(filterValue))
+                            .map<ExpansionPanel>(
+                              (c) => ExpansionPanel(
+                                backgroundColor: DesignColors.cpCardColor,
+                                headerBuilder:
+                                    (BuildContext context, bool isExpanded) {
+                                  return CredentialCard(name: c.name);
+                                },
+                                body: CredentialCardInfo(name: c.name),
+                                isExpanded: !c.isExpanded,
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ],
+                  );
+                },
+                childCount: 1,
               ),
-              Expanded(
-                child: ListView(
-                  children: connections
-                      .where((c) => c.toLowerCase().contains(filterValue))
-                      .map((c) => CredentialCard(name: c))
-                      .toList(),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

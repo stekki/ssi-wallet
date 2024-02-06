@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math';
 
+import 'package:frontend/utils/styles.dart';
+
 class ConnectionCard extends ConsumerWidget {
   final String name;
 
@@ -16,14 +18,12 @@ class ConnectionCard extends ConsumerWidget {
     final height = MediaQuery.of(context).size.height;
 
     return InkWell(
-      onTap: () => {
-        context.push('/chat')
-        },
+      onTap: () => {context.push('/chat')},
       child: Column(
         children: [
           Ink(
             decoration: BoxDecoration(
-              color: Colors.white70,
+              color: DesignColors.cpCardColor,
               borderRadius: BorderRadius.circular(8),
             ),
             height: max(height * 0.12, 50),
