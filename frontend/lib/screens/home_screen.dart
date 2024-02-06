@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import 'package:frontend/widgets/connection_card.dart';
 import 'package:frontend/providers.dart';
+import 'package:frontend/providers/providers.dart';
+import 'package:frontend/widgets/connection_card.dart';
 import '../utils/styles.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -57,33 +58,48 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           "Error loading venues",
           style: TextStyles.lsText,
         ),
-        data: (connections) => Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Column(
-            children: [
-              TextField(
+        data: (connections) => CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              backgroundColor: DesignColors.cpCardColor,
+              pinned: true,
+              floating: true,
+              title: TextField(
+                keyboardType: TextInputType.multiline,
                 controller: _searchController,
                 decoration: const InputDecoration(
                   hintText: 'Search connection',
                   prefixIcon: Icon(Icons.search),
                 ),
                 onChanged: (value) {
-                  setState(() => filterValue = value);
+                  setState(() => filterValue = value.toLowerCase());
                 },
               ),
-              SizedBox(
-                height: height * 0.02,
+            ),
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return SizedBox(
+                    height: height,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            children: connections
+                                .where((c) =>
+                                    c.toLowerCase().contains(filterValue))
+                                .map((c) => ConnectionCard(name: c))
+                                .toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                childCount: 1,
               ),
-              Expanded(
-                child: ListView(
-                  children: connections
-                      .where((c) => c.toLowerCase().contains(filterValue))
-                      .map((c) => ConnectionCard(name: c))
-                      .toList(),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

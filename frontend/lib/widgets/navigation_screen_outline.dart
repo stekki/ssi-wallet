@@ -52,12 +52,15 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
         backgroundColor: Colors.purple,
         actions: [
           TextButton(
-              onPressed: () {
-                context.go('/');
-              },
-              style: style,
-              child: const Row(
-                  children: [Icon(Icons.logout_rounded), Text('Logout')]))
+            onPressed: () {
+              context.go('/');
+            },
+            style: style,
+            child: const Tooltip(
+              message: "Log out",
+              child: Icon(Icons.logout_rounded),
+            ),
+          )
         ],
       ),
       body: SafeArea(
@@ -75,16 +78,20 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_work),
             label: 'home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.message_rounded),
-            label: 'chat',
+            icon: Icon(Icons.wallet),
+            label: 'credentials',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.qr_code_scanner),
+            label: 'scan',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'credentials',
+            label: 'profile',
           ),
         ],
       ),

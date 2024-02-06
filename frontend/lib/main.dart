@@ -7,7 +7,7 @@ import '../routes/navigation_helper.dart';
 
 void main() {
   log('Starting App');
-  NavigationHelper.instance;
+  NavigationHelper.instance; 
   runApp(const MyApp());
 }
 
