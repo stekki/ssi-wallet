@@ -1,6 +1,4 @@
-import 'dart:io' show Platform;
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 abstract class SecureStorage {
   Future<void> writeToken(String token);
@@ -12,11 +10,11 @@ class SecureStorageUtil implements SecureStorage {
   //Singleton pattern to avoid object creation when accesing the methods
   //through SecureStorageUtil().readToken()
   static final SecureStorageUtil _instance = SecureStorageUtil._internal();
+
   factory SecureStorageUtil() => _instance;
 
-  final SecureStorage _storage = Platform.isAndroid || Platform.isIOS
-      ? RealSecureStorage()
-      : FakeSecureStorage();
+  final SecureStorage _storage = FakeSecureStorage();
+  //final SecureStorage _storage = RealSecureStorage();
 
   SecureStorageUtil._internal();
 
@@ -30,6 +28,7 @@ class SecureStorageUtil implements SecureStorage {
   Future<void> deleteToken() => _storage.deleteToken();
 }
 
+/*
 // for iOS/Android builds
 class RealSecureStorage implements SecureStorage {
   static const _storage = FlutterSecureStorage();
@@ -49,6 +48,7 @@ class RealSecureStorage implements SecureStorage {
     await _storage.delete(key: 'token');
   }
 }
+*/
 
 // for Web, Mac and Linux builds
 class FakeSecureStorage implements SecureStorage {
