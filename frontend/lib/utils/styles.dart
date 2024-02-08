@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-class Constants {
-  static const lpLoginButtonSpacing = 40.0;
-}
-
 class DesignColors {
   static const mainColor = Color(0XFF07376F);
   static const secondaryColor = Color.fromRGBO(101, 178, 255, 0.498);

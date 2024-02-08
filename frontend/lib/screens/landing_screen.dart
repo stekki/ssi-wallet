@@ -1,8 +1,11 @@
 import 'dart:developer';
-import 'package:go_router/go_router.dart';
-import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../utils/constants.dart';
 import '../utils/custom_clippers.dart';
+import '../utils/secure_storage.dart';
 import '../utils/styles.dart';
 import '../widgets/landing_page_button.dart';
 
@@ -14,7 +17,8 @@ class LandingScreen extends StatefulWidget {
   _LandingScreenState createState() => _LandingScreenState();
 }
 
-class _LandingScreenState extends State<LandingScreen> with SingleTickerProviderStateMixin {
+class _LandingScreenState extends State<LandingScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -29,29 +33,73 @@ class _LandingScreenState extends State<LandingScreen> with SingleTickerProvider
     super.dispose();
   }
 
+  Future<void> promptForToken(BuildContext context) async {
+    TextEditingController tokenController = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // User must tap button to close the dialog
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Enter JWT Token'),
+          content: TextField(
+            controller: tokenController,
+            decoration: const InputDecoration(hintText: 'JWT Token'),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Submit'),
+              onPressed: () {
+                String token = tokenController.text;
+                // TODO: validate the token before proceeding, assume that token input is always correct
+                SecureStorageUtil().writeToken(token);
+                Navigator.of(context).pop(); // Close the dialog
+                context.go('/home');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget signInOptions() {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         LandingPageButton(
-          text: 'Login with Email',
+          text: 'Sign in with Email',
           onPressed: () {
-            // Login with Email logic
+            // Sign in with Email logic
           },
         ),
         const SizedBox(height: Constants.lpLoginButtonSpacing),
         LandingPageButton(
-          text: 'Login with FaceID',
+          text: 'Sign in with FaceID',
           onPressed: () {
-            // Login with FaceID logic
+            // Sign in with FaceID logic
           },
         ),
         const SizedBox(height: Constants.lpLoginButtonSpacing),
         LandingPageButton(
-          text: 'Piss-Head Login',
+          text: 'Sign in with token (dev)',
           onPressed: () {
-            // Login with Piss-Head
-            log('My man Piss-Head');
+            // Sign in with token
+            promptForToken(context);
+          },
+          color: DesignColors.devRed,
+        ),
+        const SizedBox(height: Constants.lpLoginButtonSpacing),
+        LandingPageButton(
+          text: 'Skip to home (dev)',
+          onPressed: () {
+            // Sign in with Piss-Head
+            log('My man, Piss-Head');
             context.go('/home');
           },
           color: DesignColors.devRed,

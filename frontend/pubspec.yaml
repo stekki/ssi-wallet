@@ -14,6 +14,7 @@ dependencies:
   go_router: ^13.0.0
   flutter_riverpod: ^2.4.0
   flutter_spinkit: ^5.2.0
+  #flutter_secure_storage: ^9.0.0 #uncomment this if you want to use real secure storage
 
 dev_dependencies:
   flutter_test:
