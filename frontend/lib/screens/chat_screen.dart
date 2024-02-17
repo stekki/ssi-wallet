@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
 import '../utils/styles.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -17,24 +16,17 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle style = TextButton.styleFrom(
-      foregroundColor: Colors.white,
-      backgroundColor: DesignColors.mainColor,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(2)),
-      ),
-    );
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(chatID ?? "Chat screen"),
-        backgroundColor: DesignColors.mainColor,
+        title: Text(
+          chatID ?? "Chat screen",
+          style: Theme.of(context).textTheme.displayMedium,
+        ),
         actions: [
           TextButton(
             onPressed: () {
               context.go('/');
             },
-            style: style,
             child: const Tooltip(
               message: "Log out",
               child: Icon(Icons.logout_rounded),

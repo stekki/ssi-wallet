@@ -16,83 +16,92 @@ class ConnectionCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
-
-    return InkWell(
-      onTap: () => {
-        context.pushNamed("chat", pathParameters: {"chatID": name})
-      },
-      child: Column(
-        children: [
-          Ink(
-            decoration: BoxDecoration(
-              color: DesignColors.cpCardColor,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            height: max(height * 0.12, 50),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.fitHeight,
-                            alignment: FractionalOffset.center,
-                            image: AssetImage('assets/logos/findywallet.png'),
+    //final width = MediaQuery.of(context).size.width;
+    return Card(
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      //padding: EdgeInsets.only(top: height * 0.01),
+      child: InkWell(
+        onTap: () => {
+          context.pushNamed("chat", pathParameters: {"chatID": name})
+        },
+        child: Column(
+          children: [
+            Ink(
+              decoration: BoxDecoration(
+                color: DesignColors.secondaryColor,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              height: max(height * 0.12, 50),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.fitHeight,
+                              alignment: FractionalOffset.center,
+                              image: AssetImage('assets/logos/findywallet.png'),
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 7,
-                          top: 23,
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            bottom: 7,
+                            top: 23,
+                          ),
+                          child: Text(
+                            name,
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w900, fontSize: 16),
+                          ),
                         ),
-                        child: Text(
-                          name,
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w900, fontSize: 16),
-                        ),
-                      ),
-                      const Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 5),
-                          child: SingleChildScrollView(
-                            child: Text(
-                              "description",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(fontWeight: FontWeight.w500),
+                        const Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: SingleChildScrollView(
+                              child: Text(
+                                "description",
+                                textAlign: TextAlign.left,
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          const Divider(
-            thickness: 1,
-            indent: 120,
-            endIndent: 20,
-            height: 0,
-          ),
-        ],
+            /*
+            const Divider(
+              thickness: 1,
+              indent: 120,
+              endIndent: 20,
+              height: 0,
+            ),
+            */
+          ],
+        ),
       ),
     );
   }
