@@ -1,46 +1,53 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
-import '../character.dart';
-
-import '../graphql_config.dart';
+import '../config/graphql_config.dart';
 
 class GraphQLService {
   static GraphQLConfig graphQLConfig = GraphQLConfig();
 
   GraphQLClient client = graphQLConfig.clientToQuery();
 
-  Future<List<Character>> getCharacters(page, name) async {
+final getIdQuery = gql("""
+  query {
+    user {
+      id,
+      name,
+    }
+
+  }
+""");
+final invitationQuery = gql("""
+  mutation {
+      invite {
+          id,
+          endpoint,
+          label,
+          raw,
+          imageB64
+      }
+  }
+  """);
+
+  Future<Map<String, dynamic>> getQueryResult(dynamic query, Map<String, dynamic> variables) async {
+
     try {
       QueryResult result = await client.query(
-        QueryOptions(
-          fetchPolicy: FetchPolicy.noCache,
-          document: gql("""
-            query Query(\$page: Int, \$name: String) {
-              characters(page: \$page, filter: { name: \$name }) {
-                results {
-                  name
-                }
-              }
-            }
-            """),
-          variables: {"page": page, "name": name},
-        ),
+      QueryOptions(
+        fetchPolicy: FetchPolicy.noCache,
+        document: query,
+        variables: variables
+      )
       );
-
       if (result.hasException) {
         throw Exception(result.exception);
       }
-
-      List? res = result.data?['characters']['results'];
-
-      if (res == null || res.isEmpty) {
-        return [];
+      Map<String, dynamic>? res = result.data;
+      if (res == null) {
+        return {};
+      } else {
+        return res;
       }
-
-      List<Character> characters =
-          res.map((char) => Character.fromMap(char)).toList();
-
-      return characters;
-    } catch (error) {
+    }
+    catch (error) {
       throw Exception(error);
     }
   }
