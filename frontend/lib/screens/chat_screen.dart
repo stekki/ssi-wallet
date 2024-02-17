@@ -14,24 +14,17 @@ class ChatScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle style = TextButton.styleFrom(
-      foregroundColor: Colors.white,
-      backgroundColor: Colors.purple,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(2)),
-      ),
-    );
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Findy Wallet"),
-        backgroundColor: Colors.purple,
+        title: Text(
+          "Credi",
+          style: Theme.of(context).textTheme.displayMedium,
+        ),
         actions: [
           TextButton(
             onPressed: () {
               context.go('/');
             },
-            style: style,
             child: const Tooltip(
               message: "Log out",
               child: Icon(Icons.logout_rounded),

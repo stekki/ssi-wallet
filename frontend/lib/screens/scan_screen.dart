@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/utils/styles.dart';
 
 class ScanScreen extends StatelessWidget {
   const ScanScreen({super.key});
 
-  /*
-  void popUntilRoot(BuildContext context) {
-    while (context.canPop()) {  
-      context.pop();
-    }
-  }
-  */
-
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Scan Screen"),
+    return Scaffold(
+      body: Container(
+        decoration: scaffoldBackground,
+        child: const Center(
+          child: Text("Scan Screen"),
+        ),
       ),
     );
   }

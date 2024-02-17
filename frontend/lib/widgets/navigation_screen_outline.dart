@@ -36,13 +36,6 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
 
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle style = TextButton.styleFrom(
-      foregroundColor: Colors.white,
-      backgroundColor: Colors.purple,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(2)),
-      ),
-    );
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -54,7 +47,6 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
             onPressed: () {
               context.go('/');
             },
-            style: style,
             child: const Tooltip(
               message: "Log out",
               child: Icon(Icons.logout_rounded),

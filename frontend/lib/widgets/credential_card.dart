@@ -16,11 +16,10 @@ class CredentialCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
 
-    return Padding(
-      padding: const EdgeInsets.all(8),
+    return Card(
       child: Container(
         decoration: BoxDecoration(
-          color: DesignColors.cpCardColor.withOpacity(0),
+          color: DesignColors.tertiaryColor.withOpacity(0),
           borderRadius: BorderRadius.circular(8),
         ),
         height: max(height * 0.1, 50),

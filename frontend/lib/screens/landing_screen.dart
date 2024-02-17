@@ -125,6 +125,7 @@ class _LandingScreenState extends State<LandingScreen>
 
     return Scaffold(
       body: Container(
+        decoration: scaffoldBackground,
         height: height,
         width: width,
         alignment: Alignment.center,
@@ -149,48 +150,56 @@ class _LandingScreenState extends State<LandingScreen>
                   Text(
                     "Credi",
                     style: Theme.of(context).textTheme.displayLarge,
-                  )
+                  ),
                 ],
               ),
             ),
             Positioned.fill(
-              top: height * 0.3,
-              child: Column(
-                children: [
-                  TabBar(
-                    controller: _tabController,
-                    tabs: const [
-                      Tab(text: 'Sign In'),
-                      Tab(text: 'Register'),
-                    ],
-                    labelColor: Colors.black,
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        Center(
-                          child: SingleChildScrollView(
-                            child: signInOptions(),
-                          ),
-                        ),
-                        Center(
-                          child: Column(
-                            children: [
-                              registerForm(),
-                              LandingPageButton(
-                                text: 'Register',
-                                onPressed: () {
-                                  // Register logic
-                                },
+              top: height * 0.4,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+                child: Container(
+                  color: DesignColors.secondaryColor,
+                  child: Column(
+                    children: [
+                      TabBar(
+                        controller: _tabController,
+                        tabs: const [
+                          Tab(text: 'Sign In'),
+                          Tab(text: 'Register'),
+                        ],
+                      ),
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: [
+                            Center(
+                              child: SingleChildScrollView(
+                                child: signInOptions(),
                               ),
-                            ],
-                          ),
+                            ),
+                            Center(
+                              child: Column(
+                                children: [
+                                  registerForm(),
+                                  LandingPageButton(
+                                    text: 'Register',
+                                    onPressed: () {
+                                      // Register logic
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ],
