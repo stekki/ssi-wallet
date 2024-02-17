@@ -5,35 +5,29 @@ class AppTheme {
   AppTheme._();
 
   static ThemeData lightTheme = ThemeData(
+    tabBarTheme: const TabBarTheme(
+      indicatorSize: TabBarIndicatorSize.tab,
+      indicatorColor: DesignColors.tertiaryColor,
+      labelColor: DesignColors.mainColor,
+      unselectedLabelColor: DesignColors.tertiaryColor,
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          DesignColors.mainColor,
+        ), //button color
+        foregroundColor: MaterialStateProperty.all<Color>(
+          DesignColors.secondaryColor,
+        ),
+      ),
+    ),
     primaryColor: DesignColors.secondaryColor,
     scaffoldBackgroundColor: DesignColors.mainColor,
-    textTheme: TextTheme(
-        // logo text
-        displayLarge: const TextStyle().copyWith(
-          fontFamily: "Piazzolla",
-          fontSize: 35,
-          fontWeight: FontWeight.bold,
-          color: DesignColors.secondaryColor,
-        ),
-        // appbar text
-        displayMedium: const TextStyle().copyWith(
-          fontFamily: "Piazzolla",
-          fontSize: 25,
-          fontWeight: FontWeight.normal,
-          color: DesignColors.secondaryColor,
-        ),
-        bodyMedium: const TextStyle().copyWith(
-          fontFamily: "Piazzolla",
-          fontSize: 17,
-          fontWeight: FontWeight.bold,
-          color: DesignColors.secondaryColor,
-        ),
-        bodyLarge: const TextStyle().copyWith(
-          fontFamily: "Piazzolla",
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: DesignColors.secondaryColor,
-        )),
+    textTheme: const TextTheme(
+      displayLarge: TextStyles.logoText,
+      displayMedium: TextStyles.appBarText,
+      bodyMedium: TextStyles.mediumText,
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: DesignColors.mainColor,
     ),

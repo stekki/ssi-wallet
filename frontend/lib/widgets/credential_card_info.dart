@@ -20,7 +20,7 @@ class CredentialCardInfo extends ConsumerWidget {
       padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
       child: Container(
         decoration: BoxDecoration(
-          color: DesignColors.cpCardColor.withOpacity(0),
+          color: DesignColors.tertiaryColor.withOpacity(0),
           borderRadius: BorderRadius.circular(8),
         ),
         height: max(height * 0.1, 50),
