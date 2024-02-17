@@ -129,14 +129,15 @@ class NavigationHelper {
       ),
       GoRoute(
         name: 'chat',
-        path: '/chat',
-        pageBuilder: (context, state) {
-          return getPage(
-            child: const ChatScreen(),
-            state: state,
-          );
-        },
-      ),
+        path: '/chat/:chatID',
+        pageBuilder: (context, state) => MaterialPage(
+          key: state.pageKey,
+          name: state.path,
+          child: ChatScreen(
+            chatID: state.pathParameters['chatID'],
+          ),
+        ),
+      )
     ];
     router = GoRouter(
       initialLocation: '/',
