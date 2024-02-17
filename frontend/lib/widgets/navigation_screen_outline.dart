@@ -45,8 +45,10 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text("Findy Wallet | $username"),
-        backgroundColor: Colors.purple,
+        title: Text(
+          "Credi | $username",
+          style: Theme.of(context).textTheme.displayMedium,
+        ),
         actions: [
           TextButton(
             onPressed: () {

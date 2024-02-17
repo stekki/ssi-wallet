@@ -1,10 +1,8 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../utils/constants.dart';
-import '../utils/custom_clippers.dart';
 import '../utils/secure_storage.dart';
 import '../utils/styles.dart';
 import '../widgets/landing_page_button.dart';
@@ -126,7 +124,6 @@ class _LandingScreenState extends State<LandingScreen>
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: DesignColors.tertiaryColor,
       body: Container(
         height: height,
         width: width,
@@ -134,42 +131,30 @@ class _LandingScreenState extends State<LandingScreen>
         child: Stack(
           alignment: Alignment.topCenter,
           children: [
-            Column(
-              children: [
-                Expanded(
-                  child: Container(),
-                ),
-                Expanded(
-                  child: Container(
-                    color: DesignColors.secondaryColor,
-                  ),
-                )
-              ],
-            ),
-            ClipPath(
-              clipper: FirstClipper(),
-              child: Container(
-                color: DesignColors.secondaryColor,
-              ),
-            ),
-            ClipPath(
-              clipper: SecondClipper(),
-              child: Container(
-                color: DesignColors.tertiaryColor,
-              ),
-            ),
-            ClipPath(
-              clipper: ThirdClipper(),
-              child: Container(
-                color: DesignColors.tertiaryColor,
-              ),
-            ),
             Positioned(
               top: height * 0.05,
-              child: const Text('SSI Wallet!!!', style: TextStyles.lpTitle),
+              child: Column(
+                children: [
+                  Container(
+                    width: width * 0.4,
+                    height: height * 0.2,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.fitHeight,
+                        alignment: FractionalOffset.center,
+                        image: AssetImage('assets/logos/findywallet_white.png'),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    "Credi",
+                    style: Theme.of(context).textTheme.displayLarge,
+                  )
+                ],
+              ),
             ),
             Positioned.fill(
-              top: height * 0.15,
+              top: height * 0.3,
               child: Column(
                 children: [
                   TabBar(

@@ -46,15 +46,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: connectionsFuture.when(
         loading: () => const Text(
           "Loading...",
-          style: TextStyles.lsText,
         ),
         error: (err, stack) => const Text(
           "Error loading venues",
-          style: TextStyles.lsText,
         ),
         data: (connections) => CustomScrollView(
           slivers: <Widget>[
