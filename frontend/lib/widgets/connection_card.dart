@@ -18,7 +18,9 @@ class ConnectionCard extends ConsumerWidget {
     final height = MediaQuery.of(context).size.height;
 
     return InkWell(
-      onTap: () => {context.push('/chat')},
+      onTap: () => {
+        context.pushNamed("chat", pathParameters: {"chatID": name})
+      },
       child: Column(
         children: [
           Ink(
