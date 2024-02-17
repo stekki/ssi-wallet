@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../utils/styles.dart';
+
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+  final String? chatID;
+  const ChatScreen({super.key, required this.chatID});
 
   /*
   void popUntilRoot(BuildContext context) {
@@ -16,7 +19,7 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final ButtonStyle style = TextButton.styleFrom(
       foregroundColor: Colors.white,
-      backgroundColor: Colors.purple,
+      backgroundColor: DesignColors.mainColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(2)),
       ),
@@ -24,8 +27,8 @@ class ChatScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Findy Wallet"),
-        backgroundColor: Colors.purple,
+        title: Text(chatID ?? "Chat screen"),
+        backgroundColor: DesignColors.mainColor,
         actions: [
           TextButton(
             onPressed: () {
