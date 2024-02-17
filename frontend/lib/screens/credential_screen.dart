@@ -47,15 +47,12 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: credentialsFuture.when(
         loading: () => const Text(
           "Loading...",
-          style: TextStyles.lsText,
         ),
         error: (err, stack) => const Text(
           "Error loading venues",
-          style: TextStyles.lsText,
         ),
         data: (credentials) => CustomScrollView(
           slivers: <Widget>[

@@ -24,13 +24,10 @@ class LandingPageButton extends StatelessWidget {
           right: Radius.circular(40),
         )),
       ),
-      onPressed: onPressed, 
+      onPressed: onPressed,
       child: Padding(
           padding: const EdgeInsets.fromLTRB(60, 10, 60, 10),
-          child: Text(
-            text,
-            style: TextStyles.lpButton,
-          )),
+          child: Text(text)),
     );
   }
 }

@@ -27,6 +27,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logos/findywallet.png
+    - assets/logos/findywallet_white.png
   fonts:
     - family: Piazzolla
       fonts:
