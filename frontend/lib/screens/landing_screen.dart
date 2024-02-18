@@ -162,7 +162,7 @@ class _LandingScreenState extends State<LandingScreen>
                   topRight: Radius.circular(30),
                 ),
                 child: Container(
-                  color: DesignColors.secondaryColor,
+                  color: DesignColors.extraColorWhite,
                   child: Column(
                     children: [
                       TabBar(

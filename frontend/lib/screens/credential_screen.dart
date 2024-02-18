@@ -83,7 +83,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                                   c.name.toLowerCase().contains(filterValue))
                               .map<ExpansionPanel>(
                                 (c) => ExpansionPanel(
-                                  backgroundColor: DesignColors.secondaryColor,
+                                  backgroundColor: DesignColors.extraColorWhite,
                                   headerBuilder:
                                       (BuildContext context, bool isExpanded) {
                                     return CredentialCard(name: c.name);

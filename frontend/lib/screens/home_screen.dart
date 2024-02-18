@@ -13,9 +13,23 @@ class HomeScreen extends ConsumerStatefulWidget {
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
+  late TabController _tabController;
   String filterValue = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,55 +50,132 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           error: (err, stack) => const Text(
             "Error loading chats",
           ),
-          data: (connections) => CustomScrollView(
-            slivers: <Widget>[
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                sliver: SliverAppBar(
-                  shape: const ContinuousRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                    ),
-                  ),
-                  backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-                  pinned: true,
-                  floating: true,
-                  title: TextField(
-                    keyboardType: TextInputType.multiline,
-                    controller: _searchController,
-                    decoration: const InputDecoration(
-                      hintText: 'Search connection',
-                      prefixIcon: Icon(Icons.search),
-                      border: InputBorder.none,
-                    ),
-                    onChanged: (value) {
-                      setState(() => filterValue = value.toLowerCase());
-                    },
-                  ),
-                ),
+          data: (connections) => Column(
+            children: [
+              TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(text: 'Open chats'),
+                  Tab(text: 'chat request (0)'),
+                ],
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return SizedBox(
-                      height: height * 0.75,
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: ListView(
-                              children: connections
-                                  .where((c) =>
-                                      c.toLowerCase().contains(filterValue))
-                                  .map((c) => ConnectionCard(name: c))
-                                  .toList(),
+              Expanded(
+                child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    CustomScrollView(
+                      slivers: <Widget>[
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                          sliver: SliverAppBar(
+                            shape: const ContinuousRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
+                              ),
+                            ),
+                            backgroundColor:
+                                const Color.fromRGBO(255, 255, 255, 1),
+                            pinned: true,
+                            floating: true,
+                            title: TextField(
+                              keyboardType: TextInputType.multiline,
+                              controller: _searchController,
+                              decoration: const InputDecoration(
+                                hintText: 'Search connection',
+                                prefixIcon: Icon(Icons.search),
+                                border: InputBorder.none,
+                              ),
+                              onChanged: (value) {
+                                setState(
+                                    () => filterValue = value.toLowerCase());
+                              },
                             ),
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                  childCount: 1,
+                        ),
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return SizedBox(
+                                height: height * 0.75,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: ListView(
+                                        children: connections
+                                            .where((c) => c
+                                                .toLowerCase()
+                                                .contains(filterValue))
+                                            .map((c) => ConnectionCard(name: c))
+                                            .toList(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            childCount: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+                    CustomScrollView(
+                      slivers: <Widget>[
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                          sliver: SliverAppBar(
+                            shape: const ContinuousRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(30),
+                                bottomRight: Radius.circular(30),
+                              ),
+                            ),
+                            backgroundColor:
+                                const Color.fromRGBO(255, 255, 255, 1),
+                            pinned: true,
+                            floating: true,
+                            title: TextField(
+                              keyboardType: TextInputType.multiline,
+                              controller: _searchController,
+                              decoration: const InputDecoration(
+                                hintText: 'Search connection',
+                                prefixIcon: Icon(Icons.search),
+                                border: InputBorder.none,
+                              ),
+                              onChanged: (value) {
+                                setState(
+                                    () => filterValue = value.toLowerCase());
+                              },
+                            ),
+                          ),
+                        ),
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return SizedBox(
+                                height: height * 0.75,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: ListView(
+                                        children: connections
+                                            .where((c) => c
+                                                .toLowerCase()
+                                                .contains(filterValue))
+                                            .map((c) => ConnectionCard(name: c))
+                                            .toList(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            childCount: 1,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
               ),
             ],

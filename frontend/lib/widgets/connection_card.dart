@@ -28,7 +28,7 @@ class ConnectionCard extends ConsumerWidget {
           children: [
             Ink(
               decoration: BoxDecoration(
-                color: DesignColors.secondaryColor,
+                color: DesignColors.extraColorWhite,
                 borderRadius: BorderRadius.circular(8),
               ),
               height: max(height * 0.09, 60),

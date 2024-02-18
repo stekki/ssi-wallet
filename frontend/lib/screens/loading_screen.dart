@@ -22,8 +22,8 @@ class LoadingScreen extends StatelessWidget {
               return DecoratedBox(
                 decoration: BoxDecoration(
                   color: index.isEven
-                      ? const Color.fromARGB(199, 27, 141, 166)
-                      : const Color.fromARGB(198, 42, 143, 166),
+                      ? DesignColors.extraColorWhite
+                      : DesignColors.extraColorGray,
                   shape: BoxShape.circle,
                 ),
               );
