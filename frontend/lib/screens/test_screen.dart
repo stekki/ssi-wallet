@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void makeQuery() async {
     result = await GraphQLService().getQueryResult(GraphQLService().getIdQuery, {});
-    print(result);
+    //print(result);
     setState(() {
       num++;
     });
