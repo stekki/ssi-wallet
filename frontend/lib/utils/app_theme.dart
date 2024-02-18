@@ -27,6 +27,7 @@ class AppTheme {
       displayLarge: TextStyles.logoText,
       displayMedium: TextStyles.appBarText,
       bodyMedium: TextStyles.mediumText,
+      titleMedium: TextStyles.mediumText,
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: DesignColors.mainColor,
