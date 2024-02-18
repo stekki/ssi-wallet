@@ -6,9 +6,9 @@ final connectionsFutureProvider = FutureProvider<List<String>>(
     return await Future.delayed(
         const Duration(seconds: 1),
         () => [
-              "Aalto University",
-              "Finland",
-              "OP Financial Group",
+              "Pisshead",
+              "Heikki",
+              "Janne",
             ]);
   },
 );
