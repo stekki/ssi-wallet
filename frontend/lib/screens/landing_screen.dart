@@ -3,10 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../utils/constants.dart';
-import '../utils/secure_storage.dart';
-import '../utils/styles.dart';
-import '../widgets/landing_page_button.dart';
+import 'package:frontend/utils/constants.dart';
+import 'package:frontend/utils/secure_storage.dart';
+import 'package:frontend/utils/styles.dart';
+import 'package:frontend/widgets/landing_page_button.dart';
+import 'package:frontend/utils/helpers.dart' as helpers;
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -195,6 +196,10 @@ class _LandingScreenState extends State<LandingScreen>
                                     text: 'Register',
                                     onPressed: () {
                                       // Register logic
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) =>
+                                              helpers.showInfoSnackBar(context,
+                                                  "Registration successful"));
                                     },
                                   ),
                                 ],
