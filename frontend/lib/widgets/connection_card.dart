@@ -22,18 +22,37 @@ class ConnectionCard extends ConsumerWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
-      //padding: EdgeInsets.only(top: height * 0.01),
       child: InkWell(
         onTap: () => {context.push('/chat')},
         child: Column(
           children: [
             Ink(
               decoration: BoxDecoration(
-                color: DesignColors.secondaryColor,
+                color: DesignColors.extraColorWhite,
                 borderRadius: BorderRadius.circular(8),
               ),
-              height: max(height * 0.12, 50),
-              child: Row(
+              height: max(height * 0.09, 60),
+              child: ListTile(
+                leading: const CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.transparent,
+                    backgroundImage:
+                        AssetImage('assets/logos/findywallet.png')),
+                trailing: const Text("Tap to chat"),
+                title: Text(name),
+                subtitle: const Text("Target item"),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/*
+
+Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -89,18 +108,5 @@ class ConnectionCard extends ConsumerWidget {
                   ),
                 ],
               ),
-            ),
-            /*
-            const Divider(
-              thickness: 1,
-              indent: 120,
-              endIndent: 20,
-              height: 0,
-            ),
-            */
-          ],
-        ),
-      ),
-    );
-  }
-}
+
+*/

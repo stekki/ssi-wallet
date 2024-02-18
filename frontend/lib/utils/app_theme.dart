@@ -7,9 +7,9 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     tabBarTheme: const TabBarTheme(
       indicatorSize: TabBarIndicatorSize.tab,
-      indicatorColor: DesignColors.tertiaryColor,
+      indicatorColor: DesignColors.secondaryColor,
       labelColor: DesignColors.mainColor,
-      unselectedLabelColor: DesignColors.tertiaryColor,
+      unselectedLabelColor: DesignColors.extraColorBlack,
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
@@ -17,16 +17,17 @@ class AppTheme {
           DesignColors.mainColor,
         ), //button color
         foregroundColor: MaterialStateProperty.all<Color>(
-          DesignColors.secondaryColor,
+          DesignColors.extraColorWhite,
         ),
       ),
     ),
-    primaryColor: DesignColors.secondaryColor,
+    primaryColor: DesignColors.extraColorWhite,
     scaffoldBackgroundColor: DesignColors.mainColor,
     textTheme: const TextTheme(
       displayLarge: TextStyles.logoText,
       displayMedium: TextStyles.appBarText,
       bodyMedium: TextStyles.mediumText,
+      titleMedium: TextStyles.mediumTitle,
     ),
     appBarTheme: const AppBarTheme(
       backgroundColor: DesignColors.mainColor,

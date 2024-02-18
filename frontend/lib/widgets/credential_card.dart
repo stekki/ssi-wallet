@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:math';
+//import 'dart:math';
 
-import 'package:frontend/utils/styles.dart';
+//import 'package:frontend/utils/styles.dart';
 
 class CredentialCard extends ConsumerWidget {
   final String name;
@@ -14,10 +14,22 @@ class CredentialCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final height = MediaQuery.of(context).size.height;
+    //final height = MediaQuery.of(context).size.height;
 
     return Card(
-      child: Container(
+      child: ListTile(
+        leading: const Icon(Icons.stars),
+        title: Text(name),
+        subtitle: const Text("Target item"),
+      ),
+    );
+  }
+}
+
+
+/*
+
+Container(
         decoration: BoxDecoration(
           color: DesignColors.tertiaryColor.withOpacity(0),
           borderRadius: BorderRadius.circular(8),
@@ -80,6 +92,5 @@ class CredentialCard extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-}
+
+*/
