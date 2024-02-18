@@ -11,7 +11,7 @@ class ScanScreen extends StatelessWidget {
     }
   }
   */
-
+  
   @override
   Widget build(BuildContext context) {
       return Scaffold(
@@ -21,6 +21,7 @@ class ScanScreen extends StatelessWidget {
             detectionSpeed: DetectionSpeed.normal,
             facing: CameraFacing.back,
             torchEnabled: false,
+            // TODO: Make the scanning stop when the scan screen is closed
           ),
           onDetect: (capture) {
             final List<Barcode> qrcodes = capture.barcodes;
