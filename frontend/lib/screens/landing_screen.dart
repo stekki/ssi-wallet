@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -97,7 +98,7 @@ class _LandingScreenState extends State<LandingScreen>
           text: 'Skip to home (dev)',
           onPressed: () {
             // Sign in with Piss-Head
-            log('My man, Piss-Head');
+            //log('My man, Piss-Head');
             context.go('/home');
           },
           color: DesignColors.devRed,
@@ -149,7 +150,13 @@ class _LandingScreenState extends State<LandingScreen>
                   ),
                   Text(
                     "Credi",
-                    style: Theme.of(context).textTheme.displayLarge,
+                    //Theme.of(context).textTheme.displayLarge,
+                    style: TextStyle(
+                      fontFamily: "Piazzolla",
+                      fontSize: min(height * 0.09, 30),
+                      fontWeight: FontWeight.bold,
+                      color: DesignColors.extraColorWhite,
+                    ),
                   ),
                 ],
               ),
