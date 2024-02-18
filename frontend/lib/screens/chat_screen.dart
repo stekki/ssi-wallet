@@ -1,121 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Models/chat_model.dart';
+import 'package:frontend/Models/message_model.dart';
 import 'package:go_router/go_router.dart';
+import '../utils/app_theme.dart';
 import '../utils/styles.dart';
 
-class Message {
-  final String id;
-  final String message;
-  final bool sentByMe;
-  final bool delivered;
-  final String createdMs;
-  final String connection;
+import '../Models/models.dart';
 
-  const Message({
-    required this.id,
-    required this.message,
-    required this.sentByMe,
-    required this.delivered,
-    required this.createdMs,
-    required this.connection,
-  });
-
-  static const List<Message> messages = [
-    Message(
-      id: '1',
-      message: 'Hey, how are you?',
-      sentByMe: false,
-      delivered: true,
-      createdMs: '1634567890000',
-      connection: 'user1_user2',
-    ),
-    Message(
-      id: '2',
-      message: 'I\'m good, thanks! How about you?',
-      sentByMe: true,
-      delivered: true,
-      createdMs: '1634567900000',
-      connection: 'user1_user2',
-    ),
-    Message(
-      id: '3',
-      message: 'I\'m doing great too!',
-      sentByMe: false,
-      delivered: true,
-      createdMs: '1634567910000',
-      connection: 'user1_user2',
-    ),
-    Message(
-      id: '4',
-      message: 'That\'s awesome!',
-      sentByMe: true,
-      delivered: true,
-      createdMs: '1634567920000',
-      connection: 'user1_user2',
-    ),
-    Message(
-      id: '5',
-      message: 'By the way, did you watch the latest movie?',
-      sentByMe: false,
-      delivered: true,
-      createdMs: '1634567930000',
-      connection: 'user1_user2',
-    ),
-    Message(
-      id: '6',
-      message: 'Yes, it was amazing!',
-      sentByMe: true,
-      delivered: true,
-      createdMs: '1634567940000',
-      connection: 'user1_user2',
-    ),
-  ];
-}
-
-class Chat {
-  final String connection;
-  final List<Message> messages;
-
-  const Chat({
-    required this.connection,
-    required this.messages,
-  });
-
-  Chat copyWith({
-    String? connection,
-    List<Message>? messages,
-  }) {
-    return Chat(
-      connection: connection ?? this.connection,
-      messages: messages ?? this.messages,
-    );
-  }
-
-  static List<Chat> chats = [
-    const Chat(
-      connection: 'user1_user2',
-      messages: Message.messages,
-    ),
-  ];
-}
-
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   final String? chatID;
   const ChatScreen({super.key, required this.chatID});
 
-  /*
-  void popUntilRoot(BuildContext context) {
-    while (context.canPop()) {  
-      context.pop();
-    }
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  ScrollController _scrollController = ScrollController();
+  TextEditingController _textEditingController = TextEditingController();
+  late String connection;
+  late List<Message> messages;
+
+  @override
+  void initState() {
+    super.initState();
+    // connections are given as argument to the chat screen
+    // messages are given as argument to the chat screen
   }
-  */
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            chatID ?? "Chat screen",
+            widget.chatID ?? "Chat screen",
             style: Theme.of(context).textTheme.displayMedium,
           ),
           actions: [
@@ -132,38 +50,40 @@ class ChatScreen extends StatelessWidget {
         ),
         body: Column(
           children: [
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: Chat.chats[0].messages.length,
-              itemBuilder: (context, index) {
-                Message message = Chat.chats[0].messages[index];
-                return Align(
-                  alignment: message.sentByMe
-                      ? Alignment.centerRight
-                      : Alignment.centerLeft,
-                  child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: message.sentByMe
-                          ? DesignColors.tertiaryColor
-                          : DesignColors.secondaryColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    margin: const EdgeInsets.symmetric(vertical: 10),
-                    child: Text(
-                      message.message,
-                      style: TextStyle(
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: Chat.chats[0].messages.length,
+                itemBuilder: (context, index) {
+                  Message message = Chat.chats[0].messages[index];
+                  return Align(
+                    alignment: message.sentByMe
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.6,
+                      ),
+                      decoration: BoxDecoration(
                         color: message.sentByMe
-                            ? DesignColors.secondaryColor
-                            : Colors.black,
+                            ? DesignColors.tertiaryColor
+                            : DesignColors.secondaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        message.message,
+                        style: TextStyle(
+                          color: message.sentByMe
+                              ? DesignColors.secondaryColor
+                              : Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
             const Divider(
               height: 4,
@@ -174,15 +94,21 @@ class ChatScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      decoration: const InputDecoration(
+                    child: TextFormField(
+                      decoration: InputDecoration(
                         hintText: "Type a message",
+                        filled: true,
+                        fillColor: DesignColors.secondaryColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide.none,
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.send),
+                        ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.send),
                   ),
                 ],
               ),
