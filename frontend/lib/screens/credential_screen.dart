@@ -41,13 +41,14 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                 sliver: SliverAppBar(
+                  toolbarHeight: 40,
                   shape: const ContinuousRectangleBorder(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30),
                     ),
                   ),
-                  backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+                  backgroundColor: DesignColors.extraColorWhite,
                   pinned: true,
                   floating: true,
                   title: TextField(
@@ -57,6 +58,8 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                       hintText: 'Search connection',
                       prefixIcon: Icon(Icons.search),
                       border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
                     ),
                     onChanged: (value) {
                       setState(() => filterValue = value.toLowerCase());

@@ -107,12 +107,11 @@ class _LandingScreenState extends State<LandingScreen>
     );
   }
 
-  Widget registerForm() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: TextField(
+  Widget registerForm(double height) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: height * 0.07),
+      child: const TextField(
         decoration: InputDecoration(
-          border: OutlineInputBorder(),
           labelText: 'Email',
         ),
       ),
@@ -153,7 +152,7 @@ class _LandingScreenState extends State<LandingScreen>
                     //Theme.of(context).textTheme.displayLarge,
                     style: TextStyle(
                       fontFamily: "Piazzolla",
-                      fontSize: min(height * 0.09, 30),
+                      fontSize: max(height * 0.09, 30),
                       fontWeight: FontWeight.bold,
                       color: DesignColors.extraColorWhite,
                     ),
@@ -191,7 +190,7 @@ class _LandingScreenState extends State<LandingScreen>
                             Center(
                               child: Column(
                                 children: [
-                                  registerForm(),
+                                  registerForm(height),
                                   LandingPageButton(
                                     text: 'Register',
                                     onPressed: () {

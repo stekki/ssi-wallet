@@ -38,6 +38,13 @@ class TextStyles {
     fontWeight: FontWeight.bold,
     color: DesignColors.secondaryColor,
   );
+  // label title (sign in, register)
+  static const TextStyle labelTitle = TextStyle(
+    fontFamily: "Piazzolla",
+    fontSize: 17,
+    fontWeight: FontWeight.bold,
+    color: DesignColors.secondaryColor,
+  );
 }
 
 const scaffoldBackground = BoxDecoration(
