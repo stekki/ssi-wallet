@@ -28,6 +28,7 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
 
   Future<void> _fetchAndSetUsername() async {
     String? token = await SecureStorageUtil().getToken();
+    //print(token);
     String? usernameFromToken = getUsernameJwt(token);
     setState(() {
       username = usernameFromToken ?? 'Stranger';

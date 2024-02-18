@@ -27,6 +27,14 @@ final invitationQuery = gql("""
   }
   """);
 
+final queryForQR = gql("""
+  mutation {
+      invite {
+          imageB64
+      }
+  }
+  """);
+
   Future<Map<String, dynamic>> getQueryResult(dynamic query, Map<String, dynamic> variables) async {
 
     try {
