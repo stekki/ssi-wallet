@@ -3,10 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../utils/constants.dart';
-import '../utils/secure_storage.dart';
-import '../utils/styles.dart';
-import '../widgets/landing_page_button.dart';
+import 'package:frontend/utils/constants.dart';
+import 'package:frontend/utils/secure_storage.dart';
+import 'package:frontend/utils/styles.dart';
+import 'package:frontend/widgets/landing_page_button.dart';
+import 'package:frontend/utils/helpers.dart' as helpers;
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -107,12 +108,11 @@ class _LandingScreenState extends State<LandingScreen>
     );
   }
 
-  Widget registerForm() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: TextField(
+  Widget registerForm(double height) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: height * 0.07),
+      child: const TextField(
         decoration: InputDecoration(
-          border: OutlineInputBorder(),
           labelText: 'Email',
         ),
       ),
@@ -153,7 +153,7 @@ class _LandingScreenState extends State<LandingScreen>
                     //Theme.of(context).textTheme.displayLarge,
                     style: TextStyle(
                       fontFamily: "Piazzolla",
-                      fontSize: min(height * 0.09, 30),
+                      fontSize: max(height * 0.09, 30),
                       fontWeight: FontWeight.bold,
                       color: DesignColors.extraColorWhite,
                     ),
@@ -191,11 +191,15 @@ class _LandingScreenState extends State<LandingScreen>
                             Center(
                               child: Column(
                                 children: [
-                                  registerForm(),
+                                  registerForm(height),
                                   LandingPageButton(
                                     text: 'Register',
                                     onPressed: () {
                                       // Register logic
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) =>
+                                              helpers.showInfoSnackBar(context,
+                                                  "Registration successful"));
                                     },
                                   ),
                                 ],
