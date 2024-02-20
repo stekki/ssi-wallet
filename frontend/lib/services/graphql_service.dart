@@ -6,7 +6,7 @@ class GraphQLService {
 
   GraphQLClient client = graphQLConfig.clientToQuery();
 
-final getIdQuery = gql("""
+  final getIdQuery = gql("""
   query {
     user {
       id,
@@ -15,7 +15,7 @@ final getIdQuery = gql("""
 
   }
 """);
-final invitationQuery = gql("""
+  final invitationQuery = gql("""
   mutation {
       invite {
           id,
@@ -26,17 +26,39 @@ final invitationQuery = gql("""
       }
   }
   """);
+  final getMessagesQuery = gql("""
+    query {
+      connections(first: 5) {
+        nodes {
+          id
+          ourDid
+          theirDid
+          theirEndpoint
+          theirLabel
+          createdMs
+          approvedMs
+          invited
+          messages(first: 10) {
+            nodes {
+              id
+              message
+              sentByMe
+              connection {
+                id
+              }
+            }
+          }
+        }
+      }
+    }""");
 
-  Future<Map<String, dynamic>> getQueryResult(dynamic query, Map<String, dynamic> variables) async {
-
+  Future<Map<String, dynamic>> getQueryResult(
+      dynamic query, Map<String, dynamic> variables) async {
     try {
-      QueryResult result = await client.query(
-      QueryOptions(
-        fetchPolicy: FetchPolicy.noCache,
-        document: query,
-        variables: variables
-      )
-      );
+      QueryResult result = await client.query(QueryOptions(
+          fetchPolicy: FetchPolicy.noCache,
+          document: query,
+          variables: variables));
       if (result.hasException) {
         throw Exception(result.exception);
       }
@@ -46,8 +68,7 @@ final invitationQuery = gql("""
       } else {
         return res;
       }
-    }
-    catch (error) {
+    } catch (error) {
       throw Exception(error);
     }
   }

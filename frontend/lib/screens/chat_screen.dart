@@ -4,6 +4,7 @@ import 'package:frontend/Models/message_model.dart';
 import 'package:go_router/go_router.dart';
 import '../utils/app_theme.dart';
 import '../utils/styles.dart';
+import '../services/graphql_service.dart';
 
 import '../Models/models.dart';
 
@@ -20,12 +21,24 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController _textEditingController = TextEditingController();
   late String connection;
   late List<Message> messages;
+  late List<dynamic> gqlmessages;
 
   @override
   void initState() {
     super.initState();
     // connections are given as argument to the chat screen
     // messages are given as argument to the chat screen
+  }
+
+  Map? result = {};
+
+  void getMessages() async {
+    result = await GraphQLService()
+        .getQueryResult(GraphQLService().getMessagesQuery, {});
+    setState(() {
+      gqlmessages = result!['connections']['nodes'][0]['messages']['nodes'];
+      print(gqlmessages);
+    });
   }
 
   @override
@@ -104,7 +117,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           borderSide: BorderSide.none,
                         ),
                         suffixIcon: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            getMessages();
+                          },
                           icon: const Icon(Icons.send),
                         ),
                       ),
