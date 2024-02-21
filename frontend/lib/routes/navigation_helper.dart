@@ -13,7 +13,7 @@ import '../screens/splash_screen.dart';
 
 class NavigationHelper {
   void navigateToLanding() {
-    router.go('/landing'); // Use the route path for the landing screen
+    router.go('/landing');
   }
 
   static final NavigationHelper _instance = NavigationHelper._internal();
@@ -127,7 +127,7 @@ class NavigationHelper {
         path: '/',
         pageBuilder: (context, state) {
           return getPage(
-            child: SplashScreen(),
+            child: const SplashScreen(),
             state: state,
           );
         },
