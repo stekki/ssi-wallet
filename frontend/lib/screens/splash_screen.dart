@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'dart:async'; // Import dart:async to use Timer
-import '../routes/navigation_helper.dart'; // Make sure this path is correct
+import 'dart:async';
+import '../routes/navigation_helper.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _SplashScreenState createState() => _SplashScreenState();
 }
 
@@ -17,28 +20,23 @@ class _SplashScreenState extends State<SplashScreen>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration:
-          Duration(seconds: 1), // Duration of one cycle (fade in and fade out)
-    )..repeat(
-        reverse:
-            true); // Automatically reverse the animation at the end of each cycle
+      duration: const Duration(seconds: 1),
+    )..repeat(reverse: true);
 
     _animation = Tween<double>(
-      begin: 0.0, // Completely transparent
-      end: 1.0, // Fully visible
+      begin: 0.0,
+      end: 1.0,
     ).animate(_animationController);
 
-    // Navigate away from the splash screen after some time
-    Future.delayed(Duration(seconds: 3), () {
-      _animationController.stop(); // Stop the animation
+    Future.delayed(const Duration(seconds: 3), () {
+      _animationController.stop();
       NavigationHelper.instance.navigateToLanding();
     });
   }
 
   @override
   void dispose() {
-    _animationController
-        .dispose(); // Dispose the controller when the widget is disposed
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -46,7 +44,7 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -58,9 +56,9 @@ class _SplashScreenState extends State<SplashScreen>
         ),
         child: Center(
           child: FadeTransition(
-            opacity: _animation, // Use the animation for opacity value
+            opacity: _animation,
             child: Container(
-              margin: EdgeInsets.only(bottom: 200),
+              margin: const EdgeInsets.only(bottom: 200),
               child: Image.asset('assets/logos/findywallet_white.png'),
             ),
           ),
