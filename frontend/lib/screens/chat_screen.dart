@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/Models/chat_model.dart';
-import 'package:frontend/Models/message_model.dart';
 import 'package:go_router/go_router.dart';
-import '../utils/app_theme.dart';
 import '../utils/styles.dart';
 import '../services/graphql_service.dart';
-
 import '../Models/models.dart';
 
 class ChatScreen extends StatefulWidget {

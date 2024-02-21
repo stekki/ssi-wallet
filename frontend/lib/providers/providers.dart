@@ -2,39 +2,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/widgets/credential.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../services/graphql_service.dart';
-
-/**
-     return await Future.delayed(
-        const Duration(seconds: 1),
-        () => [
-              "Pisshead",
-              "Heikki",
-              "Janne",
-            ]);
- */
+import '../Models/models.dart';
 
 Map? result = {};
-late List<dynamic> gqlConnections;
+List<Connection> gqlConnections = [];
 
 void getConnections() async {
   result = await GraphQLService()
       .getQueryResult(GraphQLService().getConnectionsQuery, {});
 
-  gqlConnections = result!['connections']['nodes'];
-  print("PRINTINGGGGGG $gqlConnections");
+  for (var con in result!['connections']['nodes']) {
+    gqlConnections.add(Connection.fromJson(con));
+  }
 }
 
-final connectionsFutureProvider = FutureProvider<List<dynamic>>(
+final connectionsFutureProvider = FutureProvider<List<Connection>>(
   (ref) async {
-    //getConnections();
+    getConnections();
     return await Future.delayed(
-        const Duration(seconds: 1),
-        //() => gqlConnections
-        () => [
-              "Pisshead",
-              "Heikki",
-              "Janne",
-            ]);
+      const Duration(seconds: 1),
+      () => gqlConnections,
+    );
   },
 );
 

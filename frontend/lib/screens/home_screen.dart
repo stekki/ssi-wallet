@@ -5,6 +5,7 @@ import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/connection_card.dart';
 import 'package:frontend/providers/providers.dart';
 import 'package:frontend/screens/loading_screen.dart';
+import '../Models/models.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -35,11 +36,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final connectionsFuture = ref.watch(connectionsFutureProvider);
     final height = MediaQuery.of(context).size.height;
-
     if (connectionsFuture.isLoading) {
       return const LoadingScreen();
     }
-
     return Scaffold(
       body: Container(
         decoration: scaffoldBackground,
@@ -103,10 +102,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                     Expanded(
                                       child: ListView(
                                         children: connections
-                                            .where((c) => c
+                                            .where((connection) => connection
+                                                .theirLabel
                                                 .toLowerCase()
                                                 .contains(filterValue))
-                                            .map((c) => ConnectionCard(name: c))
+                                            .map((connection) => ConnectionCard(
+                                                name: connection.theirLabel))
                                             .toList(),
                                       ),
                                     ),
@@ -159,10 +160,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                                     Expanded(
                                       child: ListView(
                                         children: connections
-                                            .where((c) => c
+                                            .where((connection) => connection
+                                                .theirLabel
                                                 .toLowerCase()
                                                 .contains(filterValue))
-                                            .map((c) => ConnectionCard(name: c))
+                                            .map((c) => ConnectionCard(
+                                                name: c.theirLabel))
                                             .toList(),
                                       ),
                                     ),

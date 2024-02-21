@@ -1,3 +1,5 @@
+import '../services/graphql_service.dart';
+
 class Connection {
   final String id;
   final String ourDid;
@@ -18,4 +20,17 @@ class Connection {
     required this.approvedMs,
     required this.invited,
   });
+
+  factory Connection.fromJson(Map<String, dynamic> json) {
+    return Connection(
+      id: json['id'],
+      ourDid: json['ourDid'],
+      theirDid: json['theirDid'],
+      theirEndpoint: json['theirEndpoint'],
+      theirLabel: json['theirLabel'],
+      createdMs: json['createdMs'],
+      approvedMs: json['approvedMs'],
+      invited: json['invited'],
+    );
+  }
 }
