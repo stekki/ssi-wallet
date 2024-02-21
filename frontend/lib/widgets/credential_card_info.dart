@@ -5,10 +5,12 @@ import 'dart:math';
 import 'package:frontend/utils/styles.dart';
 
 class CredentialCardInfo extends ConsumerWidget {
-  final String name;
+  final String date;
+  final String holder;
 
   const CredentialCardInfo({
-    required this.name,
+    required this.date,
+    required this.holder,
     super.key,
   });
 
@@ -39,20 +41,20 @@ class CredentialCardInfo extends ConsumerWidget {
                       top: 7,
                     ),
                     child: Text(
-                      "Issued by $name",
+                      "Purchase date: $date",
                       textAlign: TextAlign.left,
                       style: const TextStyle(
                           fontWeight: FontWeight.w500, fontSize: 14),
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 5),
+                      padding: const EdgeInsets.only(bottom: 5),
                       child: SingleChildScrollView(
                         child: Text(
-                          "More info...",
+                          "Holder: $holder",
                           textAlign: TextAlign.left,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.w500, fontSize: 14),
                         ),
                       ),

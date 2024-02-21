@@ -5,10 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 //import 'package:frontend/utils/styles.dart';
 
 class CredentialCard extends ConsumerWidget {
-  final String name;
+  final String issuer;
+  final String item;
 
   const CredentialCard({
-    required this.name,
+    required this.issuer,
+    required this.item,
     super.key,
   });
 
@@ -19,8 +21,8 @@ class CredentialCard extends ConsumerWidget {
     return Card(
       child: ListTile(
         leading: const Icon(Icons.stars),
-        title: Text(name),
-        subtitle: const Text("Target item"),
+        title: Text(item),
+        subtitle: Text(issuer),
       ),
     );
   }
