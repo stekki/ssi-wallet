@@ -9,8 +9,13 @@ import '../screens/test_screen.dart';
 import '../screens/credential_screen.dart';
 import '../screens/profile_screen.dart';
 import '../widgets/navigation_screen_outline.dart';
+import '../screens/splash_screen.dart';
 
 class NavigationHelper {
+  void navigateToLanding() {
+    router.go('/landing'); // Use the route path for the landing screen
+  }
+
   static final NavigationHelper _instance = NavigationHelper._internal();
 
   static NavigationHelper get instance => _instance;
@@ -120,6 +125,15 @@ class NavigationHelper {
       ),
       GoRoute(
         path: '/',
+        pageBuilder: (context, state) {
+          return getPage(
+            child: SplashScreen(),
+            state: state,
+          );
+        },
+      ),
+      GoRoute(
+        path: '/landing',
         pageBuilder: (context, state) {
           return getPage(
             child: const LandingScreen(),
