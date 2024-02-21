@@ -11,6 +11,14 @@ class DesignColors {
 
 class TextStyles {
   // logo text
+  static const TextStyle appBarUser = TextStyle(
+    //fontFamily: "Piazzolla",
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+    color: DesignColors.secondaryColor,
+    decoration: TextDecoration.underline,
+  );
+  // logo text
   static const TextStyle logoText = TextStyle(
     fontFamily: "Piazzolla",
     fontSize: 35,

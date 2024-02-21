@@ -83,15 +83,20 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                           },
                           children: credentials
                               .where((c) =>
-                                  c.name.toLowerCase().contains(filterValue))
+                                  c.issuer
+                                      .toLowerCase()
+                                      .contains(filterValue) ||
+                                  c.item.toLowerCase().contains(filterValue))
                               .map<ExpansionPanel>(
                                 (c) => ExpansionPanel(
                                   backgroundColor: DesignColors.extraColorWhite,
                                   headerBuilder:
                                       (BuildContext context, bool isExpanded) {
-                                    return CredentialCard(name: c.name);
+                                    return CredentialCard(
+                                        issuer: c.issuer, item: c.item);
                                   },
-                                  body: CredentialCardInfo(name: c.name),
+                                  body: CredentialCardInfo(
+                                      date: c.date, holder: c.holder),
                                   isExpanded: !c.isExpanded,
                                 ),
                               )
