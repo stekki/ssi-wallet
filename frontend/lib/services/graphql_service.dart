@@ -52,6 +52,22 @@ class GraphQLService {
       }
     }""");
 
+  final getConnectionsQuery = gql("""
+    query {
+      connections(first: 5) {
+        nodes {
+          id
+          ourDid
+          theirDid
+          theirEndpoint
+          theirLabel
+          createdMs
+          approvedMs
+          invited
+        }
+      }
+    }""");
+
   Future<Map<String, dynamic>> getQueryResult(
       dynamic query, Map<String, dynamic> variables) async {
     try {

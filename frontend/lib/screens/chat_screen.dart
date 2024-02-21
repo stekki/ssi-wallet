@@ -37,7 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
         .getQueryResult(GraphQLService().getMessagesQuery, {});
     setState(() {
       gqlmessages = result!['connections']['nodes'][0]['messages']['nodes'];
-      print(gqlmessages);
+      print("printing messages here: $gqlmessages");
     });
   }
 
@@ -79,7 +79,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                       decoration: BoxDecoration(
                         color: message.sentByMe
-                            ? DesignColors.tertiaryColor
+                            ? DesignColors.extraColorWhite
                             : DesignColors.secondaryColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -90,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         style: TextStyle(
                           color: message.sentByMe
                               ? DesignColors.secondaryColor
-                              : Colors.black,
+                              : DesignColors.extraColorWhite,
                         ),
                       ),
                     ),
@@ -111,7 +111,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       decoration: InputDecoration(
                         hintText: "Type a message",
                         filled: true,
-                        fillColor: DesignColors.secondaryColor,
+                        fillColor: DesignColors.extraColorWhite,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide.none,
