@@ -56,6 +56,7 @@ class AppTheme {
     textTheme: const TextTheme(
       displayLarge: TextStyles.logoText,
       displayMedium: TextStyles.appBarText,
+      displaySmall: TextStyles.appBarUser,
       bodyMedium: TextStyles.mediumText,
       titleMedium: TextStyles.mediumTitle,
     ),

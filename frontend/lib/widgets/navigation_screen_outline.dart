@@ -38,9 +38,20 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
-          "Credi | $username",
+          "Credi",
           style: Theme.of(context).textTheme.displayMedium,
+        ),
+        leadingWidth: 100,
+        leading: TextButton(
+          child: Text(
+            username,
+            style: Theme.of(context).textTheme.displaySmall,
+          ),
+          onPressed: () {
+            context.go('/profile');
+          },
         ),
         actions: [
           TextButton(
@@ -69,12 +80,12 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home_work),
-            label: 'home',
+            icon: Icon(Icons.chat_outlined),
+            label: 'chats',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.wallet),
-            label: 'credentials',
+            label: 'receipts',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.qr_code_scanner),

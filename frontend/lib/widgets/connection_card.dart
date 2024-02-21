@@ -36,11 +36,12 @@ class ConnectionCard extends ConsumerWidget {
                 leading: const CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.transparent,
-                    backgroundImage:
-                        AssetImage('assets/logos/findywallet.png')),
-                trailing: const Text("Tap to chat"),
+                    backgroundImage: NetworkImage(
+                      'https://as2.ftcdn.net/v2/jpg/00/97/58/97/1000_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg',
+                    )),
+                trailing: const Text("NEW"),
                 title: Text(name),
-                subtitle: const Text("Target item"),
+                subtitle: const Text("Tap to chat"),
               ),
             ),
           ],
