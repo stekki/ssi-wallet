@@ -9,6 +9,7 @@ import '../screens/test_screen.dart';
 import '../screens/credential_screen.dart';
 import '../screens/profile_screen.dart';
 import '../widgets/navigation_screen_outline.dart';
+import '../Models/models.dart';
 
 class NavigationHelper {
   static final NavigationHelper _instance = NavigationHelper._internal();
@@ -128,16 +129,15 @@ class NavigationHelper {
         },
       ),
       GoRoute(
-        name: 'chat',
-        path: '/chat/:chatID',
-        pageBuilder: (context, state) => MaterialPage(
-          key: state.pageKey,
-          name: state.path,
-          child: ChatScreen(
-            chatID: state.pathParameters['chatID'],
-          ),
-        ),
-      )
+          path: '/chat/:id',
+          name: 'chat',
+          pageBuilder: (context, state) {
+            final id = state.pathParameters['id']!;
+            return getPage(
+              child: ChatScreen(id),
+              state: state,
+            );
+          }),
     ];
     router = GoRouter(
       initialLocation: '/',
