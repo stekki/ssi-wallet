@@ -3,8 +3,9 @@ import '../config/graphql_config.dart';
 
 class GraphQLService {
   static GraphQLConfig graphQLConfig = GraphQLConfig();
-
   GraphQLClient client = graphQLConfig.clientToQuery();
+
+  static get nodeId => null;
 
   final getIdQuery = gql("""
   query {
@@ -67,6 +68,27 @@ class GraphQLService {
         }
       }
     }""");
+
+  final getMessagesByNodeIdQuery = gql("""
+  query GetMessageByNodeId(\$nodeId: ID!) {
+    connection(id: \$nodeId) {
+      id
+      messages(first: 10) {
+        nodes {
+          id
+          message
+          sentByMe
+          delivered
+          createdMs
+        }
+      }
+    }
+  }
+""");
+
+  Future<Map<String, dynamic>> getMessageByNodeId(String nodeId) async {
+    return await getQueryResult(getMessagesByNodeIdQuery, {'nodeId': nodeId});
+  }
 
   Future<Map<String, dynamic>> getQueryResult(
       dynamic query, Map<String, dynamic> variables) async {
