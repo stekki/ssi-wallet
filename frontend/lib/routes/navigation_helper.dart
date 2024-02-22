@@ -5,7 +5,7 @@ import '../screens/landing_screen.dart';
 import '../screens/home_screen.dart';
 import '../screens/chat_screen.dart';
 //import '../screens/scan_screen.dart';
-import '../screens/helperViews/makeQRCodeAndLink.dart';
+import '../screens/test_screen.dart';
 import '../screens/credential_screen.dart';
 import '../screens/profile_screen.dart';
 import '../widgets/navigation_screen_outline.dart';
@@ -87,7 +87,7 @@ class NavigationHelper {
                 pageBuilder: (context, state) {
                   return getPage(
                     child:
-                        const TestScreen(), // TODO change back to ScanScreen()
+                        const MyHomePage(), // TODO change back to ScanScreen()
                     state: state,
                   );
                 },
