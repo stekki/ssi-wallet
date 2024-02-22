@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math';
+import '../Models/models.dart';
 
 import 'package:frontend/utils/styles.dart';
 
 class ConnectionCard extends ConsumerWidget {
-  final String name;
+  final Connection connection;
 
   const ConnectionCard({
-    required this.name,
+    required this.connection,
     super.key,
   });
 
@@ -24,7 +25,7 @@ class ConnectionCard extends ConsumerWidget {
       ),
       child: InkWell(
         onTap: () => {
-          context.pushNamed("chat", pathParameters: {"chatID": name})
+          context.pushNamed("chat", pathParameters: {"id": connection.id}),
         },
         child: Column(
           children: [
@@ -41,7 +42,7 @@ class ConnectionCard extends ConsumerWidget {
                     backgroundImage:
                         AssetImage('assets/logos/findywallet.png')),
                 trailing: const Text("Tap to chat"),
-                title: Text(name),
+                title: Text(connection.theirLabel),
                 subtitle: const Text("Target item"),
               ),
             ),
