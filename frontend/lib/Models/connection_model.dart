@@ -1,5 +1,3 @@
-import '../services/graphql_service.dart';
-
 class Connection {
   final String id;
   final String ourDid;
