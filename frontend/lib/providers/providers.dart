@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/services/connection_service.dart';
 import 'package:frontend/widgets/credential.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import '../services/graphql_service.dart';
 import '../Models/models.dart';
 

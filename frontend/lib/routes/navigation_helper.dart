@@ -9,7 +9,6 @@ import '../screens/test_screen.dart';
 import '../screens/credential_screen.dart';
 import '../screens/profile_screen.dart';
 import '../widgets/navigation_screen_outline.dart';
-import '../Models/models.dart';
 
 class NavigationHelper {
   static final NavigationHelper _instance = NavigationHelper._internal();

@@ -4,7 +4,6 @@ import 'package:frontend/services/connection_service.dart';
 
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/connection_card.dart';
-import 'package:frontend/providers/providers.dart';
 import 'package:frontend/screens/loading_screen.dart';
 import '../Models/models.dart';
 
@@ -37,7 +36,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
         ref.watch(connectionsFutureProvider);
-    final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: Container(

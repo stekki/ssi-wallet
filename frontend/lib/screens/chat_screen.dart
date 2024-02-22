@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/widgets/message.dart';
-import 'package:go_router/go_router.dart';
-import '../utils/styles.dart';
-import '../services/graphql_service.dart';
 import '../Models/models.dart';
 import '../services/message_service.dart';
 
