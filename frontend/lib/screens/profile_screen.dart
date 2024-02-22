@@ -4,6 +4,7 @@ import '../../services/graphql_service.dart';
 import '../../utils/secure_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/utils/styles.dart';
+import '../token.dart';
 
 
 class TestScreen extends StatelessWidget {
@@ -12,19 +13,21 @@ class TestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: MyHomePage(),
+      body: ProfileScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<ProfileScreen> createState() => _ProfileScreen();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _ProfileScreen extends State<ProfileScreen> {
+
+  String username = 'Stranger';
 
   int num = 0;
 
@@ -35,6 +38,13 @@ class _MyHomePageState extends State<MyHomePage> {
   String? stringForConnection;
 
   bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    decodeImage();
+    _fetchAndSetUsername();
+  }
 
   void makeQuery() async {
     result = await GraphQLService().getQueryResult(GraphQLService().getIdQuery, {});
@@ -49,6 +59,14 @@ class _MyHomePageState extends State<MyHomePage> {
     //print(result);
     setState(() {
       num ++;
+    });
+  }
+
+  Future<void> _fetchAndSetUsername() async {
+    String? token = await SecureStorageUtil().getToken();
+    String? usernameFromToken = getUsernameJwt(token);
+    setState(() {
+      username = usernameFromToken ?? 'Stranger';
     });
   }
 
@@ -73,7 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
       return ['Login first', 'Login first'];
     }
   }
-    
 
   Future<void> decodeImage() async {
     setState(() => isLoading = true);
@@ -102,39 +119,55 @@ class _MyHomePageState extends State<MyHomePage> {
               size: 64,
               semanticLabel: 'Profile picture',
             ),
-            const ListTile(
+            ListTile(
               title: Center(
                 child: Text(
-                  "Piss Head",
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25.0),
+                  username,
+                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 25.0),
                 ),
               ),
-              subtitle: Center(child: Text("pisshead@gmail.com")),
+              //HERE WE WANT TO QUERY THE USER EMAIL FROM VAULT
+              subtitle: const Center(child: Text("pisshead@gmail.com")),
             ),
-            const SizedBox(height: 50),
-            if (isLoading) const CircularProgressIndicator() else SizedBox(
-              width: 300,
-              child: TextField(
-                readOnly: true,
-                controller: TextEditingController(text: stringForConnection),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: 'Invitation link',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.copy),
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(text: stringForConnection ?? 'Could not find the invitation link'));
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
-                    },
-                  ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 50),
+                    if (isLoading)
+                      const CircularProgressIndicator()
+                    else
+                      Column(
+                        children: [
+                          SizedBox(
+                            width: 300,
+                            child: TextField(
+                              readOnly: true,
+                              controller: TextEditingController(text: stringForConnection),
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                labelText: 'Invitation link',
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.copy),
+                                  onPressed: () {
+                                    Clipboard.setData(ClipboardData(text: stringForConnection ?? 'Could not find the invitation link'));
+                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
+                                  },
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          if (imageBytes != null) Image.memory(imageBytes!),
+                        ],
+                      ),
+                    ElevatedButton(
+                      onPressed: decodeImage,
+                      child: const Text('Regenerate'),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            if (imageBytes != null) Image.memory(imageBytes!),
-            ElevatedButton(
-              onPressed: decodeImage, // Directly call decodeImage
-              child: const Text('Regenerate'),
             ),
           ],
         ),
