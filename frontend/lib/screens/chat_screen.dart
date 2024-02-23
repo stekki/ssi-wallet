@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:frontend/providers/providers.dart';
+import 'package:frontend/widgets/chat_bottom_sheet.dart';
 import 'package:frontend/widgets/message.dart';
 import '../models/models.dart';
 import '../services/message_service.dart';
@@ -57,6 +58,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                     padding: const EdgeInsets.all(10),
                     child: Row(
                       children: [
+                        const ChatBottomSheet(),
                         Expanded(
                           child: TextField(
                             controller: _textEditingController,
