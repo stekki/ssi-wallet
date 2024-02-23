@@ -24,6 +24,18 @@ class ConnectionService {
     await getConnections();
     return _gqlConnections;
   }
+
+  Future<bool> acceptConnection(String invitation) async {
+    final variables = {
+      'input': {
+        'invitation': invitation,
+      },
+    };
+    final result = await GraphQLService()
+        .performMutation(GraphQLService().acceptConnectionMutation, variables);
+    print(result);
+    return result['connect']['ok'];
+  }
 }
 
 final connectionsFutureProvider = FutureProvider<List<Connection>>(

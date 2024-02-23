@@ -6,6 +6,7 @@ import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/connection_card.dart';
 import 'package:frontend/screens/loading_screen.dart';
 import '../models/models.dart';
+import '../providers/providers.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +18,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _connectionController = TextEditingController();
+
   late TabController _tabController;
   String filterValue = "";
 
@@ -36,10 +39,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
         ref.watch(connectionsFutureProvider);
-    
+
     return Scaffold(
       body: Container(
-        decoration: scaffoldBackground,
         child: connectionsAsyncValue.when(
           loading: () => const LoadingScreen(),
           error: (error, stackTrace) => Text("Error: $error"),
@@ -65,10 +67,54 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showTokenInputDialog(context);
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.blue,
+      ),
     );
   }
 
-  Widget _buildConnectionListView(BuildContext context, List<Connection> connections) {
+  void _showTokenInputDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Enter JWT Token'),
+          content: TextField(
+            controller: _connectionController, // Use your own controller
+            decoration: const InputDecoration(hintText: 'Enter your token'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final String messageText = _connectionController.text.trim();
+                final bool connectionMade = await ref
+                    .read(connectionServiceProvider)
+                    .acceptConnection(messageText);
+
+                _connectionController.clear();
+
+                Navigator.pop(context);
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildConnectionListView(
+      BuildContext context, List<Connection> connections) {
     return CustomScrollView(
       slivers: <Widget>[
         SliverPadding(
