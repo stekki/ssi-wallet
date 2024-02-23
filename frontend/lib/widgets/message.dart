@@ -5,10 +5,10 @@ class ChatMessageWidget extends StatelessWidget {
   final String sentBy;
 
   const ChatMessageWidget({
-    Key? key,
+    super.key,
     required this.message,
     required this.sentBy,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +17,15 @@ class ChatMessageWidget extends StatelessWidget {
     return Align(
       alignment: sentBy == 'me' ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
-        margin: EdgeInsets.all(8),
-        padding: EdgeInsets.all(8),
+        margin: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
           message,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 16,
           ),

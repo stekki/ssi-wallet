@@ -14,8 +14,8 @@ class GraphQLService {
       name,
     }
 
-  }
-""");
+  }""");
+
   final invitationQuery = gql("""
   mutation {
       invite {
@@ -25,8 +25,8 @@ class GraphQLService {
           raw,
           imageB64
       }
-  }
-  """);
+  }""");
+
   final getMessagesQuery = gql("""
     query {
       connections(first: 5) {
@@ -70,24 +70,56 @@ class GraphQLService {
     }""");
 
   final getMessagesByNodeIdQuery = gql("""
-  query GetMessageByNodeId(\$nodeId: ID!) {
-    connection(id: \$nodeId) {
-      id
-      messages(first: 10) {
-        nodes {
-          id
-          message
-          sentByMe
-          delivered
-          createdMs
+    query GetMessageByNodeId(\$nodeId: ID!) {
+      connection(id: \$nodeId) {
+        id
+        messages(first: 10) {
+          nodes {
+            id
+            message
+            sentByMe
+            delivered
+            createdMs
+          }
         }
       }
-    }
-  }
-""");
+    }""");
+
+  final sendMessageMutation = gql("""
+    mutation SendMessage(\$input: MessageInput!) {
+      sendMessage(input: \$input) {
+        ok
+      }
+    }""");
 
   Future<Map<String, dynamic>> getMessageByNodeId(String nodeId) async {
     return await getQueryResult(getMessagesByNodeIdQuery, {'nodeId': nodeId});
+  }
+
+  Future<Map<String, dynamic>> performMutation(
+      dynamic mutation, Map<String, dynamic> variables) async {
+    try {
+      QueryResult result = await client.mutate(
+        MutationOptions(
+          document: mutation, // This is your GraphQL mutation
+          variables: variables, // These are the variables for your mutation
+        ),
+      );
+
+      if (result.hasException) {
+        //print(result.exception.toString());
+        throw Exception(result.exception.toString());
+      }
+
+      Map<String, dynamic>? res = result.data;
+      if (res == null) {
+        throw Exception('Mutation returned null data');
+      } else {
+        return res;
+      }
+    } catch (error) {
+      throw Exception('Error performing mutation: $error');
+    }
   }
 
   Future<Map<String, dynamic>> getQueryResult(

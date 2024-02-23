@@ -5,10 +5,10 @@ import 'package:frontend/services/connection_service.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/connection_card.dart';
 import 'package:frontend/screens/loading_screen.dart';
-import '../Models/models.dart';
+import '../models/models.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();

@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/services/graphql_service.dart';
 
-import '../Models/models.dart';
+import '../models/models.dart';
 
 class ConnectionService {
   late Map<String, dynamic> _result;
