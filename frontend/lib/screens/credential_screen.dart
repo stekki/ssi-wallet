@@ -41,13 +41,14 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                 sliver: SliverAppBar(
+                  toolbarHeight: 40,
                   shape: const ContinuousRectangleBorder(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30),
                     ),
                   ),
-                  backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+                  backgroundColor: DesignColors.extraColorWhite,
                   pinned: true,
                   floating: true,
                   title: TextField(
@@ -57,6 +58,8 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                       hintText: 'Search connection',
                       prefixIcon: Icon(Icons.search),
                       border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
                     ),
                     onChanged: (value) {
                       setState(() => filterValue = value.toLowerCase());
@@ -80,15 +83,20 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                           },
                           children: credentials
                               .where((c) =>
-                                  c.name.toLowerCase().contains(filterValue))
+                                  c.issuer
+                                      .toLowerCase()
+                                      .contains(filterValue) ||
+                                  c.item.toLowerCase().contains(filterValue))
                               .map<ExpansionPanel>(
                                 (c) => ExpansionPanel(
                                   backgroundColor: DesignColors.extraColorWhite,
                                   headerBuilder:
                                       (BuildContext context, bool isExpanded) {
-                                    return CredentialCard(name: c.name);
+                                    return CredentialCard(
+                                        issuer: c.issuer, item: c.item);
                                   },
-                                  body: CredentialCardInfo(name: c.name),
+                                  body: CredentialCardInfo(
+                                      date: c.date, holder: c.holder),
                                   isExpanded: !c.isExpanded,
                                 ),
                               )

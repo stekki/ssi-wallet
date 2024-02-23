@@ -36,7 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
         ref.watch(connectionsFutureProvider);
-
+    
     return Scaffold(
       body: Container(
         decoration: scaffoldBackground,
@@ -68,8 +68,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     );
   }
 
-  Widget _buildConnectionListView(
-      BuildContext context, List<Connection> connections) {
+  Widget _buildConnectionListView(BuildContext context, List<Connection> connections) {
     return CustomScrollView(
       slivers: <Widget>[
         SliverPadding(

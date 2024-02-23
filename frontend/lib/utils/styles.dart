@@ -11,6 +11,14 @@ class DesignColors {
 
 class TextStyles {
   // logo text
+  static const TextStyle appBarUser = TextStyle(
+    //fontFamily: "Piazzolla",
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+    color: DesignColors.secondaryColor,
+    decoration: TextDecoration.underline,
+  );
+  // logo text
   static const TextStyle logoText = TextStyle(
     fontFamily: "Piazzolla",
     fontSize: 35,
@@ -33,6 +41,13 @@ class TextStyles {
   );
   // medium text (card titles)
   static const TextStyle mediumTitle = TextStyle(
+    fontFamily: "Piazzolla",
+    fontSize: 17,
+    fontWeight: FontWeight.bold,
+    color: DesignColors.secondaryColor,
+  );
+  // label title (sign in, register)
+  static const TextStyle labelTitle = TextStyle(
     fontFamily: "Piazzolla",
     fontSize: 17,
     fontWeight: FontWeight.bold,
