@@ -44,7 +44,7 @@ class ConnectionCard extends ConsumerWidget {
                       'https://as2.ftcdn.net/v2/jpg/00/97/58/97/1000_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg',
                     )),
                 trailing: const Text("NEW"),
-                title: Text(name),
+                title: Text(connection.theirLabel),
                 subtitle: const Text("Tap to chat"),
               ),
             ),
