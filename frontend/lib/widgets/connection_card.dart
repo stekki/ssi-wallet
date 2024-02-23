@@ -1,15 +1,17 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:math';
+
+import '../models/models.dart';
 
 import 'package:frontend/utils/styles.dart';
 
 class ConnectionCard extends ConsumerWidget {
-  final String name;
+  final Connection connection;
 
   const ConnectionCard({
-    required this.name,
+    required this.connection,
     super.key,
   });
 
@@ -23,7 +25,9 @@ class ConnectionCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: InkWell(
-        onTap: () => {context.push('/chat')},
+        onTap: () => {
+          context.pushNamed("chat", pathParameters: {"id": connection.id}),
+        },
         child: Column(
           children: [
             Ink(
@@ -40,7 +44,7 @@ class ConnectionCard extends ConsumerWidget {
                       'https://as2.ftcdn.net/v2/jpg/00/97/58/97/1000_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg',
                     )),
                 trailing: const Text("NEW"),
-                title: Text(name),
+                title: Text(connection.theirLabel),
                 subtitle: const Text("Tap to chat"),
               ),
             ),
