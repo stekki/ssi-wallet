@@ -160,7 +160,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ),
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.refresh),
+                icon: const Icon(Icons.refresh),
                 onPressed: () {
                   // Trigger a refresh on the connectionsFutureProvider to update the connection list
                   // ignore: unused_result

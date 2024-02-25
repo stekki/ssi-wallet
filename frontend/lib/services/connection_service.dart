@@ -33,7 +33,8 @@ class ConnectionService {
     };
     final result = await GraphQLService()
         .performMutation(GraphQLService().acceptConnectionMutation, variables);
-    print(result);
+    //TODO - debug print
+    //print(result);
     return result['connect']['ok'];
   }
 }

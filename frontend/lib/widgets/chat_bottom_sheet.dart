@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ChatBottomSheet extends StatelessWidget {
-  const ChatBottomSheet({Key? key}) : super(key: key);
+  const ChatBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: IconButton(
-        icon: Icon(Icons.add),
+        icon: const Icon(Icons.add),
         onPressed: () {
           showModalBottomSheet<void>(
             context: context,
