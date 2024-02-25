@@ -62,7 +62,7 @@ mutation connect(\$input: ConnectInput!) {
 
   final getConnectionsQuery = gql("""
     query {
-      connections(first: 5) {
+      connections(first: 100) {
         nodes {
           id
           ourDid

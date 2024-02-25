@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/services/connection_service.dart';
 
-import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/connection_card.dart';
 import 'package:frontend/screens/loading_screen.dart';
 import '../models/models.dart';
@@ -67,12 +66,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showTokenInputDialog(context);
-        },
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.blue,
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              // Trigger a refresh on the connectionsFutureProvider to update the connection list
+              // ignore: unused_result
+              ref.refresh(connectionsFutureProvider);
+            },
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.refresh),
+          ),
+          const SizedBox(height: 10), // Spacing between the buttons
+          FloatingActionButton(
+            onPressed: () {
+              _showTokenInputDialog(context);
+            },
+            backgroundColor: Colors.blue,
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }
@@ -82,10 +96,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Enter JWT Token'),
+          title: const Text('Add with invitation token'),
           content: TextField(
             controller: _connectionController, // Use your own controller
-            decoration: const InputDecoration(hintText: 'Enter your token'),
+            decoration: const InputDecoration(hintText: 'Invitation token'),
           ),
           actions: [
             TextButton(
@@ -97,15 +111,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ElevatedButton(
               onPressed: () async {
                 final String messageText = _connectionController.text.trim();
+                //TODO - check for errors
+                // ignore: unused_local_variable
                 final bool connectionMade = await ref
                     .read(connectionServiceProvider)
                     .acceptConnection(messageText);
-
                 _connectionController.clear();
-
+                // ignore: unused_result
+                ref.refresh(connectionsFutureProvider);
+                // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               },
-              child: const Text('Submit'),
+              child: const Text('Add'),
             ),
           ],
         );
@@ -141,6 +158,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 setState(() => filterValue = value.toLowerCase());
               },
             ),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  // Trigger a refresh on the connectionsFutureProvider to update the connection list
+                  // ignore: unused_result
+                  ref.refresh(connectionsFutureProvider);
+                },
+              ),
+            ],
           ),
         ),
         SliverList(
