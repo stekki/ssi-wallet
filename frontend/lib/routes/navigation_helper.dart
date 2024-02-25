@@ -87,7 +87,7 @@ class NavigationHelper {
                 pageBuilder: (context, state) {
                   return getPage(
                     child:
-                        const TestScreen(), // TODO change back to ScanScreen()
+                        const MyHomePage(),
                     state: state,
                   );
                 },
