@@ -18,6 +18,7 @@ class LandingPageButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: color ?? DesignColors.mainColor,
+        foregroundColor: Colors.white,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.horizontal(
           left: Radius.circular(40),

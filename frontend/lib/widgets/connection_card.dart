@@ -16,34 +16,42 @@ class ConnectionCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
-    //final width = MediaQuery.of(context).size.width;
+
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: InkWell(
         onTap: () => {context.push('/chat')},
-        child: Column(
-          children: [
-            Ink(
-              decoration: BoxDecoration(
-                color: DesignColors.extraColorWhite,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              height: max(height * 0.09, 60),
-              child: ListTile(
-                leading: const CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.transparent,
-                    backgroundImage:
-                        AssetImage('assets/logos/findywallet.png')),
-                trailing: const Text("Tap to chat"),
-                title: Text(name),
-                subtitle: const Text("Target item"),
-              ),
+        borderRadius: BorderRadius.circular(20.0),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: DesignColors.extraColorWhite,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.grey,
+              width: 0.5,
             ),
-          ],
+          ),
+          height: max(height * 0.09, 60),
+          child: Center(
+            // Use Center to vertically center the ListTile's contents
+            child: ListTile(
+              leading: const CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: AssetImage('assets/logos/findywallet.png')),
+              title: Text(name,
+                  style: const TextStyle(
+                      fontSize: 16)), // Adjust text style as needed
+              subtitle: const Text("Target item",
+                  style:
+                      TextStyle(fontSize: 14)), // Adjust text style as needed
+              trailing: const Text("Tap to chat"),
+            ),
+          ),
         ),
       ),
     );

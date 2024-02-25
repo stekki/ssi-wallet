@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/connection_card.dart';
 import 'package:frontend/providers/providers.dart';
@@ -28,163 +27,74 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   @override
   void dispose() {
     _tabController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final connectionsFuture = ref.watch(connectionsFutureProvider);
-    final height = MediaQuery.of(context).size.height;
-
-    if (connectionsFuture.isLoading) {
-      return const LoadingScreen();
-    }
 
     return Scaffold(
-      body: Container(
-        decoration: scaffoldBackground,
-        child: connectionsFuture.when(
-          loading: () => const Text(
-            "Loading...",
-          ),
-          error: (err, stack) => const Text(
-            "Error loading chats",
-          ),
-          data: (connections) => Column(
-            children: [
-              TabBar(
-                controller: _tabController,
-                tabs: const [
-                  Tab(text: 'open chats'),
-                  Tab(text: 'chat request (0)'),
-                ],
-              ),
-              Expanded(
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    CustomScrollView(
-                      slivers: <Widget>[
-                        SliverPadding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                          sliver: SliverAppBar(
-                            toolbarHeight: 40,
-                            shape: const ContinuousRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(30),
-                                bottomRight: Radius.circular(30),
-                              ),
-                            ),
-                            backgroundColor: DesignColors.extraColorWhite,
-                            pinned: true,
-                            floating: true,
-                            title: TextField(
-                              keyboardType: TextInputType.multiline,
-                              controller: _searchController,
-                              decoration: const InputDecoration(
-                                hintText: 'Search connection',
-                                prefixIcon: Icon(Icons.search),
-                                border: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                              ),
-                              onChanged: (value) {
-                                setState(
-                                    () => filterValue = value.toLowerCase());
-                              },
-                            ),
-                          ),
-                        ),
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                              return SizedBox(
-                                height: height * 0.75,
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: ListView(
-                                        children: connections
-                                            .where((c) => c
-                                                .toLowerCase()
-                                                .contains(filterValue))
-                                            .map((c) => ConnectionCard(name: c))
-                                            .toList(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            childCount: 1,
-                          ),
-                        ),
-                      ],
-                    ),
-                    CustomScrollView(
-                      slivers: <Widget>[
-                        SliverPadding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                          sliver: SliverAppBar(
-                            toolbarHeight: 40,
-                            shape: const ContinuousRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(30),
-                                bottomRight: Radius.circular(30),
-                              ),
-                            ),
-                            backgroundColor: DesignColors.extraColorWhite,
-                            pinned: true,
-                            floating: true,
-                            title: TextField(
-                              keyboardType: TextInputType.multiline,
-                              controller: _searchController,
-                              decoration: const InputDecoration(
-                                hintText: 'Search connection',
-                                prefixIcon: Icon(Icons.search),
-                                border: InputBorder.none,
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                              ),
-                              onChanged: (value) {
-                                setState(
-                                    () => filterValue = value.toLowerCase());
-                              },
-                            ),
-                          ),
-                        ),
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                              return SizedBox(
-                                height: height * 0.75,
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      child: ListView(
-                                        children: connections
-                                            .where((c) => c
-                                                .toLowerCase()
-                                                .contains(filterValue))
-                                            .map((c) => ConnectionCard(name: c))
-                                            .toList(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                            childCount: 1,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search connection',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide.none,
                 ),
+                filled: true,
+                fillColor: DesignColors.extraColorWhite,
               ),
+              onChanged: (value) {
+                setState(() => filterValue = value.toLowerCase());
+              },
+            ),
+          ),
+          TabBar(
+            controller: _tabController,
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            tabs: const [
+              Tab(text: 'Open Chats'),
+              Tab(text: 'Chat Requests'),
             ],
           ),
-        ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildTabContent(connectionsFuture),
+                _buildTabContent(connectionsFuture),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabContent(AsyncValue<List<String>> connectionsFuture) {
+    return connectionsFuture.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Text('Error: $err'),
+      data: (connections) => ListView.builder(
+        padding: const EdgeInsets.only(top: 8.0),
+        itemCount: connections.length,
+        itemBuilder: (context, index) {
+          final connection = connections[index];
+          if (connection.toLowerCase().contains(filterValue)) {
+            return ConnectionCard(name: connection);
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }
