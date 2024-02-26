@@ -27,6 +27,13 @@ class GraphQLService {
       }
   }""");
 
+  final acceptConnectionMutation = gql("""
+mutation connect(\$input: ConnectInput!) {
+  connect(input: \$input) {
+    ok
+  }
+}""");
+
   final getMessagesQuery = gql("""
     query {
       connections(first: 5) {
@@ -55,7 +62,7 @@ class GraphQLService {
 
   final getConnectionsQuery = gql("""
     query {
-      connections(first: 5) {
+      connections(first: 100) {
         nodes {
           id
           ourDid

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/services/connection_service.dart';
 
-import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/connection_card.dart';
 import 'package:frontend/screens/loading_screen.dart';
 import '../models/models.dart';
+import '../providers/providers.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +17,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController _connectionController = TextEditingController();
+
   late TabController _tabController;
   String filterValue = "";
 
@@ -36,10 +38,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
         ref.watch(connectionsFutureProvider);
-    
+
     return Scaffold(
       body: Container(
-        decoration: scaffoldBackground,
         child: connectionsAsyncValue.when(
           loading: () => const LoadingScreen(),
           error: (error, stackTrace) => Text("Error: $error"),
@@ -65,10 +66,72 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ),
         ),
       ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              // Trigger a refresh on the connectionsFutureProvider to update the connection list
+              // ignore: unused_result
+              ref.refresh(connectionsFutureProvider);
+            },
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.refresh),
+          ),
+          const SizedBox(height: 10), // Spacing between the buttons
+          FloatingActionButton(
+            onPressed: () {
+              _showTokenInputDialog(context);
+            },
+            backgroundColor: Colors.blue,
+            child: const Icon(Icons.add),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildConnectionListView(BuildContext context, List<Connection> connections) {
+  void _showTokenInputDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Add with invitation token'),
+          content: TextField(
+            controller: _connectionController, // Use your own controller
+            decoration: const InputDecoration(hintText: 'Invitation token'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final String messageText = _connectionController.text.trim();
+                //TODO - check for errors
+                // ignore: unused_local_variable
+                final bool connectionMade = await ref
+                    .read(connectionServiceProvider)
+                    .acceptConnection(messageText);
+                _connectionController.clear();
+                // ignore: unused_result
+                ref.refresh(connectionsFutureProvider);
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context);
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildConnectionListView(
+      BuildContext context, List<Connection> connections) {
     return CustomScrollView(
       slivers: <Widget>[
         SliverPadding(
@@ -95,6 +158,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 setState(() => filterValue = value.toLowerCase());
               },
             ),
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: () {
+                  // Trigger a refresh on the connectionsFutureProvider to update the connection list
+                  // ignore: unused_result
+                  ref.refresh(connectionsFutureProvider);
+                },
+              ),
+            ],
           ),
         ),
         SliverList(
