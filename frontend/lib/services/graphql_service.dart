@@ -2,6 +2,12 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import '../config/graphql_config.dart';
 
 class GraphQLService {
+  static final GraphQLService _instance = GraphQLService._();
+  GraphQLService._();
+  factory GraphQLService() {
+    return _instance;
+  }
+
   static GraphQLConfig graphQLConfig = GraphQLConfig();
   GraphQLClient client = graphQLConfig.clientToQuery();
 
@@ -39,7 +45,7 @@ class GraphQLService {
           createdMs
           approvedMs
           invited
-          messages(first: 10) {
+          messages(last: 10) {
             nodes {
               id
               message

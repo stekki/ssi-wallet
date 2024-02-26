@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/event_notification.dart';
 import 'package:go_router/go_router.dart';
 
 import '../screens/landing_screen.dart';
@@ -31,6 +32,8 @@ class NavigationHelper {
   static final GlobalKey<NavigatorState> credentialTabNavigatorKey =
       GlobalKey<NavigatorState>();
 */
+  final subscription = EventNotification().subscription;
+
   BuildContext get context =>
       router.routerDelegate.navigatorKey.currentContext!;
 
@@ -86,8 +89,7 @@ class NavigationHelper {
                 path: '/scan',
                 pageBuilder: (context, state) {
                   return getPage(
-                    child:
-                        const MyHomePage(),
+                    child: const MyHomePage(),
                     state: state,
                   );
                 },

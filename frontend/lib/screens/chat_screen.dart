@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:frontend/providers/providers.dart';
 import 'package:frontend/widgets/message.dart';
 import '../models/models.dart';
@@ -17,10 +16,19 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textEditingController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
+  }
+
+  void _scrollToBottom() async {
+    await Future.delayed(Duration.zero);
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent +
+          100.0, // Offset to ensure visibility
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   @override
@@ -36,6 +44,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             loading: () => const CircularProgressIndicator(),
             error: (error, stackTrace) => Text("Error: $error"),
             data: (messages) {
+              _scrollToBottom();
               return Column(
                 children: [
                   Expanded(
@@ -79,12 +88,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 // ignore: unused_result
                                 ref.refresh(messagesFutureProvider(widget.id));
                                 // Scroll to the bottom of the chat to show the new message
-                                _scrollController.animateTo(
-                                  _scrollController.position.maxScrollExtent +
-                                      100.0, // Offset to ensure visibility
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeOut,
-                                );
                               } else {
                                 /*
                                 // Show an error if the message was not sent
