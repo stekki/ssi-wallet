@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/services/graphql_service.dart';
-
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:frontend/services/queries.dart';
 import '../models/models.dart';
 
 class MessageService {
@@ -64,3 +65,30 @@ final messagesFutureProvider = FutureProvider.family<List<Message>, String>(
     }
   },
 );
+
+final messageStreamProvider =
+    StreamProvider.family<List<Message>, String>((ref, connectionID) {
+  final stream = GraphQLService()
+      .client
+      .watchQuery(
+        WatchQueryOptions(
+          fetchResults: true,
+          document: messagesQuery,
+          variables: {'id': connectionID},
+        ),
+      )
+      .stream
+      .map((event) {
+    try {
+      final List<dynamic> res = event.data?["connection"]["messages"]["edges"];
+      final List<Message> messages = res.map((e) {
+        final node = e?["node"];
+        return Message.fromJson(node);
+      }).toList();
+      return messages;
+    } catch (e) {
+      throw Exception("No data returned");
+    }
+  });
+  return stream;
+});

@@ -35,7 +35,6 @@ class GraphQLConfig {
       return incoming;
     }
     dynamic merged = existing;
-    print("relay merge");
     merged["__typename"] = merged["__typename"] ?? incoming["__typename"];
     final cursores = merged["edges"].map((e) => e["cursor"]);
     final Map<String, dynamic> incPageInfo = incoming["pageInfo"];
@@ -109,7 +108,7 @@ class GraphQLConfig {
       partialDataPolicy: PartialDataCachePolicy.accept);
 
   GraphQLClient clientToQuery() => GraphQLClient(
-        cache: GraphQLCache(),
+        cache: cache,
         link: _link,
       );
 }

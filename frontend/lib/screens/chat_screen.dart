@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/providers/providers.dart';
 import 'package:frontend/widgets/message.dart';
-import '../models/models.dart';
+// import '../models/models.dart';
 import '../services/message_service.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
@@ -33,14 +33,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<List<Message>> messagesAsyncValue =
-        ref.watch(messagesFutureProvider(widget.id));
+    // final AsyncValue<List<Message>> messagesAsyncValue =
+    //     ref.watch(messagesFutureProvider(widget.id));
+    final AsyncValue<List<dynamic>> streamMessages =
+        ref.watch(messageStreamProvider(widget.id));
     return Scaffold(
       appBar: AppBar(
         title: const Text("Chat"),
       ),
       body: Container(
-        child: messagesAsyncValue.when(
+        child: streamMessages.when(
             loading: () => const CircularProgressIndicator(),
             error: (error, stackTrace) => Text("Error: $error"),
             data: (messages) {

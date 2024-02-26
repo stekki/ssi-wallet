@@ -134,13 +134,11 @@ class GraphQLService {
       QueryResult result = await client.query(QueryOptions(
           fetchPolicy: FetchPolicy.noCache,
           document: query,
-          variables: variables));
-      if (result.hasException) {
-        throw Exception(result.exception);
-      }
+          variables: variables,
+          errorPolicy: ErrorPolicy.all));
       Map<String, dynamic>? res = result.data;
       if (res == null) {
-        return {};
+        throw Exception("No data returned");
       } else {
         return res;
       }

@@ -236,6 +236,6 @@ class EventNotification {
   final subscription = client
       .subscribe(SubscriptionOptions(document: subscriptionDocument))
       .listen((event) {
-    print(event.data);
+    updateSubScription(event.data);
   });
 }
