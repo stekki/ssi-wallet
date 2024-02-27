@@ -6,7 +6,6 @@ import 'package:frontend/widgets/credential.dart';
 
 final connectionServiceProvider = Provider((ref) => ConnectionService());
 final messageServiceProvider = Provider((ref) => MessageService());
-
 final credentialsFutureProvider = FutureProvider<List<Credential>>(
   (ref) async {
     return await Future.delayed(

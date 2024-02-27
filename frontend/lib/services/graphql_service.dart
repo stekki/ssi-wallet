@@ -2,6 +2,12 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import '../config/graphql_config.dart';
 
 class GraphQLService {
+  static final GraphQLService _instance = GraphQLService._();
+  GraphQLService._();
+  factory GraphQLService() {
+    return _instance;
+  }
+
   static GraphQLConfig graphQLConfig = GraphQLConfig();
   GraphQLClient client = graphQLConfig.clientToQuery();
 
@@ -46,7 +52,7 @@ mutation connect(\$input: ConnectInput!) {
           createdMs
           approvedMs
           invited
-          messages(first: 10) {
+          messages(last: 10) {
             nodes {
               id
               message
@@ -135,13 +141,11 @@ mutation connect(\$input: ConnectInput!) {
       QueryResult result = await client.query(QueryOptions(
           fetchPolicy: FetchPolicy.noCache,
           document: query,
-          variables: variables));
-      if (result.hasException) {
-        throw Exception(result.exception);
-      }
+          variables: variables,
+          errorPolicy: ErrorPolicy.all));
       Map<String, dynamic>? res = result.data;
       if (res == null) {
-        return {};
+        throw Exception("No data returned");
       } else {
         return res;
       }
