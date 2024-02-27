@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../token.dart';
 import '../utils/secure_storage.dart';
+import '../screens/scan_screen.dart';
 
 class NavigationScreenOutline extends StatefulWidget {
   const NavigationScreenOutline({
@@ -72,6 +73,8 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
         type: BottomNavigationBarType.fixed,
         currentIndex: widget.child.currentIndex,
         onTap: (index) {
+          if(index == 2) {cameraController.start();} 
+          else {cameraController.stop();}
           widget.child.goBranch(
             index,
             initialLocation: index == widget.child.currentIndex,
