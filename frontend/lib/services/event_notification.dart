@@ -94,7 +94,7 @@ class EventNotification {
     String parentName,
     Map<dynamic, dynamic> query,
   ) {
-    print("update state invoked");
+    //print("update state invoked");
     final newState = stateWithNewItem(prevState, itemName, newItem, last);
     final queryRequest = Request(
         operation: Operation(document: query["query"]),
@@ -113,7 +113,7 @@ class EventNotification {
             itemName: newState?["state"][itemName]
           }
         };
-        print(wState);
+        //print(wState);
         client.writeQuery(queryRequest, data: wState);
       }
     }
@@ -151,15 +151,15 @@ class EventNotification {
   static void updateProtocolItem(
       String connectionID, Map<String, dynamic> jobEdge) {
     final job = jobEdge["node"];
-    print(0);
+    //print(0);
     updateCacheWithNewItem("jobs", jobEdge, true, "connection", {
       "query": connectionJobsQuery,
       "variables": {"id": connectionID}
     });
-    print(1);
+    //print(1);
     if (job["protocol"] == "CONNECTION" &&
         (job["output"]["connection"] != null)) {
-      print(2);
+      //print(2);
       updateCacheWithNewItem(
           "connections",
           job["output"]["connection"],
@@ -168,7 +168,7 @@ class EventNotification {
           {"query": connectionsQuery, "variables": const <String, dynamic>{}});
     } else if (job["protocol"] == "BASIC_MESSAGE" &&
         (job["output"]["message"] != null)) {
-      print(3);
+      //print(3);
       updateCacheWithNewItem(
           "messages", job["output"]["message"], true, "connection", {
         "query": messagesQuery,
@@ -222,11 +222,11 @@ class EventNotification {
         });
       }
       if (node["job"] != null) {
-        print("update jobs");
+        //print("update jobs");
         updateCacheWithNewItem("jobs", node["job"], true, "",
             {"query": jobsQuery, "variables": const <String, dynamic>{}});
         if (connection != null) {
-          print("update connection jobs");
+          //print("update connection jobs");
           updateProtocolItem(connection["id"], node["job"]);
         }
       }

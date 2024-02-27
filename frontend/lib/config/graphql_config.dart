@@ -30,7 +30,7 @@ class GraphQLConfig {
 
   static dynamic relayMerge(
       dynamic existing, dynamic incoming, FieldFunctionOptions options) {
-    print("RELAY MERGE");
+    //print("RELAY MERGE");
     if (existing == null) {
       return incoming;
     }

@@ -1,0 +1,2 @@
+flutter run --dart-define=TOKEN='<your token>' --dart-define=BASE_URL=localhost:8085/query
+flutter run --dart-define=TOKEN='<your token>' --dart-define=BASE_URL=http://localhost:8085/query
