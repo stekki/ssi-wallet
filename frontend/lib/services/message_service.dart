@@ -87,7 +87,8 @@ final messageStreamProvider =
       }).toList();
       return messages;
     } catch (e) {
-      throw Exception("No data returned");
+      return <Message>[];
+      //throw Exception("No data returned");
     }
   });
   return stream;
