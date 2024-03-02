@@ -134,12 +134,12 @@ class _LandingScreenState extends State<LandingScreen>
           alignment: Alignment.topCenter,
           children: [
             Positioned(
-              top: height * 0.05,
+              top: height * 0.15,
               child: Column(
                 children: [
                   Container(
-                    width: width * 0.4,
-                    height: height * 0.2,
+                    width: width * 0.22,
+                    height: height * 0.12,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.fitHeight,
@@ -152,9 +152,9 @@ class _LandingScreenState extends State<LandingScreen>
                     "Credi",
                     //Theme.of(context).textTheme.displayLarge,
                     style: TextStyle(
-                      fontFamily: "Piazzolla",
-                      fontSize: max(height * 0.09, 30),
-                      fontWeight: FontWeight.bold,
+                      fontFamily: "Nunito",
+                      fontSize: max(height * 0.05, 20),
+                      fontWeight: FontWeight.normal,
                       color: DesignColors.extraColorWhite,
                     ),
                   ),
