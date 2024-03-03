@@ -88,10 +88,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   .sendMessage(widget.id, messageText);
                               if (messageSent) {
                                 _textEditingController.clear();
-                                // Optionally, trigger a refresh of the messages list
-                                // ignore: unused_result
-                                ref.refresh(messagesFutureProvider(widget.id));
-                                // Scroll to the bottom of the chat to show the new message
                               } else {
                                 /*
                                 // Show an error if the message was not sent
