@@ -2,9 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../models/models.dart';
-
 import 'package:frontend/utils/styles.dart';
 
 class ConnectionCard extends ConsumerWidget {
@@ -18,42 +16,50 @@ class ConnectionCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
-    //final width = MediaQuery.of(context).size.width;
+
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: InkWell(
-        onTap: () => {
-          context.pushNamed("chat", pathParameters: {"id": connection.id}),
-        },
-        child: Column(
-          children: [
-            Ink(
-              decoration: BoxDecoration(
-                color: DesignColors.extraColorWhite,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              height: max(height * 0.09, 60),
-              child: ListTile(
-                leading: const CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.transparent,
-                    backgroundImage: NetworkImage(
-                      'https://as2.ftcdn.net/v2/jpg/00/97/58/97/1000_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg',
-                    )),
-                trailing: const Text("NEW"),
-                title: Text(connection.theirLabel),
-                subtitle: const Text("Tap to chat"),
-              ),
+        onTap: () =>
+            context.pushNamed("chat", pathParameters: {"id": connection.id}),
+        borderRadius: BorderRadius.circular(20.0),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: DesignColors.extraColorWhite,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(
+              color: Colors.grey,
+              width: 0.5,
             ),
-          ],
+          ),
+          height: max(height * 0.09, 60),
+          child: Center(
+            child: ListTile(
+              leading: const CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.transparent,
+                backgroundImage: NetworkImage(
+                    'https://as2.ftcdn.net/v2/jpg/00/97/58/97/1000_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg'),
+              ),
+              title: Text(connection.theirLabel,
+                  style: const TextStyle(
+                      fontSize: 16)), // Adjust text style as needed
+              subtitle: const Text("Target item",
+                  style:
+                      TextStyle(fontSize: 14)), // Adjust text style as needed
+              trailing: const Text("Tap to chat"),
+            ),
+          ),
         ),
       ),
     );
   }
 }
+
 
 /*
 
