@@ -25,7 +25,7 @@ class ConnectionService {
     return _gqlConnections;
   }
 
-  Future<bool> acceptConnection(String invitation) async {
+  Future<bool> acceptConnection(String? invitation) async {
     final variables = {
       'input': {
         'invitation': invitation,
