@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class DesignColors {
   static const mainColor = Color.fromARGB(255, 0, 212, 161);
   static const secondaryColor = Color.fromARGB(255, 50, 103, 141);
+  static const buttonColor = Color.fromARGB(255, 78, 207, 176);
+  static const textColor = Color.fromARGB(255, 99, 99, 99);
+  static const messageColor = Color.fromARGB(255, 187, 223, 231);
   static const extraColorWhite = Color.fromARGB(255, 255, 255, 255);
   static const extraColorGray = Color.fromARGB(255, 238, 238, 238);
   static const extraColorBlack = Color.fromARGB(120, 37, 31, 31);

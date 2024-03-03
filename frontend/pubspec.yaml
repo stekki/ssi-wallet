@@ -17,6 +17,7 @@ dependencies:
   graphql_flutter: ^5.1.2
   dartz: ^0.10.1
   ferry: ^0.11.2+1
+  intl: ^0.17.0
   #flutter_secure_storage: ^9.0.0 #uncomment this if you want to use real secure storage
 
 dev_dependencies:
@@ -30,7 +31,7 @@ flutter:
     - assets/logos/findywallet.png
     - assets/logos/findywallet_white.png
   fonts:
-    - family: Nunito Sans
+    - family: Nunito 
       fonts:
         - asset: assets/fonts/Nunito-VariableFont_wght.ttf
           weight: 600

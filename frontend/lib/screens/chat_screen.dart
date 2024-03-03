@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/providers/providers.dart';
+import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/chat_bottom_sheet.dart';
 import 'package:frontend/widgets/message.dart';
 // import '../models/models.dart';
@@ -17,6 +18,7 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textEditingController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -34,18 +36,23 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final AsyncValue<List<Message>> messagesAsyncValue =
-    //     ref.watch(messagesFutureProvider(widget.id));
     final AsyncValue<List<dynamic>> streamMessages =
         ref.watch(messageStreamProvider(widget.id));
     return Scaffold(
       appBar: AppBar(
         title: const Text("Chat"),
       ),
-      body: Container(
-        child: streamMessages.when(
-            loading: () => const CircularProgressIndicator(),
-            error: (error, stackTrace) => Text("Error: $error"),
+      body: Stack(
+        children: [
+          Container(
+            decoration: scaffoldBackground,
+          ),
+          Container(
+            color: Colors.black.withOpacity(0.15),
+          ),
+          streamMessages.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stackTrace) => Center(child: Text("Error: $error")),
             data: (messages) {
               _scrollToBottom();
               return Column(
@@ -61,53 +68,54 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               return ChatMessageWidget(
                                 message: message.message,
                                 sentBy: message.sentByMe ? 'me' : 'other',
+                                timestamp: message.createdAt,
                               );
                             },
                           ),
                   ),
                   Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Row(
-                      children: [
-                        const ChatBottomSheet(),
-                        Expanded(
-                          child: TextField(
-                            controller: _textEditingController,
-                            decoration: const InputDecoration(
-                              hintText: "Type a message",
+                    color: Colors.white,
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        children: [
+                          const ChatBottomSheet(),
+                          Expanded(
+                            child: TextField(
+                              controller: _textEditingController,
+                              decoration: const InputDecoration(
+                                hintText: "Type a message",
+                              ),
                             ),
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () async {
-                            if (_textEditingController.text.trim().isNotEmpty) {
-                              final messageText =
-                                  _textEditingController.text.trim();
-                              final bool messageSent = await ref
-                                  .read(messageServiceProvider)
-                                  .sendMessage(widget.id, messageText);
-                              if (messageSent) {
-                                _textEditingController.clear();
-                              } else {
-                                /*
-                                // Show an error if the message was not sent
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Failed to send message.'),
-                                  ),
-                                );
-                                */
+                          IconButton(
+                            onPressed: () async {
+                              if (_textEditingController.text
+                                  .trim()
+                                  .isNotEmpty) {
+                                final messageText =
+                                    _textEditingController.text.trim();
+                                final bool messageSent = await ref
+                                    .read(messageServiceProvider)
+                                    .sendMessage(widget.id, messageText);
+                                if (messageSent) {
+                                  _textEditingController.clear();
+                                } else {
+                                  // Optional: Show an error if the message was not sent
+                                }
                               }
-                            }
-                          },
-                          icon: const Icon(Icons.send),
-                        ),
-                      ],
+                            },
+                            icon: const Icon(Icons.send),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               );
-            }),
+            },
+          ),
+        ],
       ),
     );
   }

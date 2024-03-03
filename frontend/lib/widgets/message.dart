@@ -1,34 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../utils/styles.dart';
 
 class ChatMessageWidget extends StatelessWidget {
   final String message;
   final String sentBy;
+  final DateTime timestamp;
 
   const ChatMessageWidget({
     super.key,
     required this.message,
     required this.sentBy,
+    required this.timestamp,
   });
 
   @override
   Widget build(BuildContext context) {
-    Color color = sentBy == 'me' ? Colors.blue : Colors.green;
+    Color color = sentBy == 'me' ? DesignColors.extraColorGray : Colors.white;
+    BorderRadiusGeometry borderRadius;
+
+    if (sentBy == 'me') {
+      borderRadius = const BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
+        bottomLeft: Radius.circular(10),
+        bottomRight: Radius.circular(0),
+      );
+    } else {
+      borderRadius = const BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
+        bottomLeft: Radius.circular(0),
+        bottomRight: Radius.circular(10),
+      );
+    }
+
+    String formattedTime = DateFormat('hh:mm a').format(timestamp);
 
     return Align(
       alignment: sentBy == 'me' ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         margin: const EdgeInsets.all(8),
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: color,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: borderRadius,
         ),
-        child: Text(
-          message,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: sentBy == 'me'
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
+          children: [
+            Text(
+              message,
+              style: const TextStyle(
+                color: DesignColors.textColor,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              formattedTime,
+              style: TextStyle(
+                color: DesignColors.textColor.withOpacity(0.6),
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
       ),
     );
