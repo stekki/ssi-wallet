@@ -30,7 +30,11 @@ class GraphQLConfig {
 
   static dynamic relayMerge(
       dynamic existing, dynamic incoming, FieldFunctionOptions options) {
-    //print("RELAY MERGE");
+    if (incoming == null ||
+        incoming["edges"] == null ||
+        incoming["pageInfo"] == null) {
+      return existing;
+    }
     if (existing == null) {
       return incoming;
     }
@@ -70,42 +74,42 @@ class GraphQLConfig {
         relayMerge(existing, incoming, options),
   );
   final GraphQLCache cache = GraphQLCache(
-      store: InMemoryStore(),
-      typePolicies: {
-        "Pairwise": TypePolicy(
-          keyFields: {},
-          fields: {
-            "messages": relayPolicy,
-            "credentials": relayPolicy,
-            "proofs": relayPolicy,
-            "jobs": relayPolicy,
-            "events": relayPolicy
-          },
-        ),
-        "Query": TypePolicy(keyFields: {}, fields: {
-          "events": relayPolicy,
-          "connections": relayPolicy,
+    store: InMemoryStore(),
+    typePolicies: {
+      "Pairwise": TypePolicy(
+        keyFields: {},
+        fields: {
+          "messages": relayPolicy,
           "credentials": relayPolicy,
+          "proofs": relayPolicy,
           "jobs": relayPolicy,
-          "connection": FieldPolicy(
-            merge: (existing, incoming, options) {
-              if (existing == null) {
-                return incoming;
-              } else {
-                final mergedData = existing;
-                for (final key in incoming.keys) {
-                  if (!mergedData.containsKey(key)) {
-                    mergedData[key] = incoming[key];
-                  }
+          "events": relayPolicy
+        },
+      ),
+      "Query": TypePolicy(keyFields: {}, fields: {
+        "events": relayPolicy,
+        "connections": relayPolicy,
+        "credentials": relayPolicy,
+        "jobs": relayPolicy,
+        "connection": FieldPolicy(
+          merge: (existing, incoming, options) {
+            if (existing == null) {
+              return incoming;
+            } else {
+              final mergedData = existing;
+              for (final key in incoming.keys) {
+                if (!mergedData.containsKey(key)) {
+                  mergedData[key] = incoming[key];
                 }
-                return mergedData;
               }
-            },
-          )
-          // "activeConnectionName": FieldPolicy()
-        })
-      },
-      partialDataPolicy: PartialDataCachePolicy.accept);
+              return mergedData;
+            }
+          },
+        )
+        // "activeConnectionName": FieldPolicy()
+      })
+    },
+  );
 
   GraphQLClient clientToQuery() => GraphQLClient(
         cache: cache,

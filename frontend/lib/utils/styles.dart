@@ -12,7 +12,7 @@ class DesignColors {
 class TextStyles {
   // logo text
   static const TextStyle appBarUser = TextStyle(
-    fontFamily: "Nunito Sans",
+    fontFamily: "Nunito",
     fontSize: 15,
     fontWeight: FontWeight.bold,
     color: DesignColors.secondaryColor,
@@ -20,45 +20,45 @@ class TextStyles {
   );
   // logo text
   static const TextStyle logoText = TextStyle(
-    fontFamily: "Nunito Sans",
-    fontSize: 30,
+    fontFamily: "Nunito",
+    fontSize: 35,
     fontWeight: FontWeight.bold,
     color: DesignColors.extraColorWhite,
   );
   // appBar text
   static const TextStyle appBarText = TextStyle(
-    fontFamily: "Nunito Sans",
+    fontFamily: "Nunito",
     fontSize: 25,
     fontWeight: FontWeight.normal,
     color: DesignColors.extraColorWhite,
   );
   // medium text (card subtitle, card texts)
   static const TextStyle mediumText = TextStyle(
-    fontFamily: "Nunito Sans",
+    fontFamily: "Nunito",
     fontSize: 15,
     fontWeight: FontWeight.bold,
     color: DesignColors.secondaryColor,
   );
   // medium text (card titles)
   static const TextStyle mediumTitle = TextStyle(
-    fontFamily: "Nuniito Sans",
+    fontFamily: "Nunito",
     fontSize: 17,
     fontWeight: FontWeight.bold,
     color: DesignColors.secondaryColor,
   );
   // label title (sign in, register)
   static const TextStyle labelTitle = TextStyle(
-    fontFamily: "Nunito Sans",
+    fontFamily: "Nunito",
     fontSize: 17,
-    fontWeight: FontWeight.bold,
-    color: DesignColors.secondaryColor,
+    fontWeight: FontWeight.normal,
+    color: DesignColors.extraColorGray,
   );
 }
 
 const scaffoldBackground = BoxDecoration(
   gradient: LinearGradient(
-    begin: Alignment.topRight,
-    end: Alignment.bottomLeft,
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
     stops: [
       0.01,
       0.99,

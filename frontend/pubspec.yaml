@@ -30,9 +30,7 @@ flutter:
     - assets/logos/findywallet.png
     - assets/logos/findywallet_white.png
   fonts:
-    - family: Piazzolla
+    - family: Nunito Sans
       fonts:
-        - asset: assets/fonts/Piazzolla-600.ttf
+        - asset: assets/fonts/Nunito-VariableFont_wght.ttf
           weight: 600
-        - asset: assets/fonts/Piazzolla-700.ttf
-          weight: 700
