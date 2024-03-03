@@ -59,7 +59,11 @@ class _SplashScreenState extends State<SplashScreen>
             opacity: _animation,
             child: Container(
               margin: const EdgeInsets.only(bottom: 200),
-              child: Image.asset('assets/logos/findywallet_white.png'),
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Image.asset('assets/logos/findywallet_white.png'),
+              ),
             ),
           ),
         ),
