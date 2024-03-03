@@ -111,9 +111,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ElevatedButton(
               onPressed: () async {
                 final String messageText = _connectionController.text.trim();
-                //TODO - check for errors
-                // ignore: unused_local_variable
-                final bool connectionMade = await ref
+                await ref
                     .read(connectionServiceProvider)
                     .acceptConnection(messageText);
                 _connectionController.clear();
