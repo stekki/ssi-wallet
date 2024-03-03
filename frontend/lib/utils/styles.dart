@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DesignColors {
   static const mainColor = Color.fromARGB(255, 0, 212, 161);
-  static const secondaryColor = Color.fromARGB(255, 30, 69, 154);
+  static const secondaryColor = Color.fromARGB(255, 50, 103, 141);
   static const extraColorWhite = Color.fromARGB(255, 255, 255, 255);
   static const extraColorGray = Color.fromARGB(255, 238, 238, 238);
   static const extraColorBlack = Color.fromARGB(120, 37, 31, 31);

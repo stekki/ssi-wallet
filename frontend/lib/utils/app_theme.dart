@@ -52,7 +52,7 @@ class AppTheme {
       ),
     ),
     primaryColor: DesignColors.extraColorWhite,
-    scaffoldBackgroundColor: DesignColors.mainColor,
+    scaffoldBackgroundColor: DesignColors.extraColorGray,
     textTheme: const TextTheme(
       displayLarge: TextStyles.logoText,
       displayMedium: TextStyles.appBarText,
