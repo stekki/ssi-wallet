@@ -39,6 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
         ref.watch(connectionsFutureProvider);
+    final List<String> chatStateList = ref.watch(chatStatusProvider);
 
     return Scaffold(
       body: Column(
@@ -75,8 +76,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             child: TabBarView(
               controller: _tabController,
               children: [
-                _buildConnectionListView(context, connectionsAsyncValue),
-                _buildConnectionListView(context, connectionsAsyncValue),
+                _buildConnectionListViewOpen(
+                    context, connectionsAsyncValue, chatStateList),
+                _buildConnectionListViewRequest(
+                    context, connectionsAsyncValue, chatStateList),
               ],
             ),
           ),
@@ -139,15 +142,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     );
   }
 
-  Widget _buildConnectionListView(BuildContext context,
-      AsyncValue<List<Connection>> connectionsAsyncValue) {
+  Widget _buildConnectionListViewRequest(
+      BuildContext context,
+      AsyncValue<List<Connection>> connectionsAsyncValue,
+      List<String> chatStates) {
     return connectionsAsyncValue.when(
       loading: () => const LoadingScreen(),
       error: (error, stack) => Text("Error: $error"),
       data: (connections) {
         var filteredConnections = connections
             .where((connection) =>
-                connection.theirLabel.toLowerCase().contains(filterValue))
+                connection.theirLabel.toLowerCase().contains(filterValue) &&
+                !chatStates.contains(connection.id))
+            .toList();
+        return ListView.builder(
+          itemCount: filteredConnections.length,
+          itemBuilder: (context, index) =>
+              ConnectionCard(connection: filteredConnections[index]),
+          padding: const EdgeInsets.only(top: 8.0),
+        );
+      },
+    );
+  }
+
+  Widget _buildConnectionListViewOpen(
+      BuildContext context,
+      AsyncValue<List<Connection>> connectionsAsyncValue,
+      List<String> chatStates) {
+    return connectionsAsyncValue.when(
+      loading: () => const LoadingScreen(),
+      error: (error, stack) => Text("Error: $error"),
+      data: (connections) {
+        var filteredConnections = connections
+            .where((connection) =>
+                connection.theirLabel.toLowerCase().contains(filterValue) &&
+                chatStates.contains(connection.id))
             .toList();
         return ListView.builder(
           itemCount: filteredConnections.length,

@@ -79,7 +79,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       padding: const EdgeInsets.all(10),
                       child: Row(
                         children: [
-                          const ChatBottomSheet(),
+                          ChatBottomSheet(widget.id),
                           Expanded(
                             child: TextField(
                               controller: _textEditingController,

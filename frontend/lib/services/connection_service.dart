@@ -41,9 +41,20 @@ class ConnectionService {
 
 final connectionsFutureProvider = FutureProvider<List<Connection>>(
   (ref) async {
-    final connectionService = ConnectionService();
-    await connectionService.getConnections();
+    //final connectionService = ConnectionService();
+    //await connectionService.getConnections();
     await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second
-    return connectionService.fetchConnections();
+    //return connectionService.fetchConnections();
+    const connection = Connection(
+        id: "111",
+        ourDid: "111",
+        theirDid: "2222",
+        theirEndpoint: "ewtert",
+        theirLabel: "Bob",
+        createdMs: "1232531251",
+        approvedMs: "sdgd",
+        invited: true);
+
+    return [connection];
   },
 );
