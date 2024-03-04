@@ -41,10 +41,8 @@ class ConnectionService {
 
 final connectionsFutureProvider = FutureProvider<List<Connection>>(
   (ref) async {
-    //final connectionService = ConnectionService();
-    //await connectionService.getConnections();
-    await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second
-    //return connectionService.fetchConnections();
+    // mock data for those who can't work with the backend
+    /*
     const connection = Connection(
       id: "111",
       ourDid: "111",
@@ -55,29 +53,10 @@ final connectionsFutureProvider = FutureProvider<List<Connection>>(
       approvedMs: "sdgd",
       invited: true,
     );
-
-    const connection2 = Connection(
-      id: "112",
-      ourDid: "112",
-      theirDid: "2223",
-      theirEndpoint: "ewtert",
-      theirLabel: "Jessica",
-      createdMs: "1232531251",
-      approvedMs: "sdgd",
-      invited: true,
-    );
-
-    const connection3 = Connection(
-      id: "113",
-      ourDid: "113",
-      theirDid: "2224",
-      theirEndpoint: "ewtert",
-      theirLabel: "Pissassfuckhead",
-      createdMs: "1232531251",
-      approvedMs: "sdgd",
-      invited: true,
-    );
-
-    return [connection, connection2, connection3];
+    */
+    final connectionService = ConnectionService();
+    await connectionService.getConnections();
+    await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second
+    return connectionService.fetchConnections();
   },
 );
