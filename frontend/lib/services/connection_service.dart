@@ -46,15 +46,38 @@ final connectionsFutureProvider = FutureProvider<List<Connection>>(
     await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second
     //return connectionService.fetchConnections();
     const connection = Connection(
-        id: "111",
-        ourDid: "111",
-        theirDid: "2222",
-        theirEndpoint: "ewtert",
-        theirLabel: "Bob",
-        createdMs: "1232531251",
-        approvedMs: "sdgd",
-        invited: true);
+      id: "111",
+      ourDid: "111",
+      theirDid: "2222",
+      theirEndpoint: "ewtert",
+      theirLabel: "Bob",
+      createdMs: "1232531251",
+      approvedMs: "sdgd",
+      invited: true,
+    );
 
-    return [connection];
+    const connection2 = Connection(
+      id: "112",
+      ourDid: "112",
+      theirDid: "2223",
+      theirEndpoint: "ewtert",
+      theirLabel: "Jessica",
+      createdMs: "1232531251",
+      approvedMs: "sdgd",
+      invited: true,
+    );
+
+    const connection3 = Connection(
+      id: "113",
+      ourDid: "113",
+      theirDid: "2224",
+      theirEndpoint: "ewtert",
+      theirLabel: "Pissassfuckhead",
+      createdMs: "1232531251",
+      approvedMs: "sdgd",
+      invited: true,
+    );
+
+    return [connection, connection2, connection3];
   },
 );
