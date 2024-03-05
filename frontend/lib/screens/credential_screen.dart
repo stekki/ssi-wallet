@@ -48,7 +48,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
             Expanded(
               child: credentialsFuture.when(
                 loading: () => const LoadingScreen(),
-                error: (err, stack) => Text("Error loading credentials"),
+                error: (err, stack) => const Text("Error loading credentials"),
                 data: (credentials) {
                   var filteredCredentials = credentials
                       .where((c) =>
