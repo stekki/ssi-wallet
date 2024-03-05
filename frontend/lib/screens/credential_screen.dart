@@ -22,94 +22,87 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
   Widget build(BuildContext context) {
     final credentialsFuture = ref.watch(credentialsFutureProvider);
 
-    if (credentialsFuture.isLoading) {
-      return const LoadingScreen();
-    }
-
     return Scaffold(
       body: Container(
-        decoration: scaffoldBackground,
-        child: credentialsFuture.when(
-          loading: () => const Text(
-            "Loading...",
-          ),
-          error: (err, stack) => const Text(
-            "Error loading venues",
-          ),
-          data: (credentials) => CustomScrollView(
-            slivers: <Widget>[
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                sliver: SliverAppBar(
-                  toolbarHeight: 40,
-                  shape: const ContinuousRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30),
-                    ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'Search connection',
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(5),
+                    borderSide: BorderSide.none,
                   ),
-                  backgroundColor: DesignColors.extraColorWhite,
-                  pinned: true,
-                  floating: true,
-                  title: TextField(
-                    keyboardType: TextInputType.multiline,
-                    controller: _searchController,
-                    decoration: const InputDecoration(
-                      hintText: 'Search connection',
-                      prefixIcon: Icon(Icons.search),
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                    ),
-                    onChanged: (value) {
-                      setState(() => filterValue = value.toLowerCase());
-                    },
-                  ),
+                  filled: true,
+                  fillColor: DesignColors.extraColorWhite,
                 ),
+                onChanged: (value) {
+                  setState(() => filterValue = value.toLowerCase());
+                },
               ),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    return Column(
-                      children: [
-                        ExpansionPanelList(
-                          expandedHeaderPadding: EdgeInsets.zero,
-                          expansionCallback: (int index, bool isExpanded) {
-                            setState(
-                              () {
-                                credentials[index].isExpanded = !isExpanded;
-                              },
-                            );
-                          },
-                          children: credentials
-                              .where((c) =>
-                                  c.issuer
-                                      .toLowerCase()
-                                      .contains(filterValue) ||
-                                  c.item.toLowerCase().contains(filterValue))
-                              .map<ExpansionPanel>(
-                                (c) => ExpansionPanel(
-                                  backgroundColor: DesignColors.extraColorWhite,
-                                  headerBuilder:
-                                      (BuildContext context, bool isExpanded) {
-                                    return CredentialCard(
-                                        issuer: c.issuer, item: c.item);
-                                  },
-                                  body: CredentialCardInfo(
-                                      date: c.date, holder: c.holder),
-                                  isExpanded: !c.isExpanded,
-                                ),
-                              )
-                              .toList(),
+            ),
+            Expanded(
+              child: credentialsFuture.when(
+                loading: () => const LoadingScreen(),
+                error: (err, stack) => Text("Error loading credentials"),
+                data: (credentials) {
+                  var filteredCredentials = credentials
+                      .where((c) =>
+                          c.issuer.toLowerCase().contains(filterValue) ||
+                          c.item.toLowerCase().contains(filterValue))
+                      .toList();
+
+                  return ListView.builder(
+                    itemCount: filteredCredentials.length,
+                    itemBuilder: (context, index) {
+                      var credential = filteredCredentials[index];
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: const Color.fromARGB(255, 152, 226, 226),
+                              width: 2.0,
+                            ),
+                            gradient: const LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              stops: [
+                                0.001,
+                                0.999,
+                              ],
+                              colors: [
+                                Color.fromARGB(255, 219, 255, 251),
+                                Color.fromARGB(255, 212, 253, 248)
+                              ],
+                            )),
+                        child: Theme(
+                          data: Theme.of(context).copyWith(
+                            dividerColor: Colors.transparent, // Remove dividers
+                          ),
+                          child: ExpansionTile(
+                            title: Text(credential.issuer),
+                            subtitle: Text(credential.item),
+                            children: [
+                              CredentialCardInfo(
+                                date: credential.date,
+                                holder: credential.holder,
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    );
-                  },
-                  childCount: 1,
-                ),
+                      );
+                    },
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

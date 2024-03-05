@@ -72,3 +72,18 @@ const scaffoldBackground = BoxDecoration(
     ],
   ),
 );
+
+const connectionBackground = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    stops: [
+      0.01,
+      0.99,
+    ],
+    colors: [
+      DesignColors.extraColorWhite,
+      DesignColors.messageColor,
+    ],
+  ),
+);

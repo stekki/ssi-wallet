@@ -19,39 +19,43 @@ class ConnectionCard extends ConsumerWidget {
 
     return Card(
       color: Colors.white,
-      margin: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
+      //margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: InkWell(
         onTap: () =>
             context.pushNamed("chat", pathParameters: {"id": connection.id}),
-        borderRadius: BorderRadius.circular(20.0),
         child: Ink(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: DesignColors.extraColorWhite,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(
-              color: Colors.grey,
-              width: 0.5,
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.grey,
+                width: 0,
+              ),
             ),
           ),
-          height: max(height * 0.09, 60),
+          height: max(height * 0.11, 80),
           child: Center(
             child: ListTile(
               leading: const CircleAvatar(
-                radius: 20,
+                radius: 25,
                 backgroundColor: Colors.transparent,
                 backgroundImage: NetworkImage(
                     'https://as2.ftcdn.net/v2/jpg/00/97/58/97/1000_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg'),
               ),
               title: Text(connection.theirLabel,
                   style: const TextStyle(
-                      fontSize: 16)), // Adjust text style as needed
+                      fontSize: 18,
+                      fontWeight:
+                          FontWeight.bold)), // Adjust text style as needed
               subtitle: const Text("Target item",
                   style:
-                      TextStyle(fontSize: 14)), // Adjust text style as needed
-              trailing: const Text("Tap to chat"),
+                      TextStyle(fontSize: 16)), // Adjust text style as needed
+              trailing: const Text(
+                "Tap to chat",
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
             ),
           ),
         ),

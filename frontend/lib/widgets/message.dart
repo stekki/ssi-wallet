@@ -16,7 +16,7 @@ class ChatMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = sentBy == 'me' ? DesignColors.extraColorGray : Colors.white;
+    Color color = sentBy == 'me' ? DesignColors.messageColor : Colors.white;
     BorderRadiusGeometry borderRadius;
 
     if (sentBy == 'me') {

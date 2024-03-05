@@ -16,14 +16,10 @@ class AppTheme {
         ),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(15.0),
-        ),
-        borderSide: BorderSide(
-          color: DesignColors.secondaryColor,
-          width: 1.0,
-        ),
-      ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(15.0),
+          ),
+          borderSide: BorderSide.none),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(15.0),

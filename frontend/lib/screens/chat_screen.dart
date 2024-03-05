@@ -76,7 +76,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   Container(
                     color: Colors.white,
                     child: Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(5),
                       child: Row(
                         children: [
                           const ChatBottomSheet(),

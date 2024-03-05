@@ -72,12 +72,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ],
           ),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                _buildConnectionListView(context, connectionsAsyncValue),
-                _buildConnectionListView(context, connectionsAsyncValue),
-              ],
+            child: Container(
+              color: Colors.white,
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildConnectionListView(context, connectionsAsyncValue),
+                  _buildConnectionListView(context, connectionsAsyncValue),
+                ],
+              ),
             ),
           ),
         ],
@@ -153,7 +156,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           itemCount: filteredConnections.length,
           itemBuilder: (context, index) =>
               ConnectionCard(connection: filteredConnections[index]),
-          padding: const EdgeInsets.only(top: 8.0),
+          //padding: const EdgeInsets.only(top: 8.0),
         );
       },
     );

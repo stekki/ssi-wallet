@@ -85,6 +85,14 @@ class _LandingScreenState extends State<LandingScreen>
             // Sign in with FaceID logic
           },
         ),
+      ],
+    );
+  }
+
+/*
+  Widget developerOptions() {
+    return Column(
+      children: <Widget>[
         const SizedBox(height: Constants.lpLoginButtonSpacing),
         LandingPageButton(
           text: 'Sign in with token (dev)',
@@ -92,7 +100,7 @@ class _LandingScreenState extends State<LandingScreen>
             // Sign in with token
             promptForToken(context);
           },
-          color: DesignColors.devRed,
+          color: DesignColors.extraColorGray,
         ),
         const SizedBox(height: Constants.lpLoginButtonSpacing),
         LandingPageButton(
@@ -102,9 +110,38 @@ class _LandingScreenState extends State<LandingScreen>
             //log('My man, Piss-Head');
             context.go('/home');
           },
-          color: DesignColors.devRed,
-        ),
+          color: DesignColors.extraColorGray,
+        )
       ],
+    );
+  }
+  */
+
+  void _showDeveloperOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: <Widget>[
+            ListTile(
+              leading: const Icon(Icons.vpn_key),
+              title: const Text('Sign in with token (dev)'),
+              onTap: () {
+                Navigator.of(context).pop(); // Dismiss bottom sheet
+                promptForToken(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.skip_next),
+              title: const Text('Skip to home (dev)'),
+              onTap: () {
+                Navigator.of(context).pop(); // Dismiss bottom sheet
+                context.go('/home');
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -211,6 +248,16 @@ class _LandingScreenState extends State<LandingScreen>
                     ],
                   ),
                 ),
+              ),
+            ),
+            Positioned(
+              right: 20,
+              bottom: 20,
+              child: FloatingActionButton(
+                onPressed: () => _showDeveloperOptions(context),
+                backgroundColor: Colors.grey.withOpacity(0.5),
+                child: const Icon(Icons.developer_mode, size: 20),
+                mini: true,
               ),
             ),
           ],

@@ -67,17 +67,19 @@ class CredentialCardInfo extends ConsumerWidget {
               padding: const EdgeInsets.fromLTRB(15, 15, 10, 0),
               child: Row(
                 children: [
-                  ElevatedButton(
-                    child: const Text("Delete"),
-                    onPressed: () => {},
-                  ),
+                  TextButton(
+                      child: const Text("Delete"),
+                      onPressed: () => {},
+                      style: TextButton.styleFrom(
+                          backgroundColor: DesignColors.devRed)),
                   const SizedBox(
-                    width: 20,
+                    width: 15,
                   ),
-                  ElevatedButton(
-                    child: const Text("Send"),
-                    onPressed: () => {},
-                  ),
+                  TextButton(
+                      child: const Text(" Send "),
+                      onPressed: () => {},
+                      style: TextButton.styleFrom(
+                          backgroundColor: DesignColors.buttonColor)),
                 ],
               ),
             )
