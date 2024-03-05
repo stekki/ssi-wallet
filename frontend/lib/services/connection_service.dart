@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/services/graphql_service.dart';
-
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'queries.dart';
 import '../models/models.dart';
 
 class ConnectionService {
@@ -47,3 +48,26 @@ final connectionsFutureProvider = FutureProvider<List<Connection>>(
     return connectionService.fetchConnections();
   },
 );
+
+final connectionStreamProvider = StreamProvider<List<Connection>>((ref) {
+  final stream = GraphQLService()
+      .client
+      .watchQuery(WatchQueryOptions(
+        fetchResults: true,
+        document: connectionsQuery,
+      ))
+      .stream
+      .map((event) {
+    try {
+      final List<dynamic> res = event.data?["connections"]["edges"];
+      final List<Connection> connections = res.map((e) {
+        final node = e?["node"];
+        return Connection.fromJson(node);
+      }).toList();
+      return connections;
+    } catch (e) {
+      return <Connection>[];
+    }
+  });
+  return stream;
+});

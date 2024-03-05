@@ -18,16 +18,17 @@ final pairwise = {
       cursor
       node {
         ...PairwiseNodeFragment
-        events(last: 1) {
-          nodes {
-            read
-          }
-        }
       }
     }
     $pairwiseNodeFragment
   """
 };
+
+// events(last: 1) {
+//   nodes {
+//     read
+//   }
+// }
 
 const credentialNodeFragment = """
   fragment CredentialNodeFragment on Credential {
