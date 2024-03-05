@@ -68,18 +68,18 @@ class CredentialCardInfo extends ConsumerWidget {
               child: Row(
                 children: [
                   TextButton(
-                      child: const Text("Delete"),
                       onPressed: () => {},
                       style: TextButton.styleFrom(
-                          backgroundColor: DesignColors.devRed)),
+                          backgroundColor: DesignColors.devRed),
+                      child: const Text("Delete")),
                   const SizedBox(
                     width: 15,
                   ),
                   TextButton(
-                      child: const Text(" Send "),
                       onPressed: () => {},
                       style: TextButton.styleFrom(
-                          backgroundColor: DesignColors.buttonColor)),
+                          backgroundColor: DesignColors.buttonColor),
+                      child: const Text(" Send ")),
                 ],
               ),
             )

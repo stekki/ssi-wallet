@@ -256,8 +256,8 @@ class _LandingScreenState extends State<LandingScreen>
               child: FloatingActionButton(
                 onPressed: () => _showDeveloperOptions(context),
                 backgroundColor: Colors.grey.withOpacity(0.5),
-                child: const Icon(Icons.developer_mode, size: 20),
                 mini: true,
+                child: const Icon(Icons.developer_mode, size: 20),
               ),
             ),
           ],

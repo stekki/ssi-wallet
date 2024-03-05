@@ -5,11 +5,12 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:go_router/go_router.dart';
 
-MobileScannerController cameraController = MobileScannerController(autoStart: true,
-            detectionSpeed: DetectionSpeed.normal,
-            facing: CameraFacing.back,
-            torchEnabled: false,
-          );        
+MobileScannerController cameraController = MobileScannerController(
+  autoStart: true,
+  detectionSpeed: DetectionSpeed.normal,
+  facing: CameraFacing.back,
+  torchEnabled: false,
+);
 
 class ScanScreen extends ConsumerStatefulWidget {
   const ScanScreen({super.key});
@@ -20,12 +21,9 @@ class ScanScreen extends ConsumerStatefulWidget {
 
 class _ScanScreenState extends ConsumerState<ScanScreen>
     with SingleTickerProviderStateMixin {
-
-void createConnection(String? link) async {
-  await ref
-      .read(connectionServiceProvider)
-      .acceptConnection(link);
-}
+  void createConnection(String? link) async {
+    await ref.read(connectionServiceProvider).acceptConnection(link);
+  }
 
   void showConfirmationDialog(String? qrValue) {
     showDialog(
@@ -39,7 +37,7 @@ void createConnection(String? link) async {
               child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
-                cameraController.start(); 
+                cameraController.start();
               },
             ),
             TextButton(
@@ -48,7 +46,6 @@ void createConnection(String? link) async {
                 Navigator.of(context).pop();
                 createConnection(qrValue);
                 context.go('/home');
-
               },
             ),
           ],
@@ -68,8 +65,8 @@ void createConnection(String? link) async {
         child: Align(
           alignment: Alignment.center,
           child: SizedBox(
-            width: 410,
-            height: 410,
+            width: null,
+            height: null,
             child: MobileScanner(
               controller: cameraController,
               onDetect: (capture) {

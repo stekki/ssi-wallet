@@ -44,16 +44,6 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
           "Credi",
           style: Theme.of(context).textTheme.displayMedium,
         ),
-        leadingWidth: 100,
-        leading: TextButton(
-          child: Text(
-            username,
-            style: Theme.of(context).textTheme.displaySmall,
-          ),
-          onPressed: () {
-            context.go('/profile');
-          },
-        ),
         actions: [
           TextButton(
             onPressed: () {
@@ -73,8 +63,11 @@ class _NavigationScreenOutlineState extends State<NavigationScreenOutline> {
         type: BottomNavigationBarType.fixed,
         currentIndex: widget.child.currentIndex,
         onTap: (index) {
-          if(index == 2) {cameraController.start();} 
-          else {cameraController.stop();}
+          if (index == 2) {
+            cameraController.start();
+          } else {
+            cameraController.stop();
+          }
           widget.child.goBranch(
             index,
             initialLocation: index == widget.child.currentIndex,
