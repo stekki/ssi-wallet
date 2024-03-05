@@ -127,7 +127,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 if (connectionMade) {}
                 _connectionController.clear();
                 // ignore: unused_result
-                ref.refresh(connectionsFutureProvider);
+                // ref.refresh(connectionsFutureProvider);
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               },
