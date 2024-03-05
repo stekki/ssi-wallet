@@ -38,7 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
-        ref.watch(connectionsFutureProvider);
+        ref.watch(connectionStreamProvider);
 
     return Scaffold(
       body: Column(
