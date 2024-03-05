@@ -71,32 +71,3 @@ final connectionStreamProvider = StreamProvider<List<Connection>>((ref) {
   });
   return stream;
 });
-
-
-// final messageStreamProvider =
-//     StreamProvider.family<List<Message>, String>((ref, connectionID) {
-//   final stream = GraphQLService()
-//       .client
-//       .watchQuery(
-//         WatchQueryOptions(
-//           fetchResults: true,
-//           document: messagesQuery,
-//           variables: {'id': connectionID},
-//         ),
-//       )
-//       .stream
-//       .map((event) {
-//     try {
-//       final List<dynamic> res = event.data?["connection"]["messages"]["edges"];
-//       final List<Message> messages = res.map((e) {
-//         final node = e?["node"];
-//         return Message.fromJson(node);
-//       }).toList();
-//       return messages;
-//     } catch (e) {
-//       return <Message>[];
-//       //throw Exception("No data returned");
-//     }
-//   });
-//   return stream;
-// });
