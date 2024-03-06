@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../utils/styles.dart';
 
 class ChatMessageWidget extends StatelessWidget {

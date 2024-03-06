@@ -1,8 +1,9 @@
-import 'package:frontend/services/queries.dart';
 import 'dart:developer';
-import 'graphql_service.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+
 import 'fragments.dart';
+import 'graphql_service.dart';
+import 'package:frontend/services/queries.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class EventNotification {
   static final EventNotification _instance = EventNotification._();

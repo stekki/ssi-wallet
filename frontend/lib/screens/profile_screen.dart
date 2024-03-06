@@ -4,8 +4,7 @@ import '../../services/graphql_service.dart';
 import '../../utils/secure_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/utils/styles.dart';
-import '../token.dart';
-
+import '../utils/token.dart';
 
 class TestScreen extends StatelessWidget {
   const TestScreen({super.key});
@@ -26,7 +25,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreen extends State<ProfileScreen> {
-
   String username = 'Stranger';
 
   int num = 0;
@@ -47,7 +45,8 @@ class _ProfileScreen extends State<ProfileScreen> {
   }
 
   void makeQuery() async {
-    result = await GraphQLService().getQueryResult(GraphQLService().getIdQuery, {});
+    result =
+        await GraphQLService().getQueryResult(GraphQLService().getIdQuery, {});
     //print(result);
     setState(() {
       num++;
@@ -55,10 +54,11 @@ class _ProfileScreen extends State<ProfileScreen> {
   }
 
   void makeInvitation() async {
-    result = await GraphQLService().getQueryResult(GraphQLService().invitationQuery, {});
+    result = await GraphQLService()
+        .getQueryResult(GraphQLService().invitationQuery, {});
     //print(result);
     setState(() {
-      num ++;
+      num++;
     });
   }
 
@@ -74,9 +74,12 @@ class _ProfileScreen extends State<ProfileScreen> {
     // Make a check if agent has done login
     String? token = await SecureStorageUtil().getToken();
     if (token != null) {
-      result = await GraphQLService().getQueryResult(GraphQLService().invitationQuery, {});
+      result = await GraphQLService()
+          .getQueryResult(GraphQLService().invitationQuery, {});
       Map<String, dynamic>? invite = result?['invite'];
-      if (invite != null && invite.containsKey('imageB64') && invite.containsKey('raw')) {
+      if (invite != null &&
+          invite.containsKey('imageB64') &&
+          invite.containsKey('raw')) {
         String? raw = invite['raw'];
         String? imageB64 = invite['imageB64'];
         if (imageB64 != null && raw != null) {
@@ -123,7 +126,8 @@ class _ProfileScreen extends State<ProfileScreen> {
               title: Center(
                 child: Text(
                   username,
-                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 25.0),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 25.0),
                 ),
               ),
               //HERE WE WANT TO QUERY THE USER EMAIL FROM VAULT
@@ -143,15 +147,21 @@ class _ProfileScreen extends State<ProfileScreen> {
                             width: 300,
                             child: TextField(
                               readOnly: true,
-                              controller: TextEditingController(text: stringForConnection),
+                              controller: TextEditingController(
+                                  text: stringForConnection),
                               decoration: InputDecoration(
                                 border: const OutlineInputBorder(),
                                 labelText: 'Invitation link',
                                 suffixIcon: IconButton(
                                   icon: const Icon(Icons.copy),
                                   onPressed: () {
-                                    Clipboard.setData(ClipboardData(text: stringForConnection ?? 'Could not find the invitation link'));
-                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
+                                    Clipboard.setData(ClipboardData(
+                                        text: stringForConnection ??
+                                            'Could not find the invitation link'));
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content:
+                                                Text('Copied to clipboard')));
                                   },
                                 ),
                               ),

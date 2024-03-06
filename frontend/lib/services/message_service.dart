@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/services/graphql_service.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:frontend/services/queries.dart';
+
 import '../models/models.dart';
+
+import 'package:frontend/services/graphql_service.dart';
+import 'package:frontend/services/queries.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class MessageService {
   late Map<String, dynamic> _result;

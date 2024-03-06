@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/providers/providers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../routes/navigation_helper.dart';
 import 'utils/app_theme.dart';
+import 'package:frontend/providers/providers.dart';
+import 'package:frontend/routes/navigation_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   log('Starting App');

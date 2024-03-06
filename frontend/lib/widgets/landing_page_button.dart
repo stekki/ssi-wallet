@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../utils/styles.dart';
 
 class LandingPageButton extends StatelessWidget {

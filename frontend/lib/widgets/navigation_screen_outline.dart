@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../token.dart';
+import '../utils/token.dart';
 import '../utils/secure_storage.dart';
-import '../screens/working_scan_screen.dart';
+import '../screens/scan_screen.dart';
 
 class NavigationScreenOutline extends StatefulWidget {
   const NavigationScreenOutline({
