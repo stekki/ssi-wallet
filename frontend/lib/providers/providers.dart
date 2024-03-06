@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:frontend/services/connection_service.dart';
 import 'package:frontend/services/message_service.dart';
@@ -29,3 +30,40 @@ final credentialsFutureProvider = FutureProvider<List<Credential>>(
             ]);
   },
 );
+
+// Provider for storing chat states
+class ChatIdsNotifier extends StateNotifier<List<String>> {
+  final SharedPreferences prefs;
+  ChatIdsNotifier(this.prefs) : super([]);
+
+  _initialize() async {
+    if (prefs.containsKey("chats")) {
+      state = prefs.getStringList("chats")!;
+    }
+  }
+
+  updateChatStatus(String id) async {
+    //final chats = state;
+    state = [id, ...state];
+    /*
+    if (!state.contains(id)) {
+      state = [id, ...state];
+    } else {
+      chats.removeWhere((venueId) => venueId == id);
+      state = [...chats];
+    }
+    */
+    prefs.setStringList("chats", state);
+  }
+}
+
+final chatStatusProvider =
+    StateNotifierProvider<ChatIdsNotifier, List<String>>((ref) {
+  final ids = ChatIdsNotifier(ref.watch(sharedPreferencesProvider));
+  ids._initialize();
+  return ids;
+});
+
+// Provider for sharedPreferences
+final sharedPreferencesProvider =
+    Provider<SharedPreferences>((ref) => throw UnimplementedError());

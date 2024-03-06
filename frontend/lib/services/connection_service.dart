@@ -41,6 +41,19 @@ class ConnectionService {
 
 final connectionsFutureProvider = FutureProvider<List<Connection>>(
   (ref) async {
+    // mock data for those who can't work with the backend
+    /*
+    const connection = Connection(
+      id: "111",
+      ourDid: "111",
+      theirDid: "2222",
+      theirEndpoint: "ewtert",
+      theirLabel: "Bob",
+      createdMs: "1232531251",
+      approvedMs: "sdgd",
+      invited: true,
+    );
+    */
     final connectionService = ConnectionService();
     await connectionService.getConnections();
     await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second

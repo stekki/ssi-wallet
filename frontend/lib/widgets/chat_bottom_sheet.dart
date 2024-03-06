@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/providers.dart';
 
-class ChatBottomSheet extends StatelessWidget {
-  const ChatBottomSheet({super.key});
+class ChatBottomSheet extends ConsumerWidget {
+  final String id;
+  const ChatBottomSheet(this.id, {super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: IconButton(
         icon: const Icon(Icons.add),
@@ -26,16 +29,26 @@ class ChatBottomSheet extends StatelessWidget {
                         SizedBox(
                           width: double
                               .infinity, // Ensure the button takes full width
+                          height: 40,
                           child: ElevatedButton(
-                            child: const Text('Request proof'),
-                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Accept chat'),
+                            onPressed: () => {
+                              ref
+                                  .watch(chatStatusProvider.notifier)
+                                  .updateChatStatus(id),
+                              Navigator.pop(context)
+                            },
                           ),
+                        ),
+                        const SizedBox(
+                          height: 30,
                         ),
                         SizedBox(
                           width: double
                               .infinity, // Ensure the button takes full width
+                          height: 40,
                           child: ElevatedButton(
-                            child: const Text('Send a Proof'),
+                            child: const Text('Delete chat'),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ),

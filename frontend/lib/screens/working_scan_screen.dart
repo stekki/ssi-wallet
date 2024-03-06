@@ -65,8 +65,8 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
         child: Align(
           alignment: Alignment.center,
           child: SizedBox(
-            width: null,
-            height: null,
+            width: 410,
+            height: 410,
             child: MobileScanner(
               controller: cameraController,
               onDetect: (capture) {
