@@ -9,13 +9,13 @@ import 'package:frontend/widgets/credential_card_info.dart';
 
 class CredentialsListWidget extends ConsumerWidget {
   final FutureProvider<List<Credential>> credentialsProvider;
+  final String filterValue;
 
-  const CredentialsListWidget({super.key, required this.credentialsProvider});
+  const CredentialsListWidget({super.key, required this.credentialsProvider, required this.filterValue});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final credentialsFuture = ref.watch(credentialsProvider);
-    String filterValue = "";
 
     return credentialsFuture.when(
       loading: () => const LoadingScreen(),

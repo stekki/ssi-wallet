@@ -136,7 +136,7 @@ class _ProfileScreen extends State<ProfileScreen> {
             ),
             ConstrainedBox(
               constraints: const BoxConstraints(maxHeight: 200), // Set the maximum height
-                  child: CredentialsListWidget(credentialsProvider: profileCredentialProvider),
+                  child: CredentialsListWidget(credentialsProvider: profileCredentialProvider, filterValue: ''),
             ),
             Expanded(
               child: SingleChildScrollView(

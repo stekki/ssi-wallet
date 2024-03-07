@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/providers/providers.dart';
 
-
 class CredentialScreen extends ConsumerStatefulWidget {
   const CredentialScreen({super.key});
 
@@ -41,7 +40,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
             ),
           ),
           Expanded(
-            child: CredentialsListWidget(credentialsProvider: credentialsFutureProvider),
+            child: CredentialsListWidget(credentialsProvider: credentialsFutureProvider, filterValue: filterValue),
           ),
         ],
       ),
