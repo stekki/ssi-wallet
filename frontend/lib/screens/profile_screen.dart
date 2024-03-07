@@ -5,6 +5,7 @@ import '../../utils/secure_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/utils/styles.dart';
 import '../utils/token.dart';
+import '../providers/providers.dart';
 
 class TestScreen extends StatelessWidget {
   const TestScreen({super.key});
@@ -132,6 +133,10 @@ class _ProfileScreen extends State<ProfileScreen> {
               ),
               //HERE WE WANT TO QUERY THE USER EMAIL FROM VAULT
               subtitle: const Center(child: Text("pisshead@gmail.com")),
+            ),
+            ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 200), // Set the maximum height
+                  child: CredentialsListWidget(credentialsProvider: profileCredentialProvider),
             ),
             Expanded(
               child: SingleChildScrollView(
