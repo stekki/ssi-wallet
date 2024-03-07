@@ -18,20 +18,19 @@ fi
 
 source setup-cli-env.sh
 
-REGISTRATION_OUTPUT=$($cli authn register -u "$USERNAME" 2>&1)
-
-if echo "$REGISTRATION_OUTPUT" | grep -q "Error: authn: glob: : execute authenticator: register user: error bad: {}"; then
-    echo "Registration skipped, $USERNAME exists"
-elif echo "$REGISTRATION_OUTPUT" | grep -q "\"Registration Success\""; then
-    echo "$USERNAME: $REGISTRATION_OUTPUT"
-else
-    echo "$REGISTRATION_OUTPUT"
-    exit 1
-fi
-
 LOGIN_OUTPUT=$($cli authn login -u "$USERNAME" 2>&1)
 
-# Check if LOGIN_OUTPUT starts with 'e'
+if echo "$LOGIN_OUTPUT" | grep -qE "user \(.+\) not exist"; then
+    REGISTRATION_OUTPUT=$($cli authn register -u "$USERNAME" 2>&1)
+    if echo "$REGISTRATION_OUTPUT" | grep -q "\"Registration Success\""; then
+        echo "$USERNAME: $REGISTRATION_OUTPUT"
+    else
+        echo "$REGISTRATION_OUTPUT"
+        exit 1
+    fi
+    LOGIN_OUTPUT=$($cli authn login -u "$USERNAME" 2>&1)
+fi
+
 if [[ $LOGIN_OUTPUT == e* ]]; then
     echo "Login successful"
     echo "$USERNAME: $LOGIN_OUTPUT"
