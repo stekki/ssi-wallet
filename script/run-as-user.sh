@@ -30,7 +30,16 @@ else
 fi
 
 LOGIN_OUTPUT=$($cli authn login -u "$USERNAME" 2>&1)
-echo "$USERNAME: $LOGIN_OUTPUT"
+
+# Check if LOGIN_OUTPUT starts with 'e'
+if [[ $LOGIN_OUTPUT == e* ]]; then
+    echo "Login successful"
+    echo "$USERNAME: $LOGIN_OUTPUT"
+else
+    echo "Login failed or did not produce a valid JWT token:"
+    echo "$LOGIN_OUTPUT"
+    exit 1
+fi
 
 #why this doesn't work??
 #if [[ $LOGIN_OUTPUT =~ ^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$ ]]; then
