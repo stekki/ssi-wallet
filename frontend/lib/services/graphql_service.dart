@@ -140,7 +140,7 @@ mutation connect(\$input: ConnectInput!) {
       dynamic query, Map<String, dynamic> variables) async {
     try {
       QueryResult result = await client.query(QueryOptions(
-          fetchPolicy: FetchPolicy.noCache,
+          fetchPolicy: FetchPolicy.networkOnly,
           document: query,
           variables: variables,
           errorPolicy: ErrorPolicy.all));

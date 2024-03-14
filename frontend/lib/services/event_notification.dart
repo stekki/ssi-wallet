@@ -1,9 +1,8 @@
-import 'dart:developer';
-
-import 'fragments.dart';
-import 'graphql_service.dart';
 import 'package:frontend/services/queries.dart';
+import 'dart:developer';
+import 'graphql_service.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'fragments.dart';
 
 class EventNotification {
   static final EventNotification _instance = EventNotification._();
@@ -95,17 +94,17 @@ class EventNotification {
     String parentName,
     Map<dynamic, dynamic> query,
   ) {
-    //print("update state invoked");
     final newState = stateWithNewItem(prevState, itemName, newItem, last);
     final queryRequest = Request(
         operation: Operation(document: query["query"]),
         variables: query["variables"]);
     if (newState?["updated"]) {
       if (parentName == "") {
-        client.writeQuery(queryRequest, data: {
+        final wsState = {
           "__typename": "Query",
           itemName: newState?["state"][itemName]
-        });
+        };
+        client.writeQuery(queryRequest, data: wsState);
       } else {
         final wState = {
           "__typename": "Query",
@@ -114,7 +113,6 @@ class EventNotification {
             itemName: newState?["state"][itemName]
           }
         };
-        //print(wState);
         client.writeQuery(queryRequest, data: wState);
       }
     }
@@ -130,11 +128,7 @@ class EventNotification {
     final queryRequest = Request(
         operation: Operation(document: query["query"]),
         variables: query["variables"]);
-    final dynamic state = (parentName == "")
-        ? (client.readQuery(queryRequest) == null
-            ? null
-            : client.readQuery(queryRequest)![parentName])
-        : client.readQuery(queryRequest);
+    dynamic state = client.readQuery(queryRequest);
     if (state == null) {
       updateState({}, itemName, newItem, last, parentName, query);
       return;
@@ -152,15 +146,12 @@ class EventNotification {
   static void updateProtocolItem(
       String connectionID, Map<String, dynamic> jobEdge) {
     final job = jobEdge["node"];
-    //print(0);
     updateCacheWithNewItem("jobs", jobEdge, true, "connection", {
       "query": connectionJobsQuery,
       "variables": {"id": connectionID}
     });
-    //print(1);
     if (job["protocol"] == "CONNECTION" &&
         (job["output"]["connection"] != null)) {
-      //print(2);
       updateCacheWithNewItem(
           "connections",
           job["output"]["connection"],
@@ -169,7 +160,6 @@ class EventNotification {
           {"query": connectionsQuery, "variables": const <String, dynamic>{}});
     } else if (job["protocol"] == "BASIC_MESSAGE" &&
         (job["output"]["message"] != null)) {
-      //print(3);
       updateCacheWithNewItem(
           "messages", job["output"]["message"], true, "connection", {
         "query": messagesQuery,
@@ -223,11 +213,9 @@ class EventNotification {
         });
       }
       if (node["job"] != null) {
-        //print("update jobs");
         updateCacheWithNewItem("jobs", node["job"], true, "",
             {"query": jobsQuery, "variables": const <String, dynamic>{}});
         if (connection != null) {
-          //print("update connection jobs");
           updateProtocolItem(connection["id"], node["job"]);
         }
       }
