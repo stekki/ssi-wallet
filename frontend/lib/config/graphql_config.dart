@@ -4,10 +4,22 @@ import 'package:ferry/ferry.dart';
 const token = String.fromEnvironment('TOKEN');
 const baseURL = String.fromEnvironment('BASE_URL');
 
-var httpLink =
-    HttpLink(baseURL, defaultHeaders: {'Authorization': 'Bearer $token'});
+String initializeWsLink() {
+  if (baseURL.startsWith('https://')) {
+    return 'wss://${baseURL.substring(8)}';
+  } else if (baseURL.startsWith('http://')) {
+    return 'ws://${baseURL.substring(7)}';
+  } else {
+    throw Exception('URL must start with either http or https');
+  }
+}
+
+final webSocketLink = initializeWsLink();
 
 class GraphQLConfig {
+
+  static var httpLink = HttpLink(baseURL, defaultHeaders: {'Authorization': 'Bearer $token'});
+
   static final GraphQLConfig _instance = GraphQLConfig._();
 
   GraphQLConfig._();
@@ -16,17 +28,18 @@ class GraphQLConfig {
     return _instance;
   }
 
-  static final Link _authLink = AuthLink(getToken: () {
-    return 'Bearer $token';
-  });
-
-  static final HttpLink _httpLink = HttpLink("http://$baseURL");
-  static final _wsLink = WebSocketLink("ws://$baseURL?access_token=$token",
+  static final _wsLink = WebSocketLink("$webSocketLink?access_token=$token",
       config: const SocketClientConfig(autoReconnect: true, initialPayload: {
         'header': {'Authorization': 'Bearer $token'}
       }));
+
+  static final Link _authLink = AuthLink(getToken: () {
+    return 'Bearer $token';
+  });
+  static final HttpLink _httpLink = HttpLink(baseURL);
   final _link = Link.split((request) => request.isSubscription, _wsLink,
       _authLink.concat(_httpLink));
+  
 
   static dynamic relayMerge(
       dynamic existing, dynamic incoming, FieldFunctionOptions options) {
