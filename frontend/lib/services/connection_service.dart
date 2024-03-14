@@ -10,7 +10,6 @@ class ConnectionService {
   late List<Connection> _gqlConnections;
 
   Future<Map<String, dynamic>> getConnections() async {
-    print("Retrieve connection from network");
     _result = await GraphQLService().getQueryResult(
       connectionsQuery,
       {},
