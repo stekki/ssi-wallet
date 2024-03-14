@@ -69,7 +69,6 @@ class GraphQLConfig {
   }
 
   static final FieldPolicy relayPolicy = FieldPolicy(
-    keyArgs: [],
     merge: (existing, incoming, options) =>
         relayMerge(existing, incoming, options),
   );
@@ -86,28 +85,31 @@ class GraphQLConfig {
           "events": relayPolicy
         },
       ),
-      "Query": TypePolicy(keyFields: {}, fields: {
-        "events": relayPolicy,
-        "connections": relayPolicy,
-        "credentials": relayPolicy,
-        "jobs": relayPolicy,
-        "connection": FieldPolicy(
-          merge: (existing, incoming, options) {
-            if (existing == null) {
-              return incoming;
-            } else {
-              final mergedData = existing;
-              for (final key in incoming.keys) {
-                if (!mergedData.containsKey(key)) {
-                  mergedData[key] = incoming[key];
+      "Query": TypePolicy(
+          keyFields: {},
+          queryType: true,
+          fields: {
+            "events": relayPolicy,
+            "connections": relayPolicy,
+            "credentials": relayPolicy,
+            "jobs": relayPolicy,
+            "connection": FieldPolicy(
+              merge: (existing, incoming, options) {
+                if (existing == null) {
+                  return incoming;
+                } else {
+                  final mergedData = existing;
+                  for (final key in incoming.keys) {
+                    if (!mergedData.containsKey(key)) {
+                      mergedData[key] = incoming[key];
+                    }
+                  }
+                  return mergedData;
                 }
-              }
-              return mergedData;
-            }
-          },
-        )
-        // "activeConnectionName": FieldPolicy()
-      })
+              },
+            )
+            // "activeConnectionName": FieldPolicy()
+          })
     },
   );
 
