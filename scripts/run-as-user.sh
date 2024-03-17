@@ -2,27 +2,35 @@
 
 #set -x
 
-cli='findy-agent-cli'
-
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <username> [device_option]"
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+    echo "Usage: $0 <username> <local|findy>"
+    echo "Options:"
+    echo "  -h, --help    Show this help message."
+    echo " local - use locally deployed backend "
+    echo " findy - use findy deployed backend "
     return 1
 fi
 
+if [ "$#" -ne 2 ]; then
+    echo "Usage: $0 <username> <local|findy>"
+    return 1
+fi
+
+cli='findy-agent-cli'
 USERNAME="$1"
+HOST="$2"
 
-#TODO - allow to specify device for flutter run
-if [ ! -z "$2" ]; then
-    DEVICE="$2"
+if [ "$HOST" = "findy" ]; then
+    BASE_URL="https://findy-agency.op-ai.fi/query"
+    source setup-cli-env-findy.sh
+elif [ "$HOST" = "local" ]; then
+    LOCAL_HOST=$(cat host_address)
+    BASE_URL="http://"$LOCAL_HOST":8085/query"
+    source setup-cli-env-local.sh
+else
+    echo "Error: Invalid host argument. Must be 'local' or 'findy'."
+    return 1
 fi
-
-if [ -z "$FCLI_KEY" ]; then
-    export FCLI_KEY=`$cli new-key`
-    printf "export FCLI_KEY=%s" $FCLI_KEY > use-key.sh
-    echo "$FCLI_KEY" >> .key-backup
-fi
-
-source setup-cli-env.sh
 
 LOGIN_OUTPUT=$("$cli" authn login -u "$USERNAME" 2>&1)
 
@@ -49,7 +57,7 @@ case "$LOGIN_OUTPUT" in
         ;;
 esac
 
-HOST_ADDRESS=$(cat host_address)
-pushd ../frontend/ > /dev/null
-flutter run --dart-define=TOKEN="$LOGIN_OUTPUT" --dart-define=BASE_URL="$HOST_ADDRES":8085/query
-popd > /dev/null
+cd ../frontend/
+echo "$BASE_URL"
+flutter run --dart-define=TOKEN="$LOGIN_OUTPUT" --dart-define=BASE_URL="$BASE_URL"
+cd ../scripts/
