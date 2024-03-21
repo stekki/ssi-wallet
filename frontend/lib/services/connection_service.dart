@@ -7,6 +7,7 @@ import '../models/models.dart';
 
 class ConnectionService {
   late Map<String, dynamic> _result;
+  late Map<String, dynamic> _boolResult;
   late List<Connection> _gqlConnections;
 
   Future<Map<String, dynamic>> getConnections() async {
@@ -44,7 +45,17 @@ class ConnectionService {
     //print(result);
     return result['connect']['ok'];
   }
+
+  Future<bool> getInviter(String nodeID) async {
+    try {
+      _boolResult = await GraphQLService().getInviterByNodeId(nodeID);
+      return _boolResult['connection']['invited'];
+    } catch (e) {
+      return false;
+    }
+  }
 }
+
 
 final connectionsFutureProvider = FutureProvider<List<Connection>>(
   (ref) async {

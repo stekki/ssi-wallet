@@ -5,6 +5,7 @@ import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/chat_bottom_sheet.dart';
 import 'package:frontend/widgets/message.dart';
 // import '../models/models.dart';
+import '../services/connection_service.dart';
 import '../services/message_service.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
@@ -18,10 +19,29 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textEditingController = TextEditingController();
+  bool _isInvited = false;
+
 
   @override
   void initState() {
     super.initState();
+    _fetchInviterStatus();
+  }
+
+  void _fetchInviterStatus() async {
+    bool invited = await ConnectionService().getInviter(widget.id);
+    setState(() {
+      _isInvited = invited;
+    });
+  }
+
+
+  Widget _chooseChatBottomSheet() {
+    if (_isInvited) {
+      return ChatBottomSheetSeller(widget.id);
+    } else {
+      return ChatBottomSheetBuyer(widget.id);
+    }
   }
 
   void _scrollToBottom() async {
@@ -79,7 +99,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       padding: const EdgeInsets.all(5),
                       child: Row(
                         children: [
-                          ChatBottomSheet(widget.id),
+                          _chooseChatBottomSheet(),
                           Expanded(
                             child: TextField(
                               controller: _textEditingController,
