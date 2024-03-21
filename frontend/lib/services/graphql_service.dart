@@ -99,6 +99,13 @@ mutation connect(\$input: ConnectInput!) {
       }
     }""");
 
+    final getInvitatorQuery = gql("""
+    query GetInvitator(\$nodeId: ID!) {
+      connection(id: \$nodeId) {
+        invited
+      }
+    }""");
+
   final sendMessageMutation = gql("""
     mutation SendMessage(\$input: MessageInput!) {
       sendMessage(input: \$input) {
@@ -108,6 +115,10 @@ mutation connect(\$input: ConnectInput!) {
 
   Future<Map<String, dynamic>> getMessageByNodeId(String nodeId) async {
     return await getQueryResult(getMessagesByNodeIdQuery, {'nodeId': nodeId});
+  }
+
+  Future<Map<String, dynamic>> getInviterByNodeId(String nodeId) async {
+    return await getQueryResult(getInvitatorQuery, {'nodeId': nodeId});
   }
 
   Future<Map<String, dynamic>> performMutation(
