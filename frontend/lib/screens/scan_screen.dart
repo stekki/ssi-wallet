@@ -10,6 +10,7 @@ MobileScannerController cameraController = MobileScannerController(
   detectionSpeed: DetectionSpeed.normal,
   facing: CameraFacing.back,
   torchEnabled: false,
+  formats: [BarcodeFormat.qrCode],
 );
 
 class ScanScreen extends ConsumerStatefulWidget {
@@ -23,6 +24,26 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
     with SingleTickerProviderStateMixin {
   void createConnection(String? link) async {
     await ref.read(connectionServiceProvider).acceptConnection(link);
+  }
+
+  void showFailureDialog(String message){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Connection failed"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(child: const Text("Close"),
+            onPressed: () {
+              Navigator.of(context).pop();
+              cameraController.start();
+            }
+            ,)
+          ]
+        );
+      }
+    );
   }
 
   void showConfirmationDialog(String? qrValue) {
@@ -42,10 +63,14 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
             ),
             TextButton(
               child: const Text('Accept'),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
-                createConnection(qrValue);
-                context.go('/home');
+                try {
+                  createConnection(qrValue);
+                  context.go('/home');                    
+                } catch (e) {
+                  showFailureDialog(e.toString());
+                }
               },
             ),
           ],
@@ -73,9 +98,14 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
                 final List<Barcode> qrcodes = capture.barcodes;
                 if (qrcodes.isNotEmpty) {
                   final qrcode = qrcodes.first;
+                  String? scannedValue = qrcode.rawValue;
                   cameraController.stop();
-                  debugPrint('Code found: ${qrcode.rawValue}');
-                  showConfirmationDialog(qrcode.rawValue);
+                  debugPrint('Code found: $scannedValue');
+                  if (scannedValue != null && scannedValue.startsWith('didcomm://aries_connection_invitation')==true){
+                    showConfirmationDialog(qrcode.rawValue);
+                  } else {
+                    showFailureDialog("Invalid invitation code");
+                  }      
                 }
               },
             ),
