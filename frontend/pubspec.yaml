@@ -32,8 +32,8 @@ flutter:
   assets:
     - assets/logos/findywallet.png
     - assets/logos/findywallet_white.png
+    - assets/icons/profile.png
   fonts:
     - family: Nunito
       fonts:
         - asset: assets/fonts/Nunito-VariableFont_wght.ttf
-          weight: 600

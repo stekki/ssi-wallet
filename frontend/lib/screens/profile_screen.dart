@@ -111,74 +111,87 @@ class _ProfileScreen extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: scaffoldBackground,
-      child: Center(
+    return Scaffold(
+      body: Container(
+        decoration: scaffoldBackground,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 16.0),
-            const Icon(
-              Icons.account_circle_rounded,
-              size: 64,
-              semanticLabel: 'Profile picture',
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Image.asset('assets/icons/profile.png'),
+              ),
             ),
             ListTile(
               title: Center(
                 child: Text(
                   username,
                   style: const TextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 25.0),
+                      fontFamily: 'Nunito',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 25.0,
+                      color: Colors.white),
                 ),
               ),
-              //HERE WE WANT TO QUERY THE USER EMAIL FROM VAULT
-              subtitle: const Center(child: Text("pisshead@gmail.com")),
-            ),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 200), // Set the maximum height
-                  child: CredentialsListWidget(credentialsProvider: profileCredentialProvider, filterValue: ''),
+              subtitle: const Center(
+                  child: Text("pisshead@gmail.com",
+                      style: TextStyle(
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 17.0,
+                          color: Colors.white))),
             ),
             Expanded(
+              // This makes the content below scrollable
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 50),
-                    if (isLoading)
-                      const CircularProgressIndicator()
-                    else
-                      Column(
-                        children: [
-                          SizedBox(
-                            width: 300,
-                            child: TextField(
-                              readOnly: true,
-                              controller: TextEditingController(
-                                  text: stringForConnection),
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(),
-                                labelText: 'Invitation link',
-                                suffixIcon: IconButton(
-                                  icon: const Icon(Icons.copy),
-                                  onPressed: () {
-                                    Clipboard.setData(ClipboardData(
-                                        text: stringForConnection ??
-                                            'Could not find the invitation link'));
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content:
-                                                Text('Copied to clipboard')));
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          if (imageBytes != null) Image.memory(imageBytes!),
-                        ],
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    ElevatedButton(
-                      onPressed: decodeImage,
-                      child: const Text('Regenerate'),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxHeight: 200, // Adjust the height as necessary
+                        ),
+                        child: CredentialsListWidget(
+                          credentialsProvider: profileCredentialProvider,
+                          filterValue: '',
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                        ),
+                      ),
+                      padding: const EdgeInsets.all(40),
+                      child: isLoading
+                          ? const CircularProgressIndicator()
+                          : Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (imageBytes != null)
+                                  Image.memory(imageBytes!),
+                                const SizedBox(height: 20),
+                                TextButton(
+                                  onPressed: decodeImage,
+                                  style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          DesignColors.buttonColor),
+                                  child: const Text('Regenerate',
+                                      style: TextStyle(color: Colors.white)),
+                                ),
+                              ],
+                            ),
                     ),
                   ],
                 ),
