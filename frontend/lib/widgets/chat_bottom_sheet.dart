@@ -32,7 +32,8 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                               .infinity, // Ensure the button takes full width
                           height: 40,
                           child: ElevatedButton(
-                            child: const Text('Im a seller (these buttons in development)'),
+                            child: const Text(
+                                'Im a seller (these buttons in development)'),
                             onPressed: () => {
                               ref
                                   .watch(chatStatusProvider.notifier)
@@ -66,7 +67,6 @@ class ChatBottomSheetSeller extends ConsumerWidget {
   }
 }
 
-
 class ChatBottomSheetBuyer extends ConsumerWidget {
   final String id;
   const ChatBottomSheetBuyer(this.id, {super.key});
@@ -96,7 +96,8 @@ class ChatBottomSheetBuyer extends ConsumerWidget {
                               .infinity, // Ensure the button takes full width
                           height: 40,
                           child: ElevatedButton(
-                            child: const Text('Im a buyer (these buttons in development)'),
+                            child: const Text(
+                                'Im a buyer (these buttons in development)'),
                             onPressed: () => {
                               ref
                                   .watch(chatStatusProvider.notifier)

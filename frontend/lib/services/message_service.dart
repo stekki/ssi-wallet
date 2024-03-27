@@ -7,29 +7,43 @@ import 'package:frontend/services/queries.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class MessageService {
-  late Map<String, dynamic> _result;
-  late List<Message> _gqlMessages = [];
-
-  Future<Map<String, dynamic>> getMessages(String nodeID) async {
-    try {
-      _result = await GraphQLService().getMessageByNodeId(nodeID);
-      if (_result['errors'] != null) {
-        //print('GraphQL Error: ${_result['errors']}');
-        _gqlMessages = [];
-      } else if (_result['connection'] != null &&
-          _result['connection']['messages'] != null &&
-          _result['connection']['messages']['nodes'] != null) {
-        _gqlMessages = _result['connection']['messages']['nodes']
-            .map<Message>((m) => Message.fromJson(m))
-            .toList();
-      } else {
-        _gqlMessages = []; // Ensure the list is empty if no messages are found
+  static final MessageService _instance = MessageService._();
+  MessageService._();
+  factory MessageService() {
+    return _instance;
+  }
+  static QueryResult? fullResult;
+  static List<Message> gqlMessages = [];
+  static Map<String, dynamic> pageInfo = {};
+  static final sendMessageMutation = gql("""
+    mutation SendMessage(\$input: MessageInput!) {
+      sendMessage(input: \$input) {
+        ok
       }
+    }""");
+
+  // Get fresh data from the server
+  Future<void> getMessages(String nodeID) async {
+    try {
+      await GraphQLService().getQueryResult(messagesQuery, {'id': nodeID});
     } catch (e) {
-      //print('Exception occurred: $e');
-      _gqlMessages = []; // Ensure the list is empty if an exception occurred
+      throw Exception(e);
     }
-    return _result;
+  }
+
+  Future<void> getMoreMessages(String nodeID) async {
+    final cursor = pageInfo["startCursor"];
+    try {
+      // fullResult should be not null
+      if (fullResult == null) {
+        getMessages(nodeID);
+        return;
+      }
+      await GraphQLService().fetchMore(messagesQuery, {'id': nodeID},
+          fullResult!, true, cursor, "messages", "connection");
+    } catch (error) {
+      throw Exception(error);
+    }
   }
 
   Future<bool> sendMessage(String connectionId, String messageText) async {
@@ -39,59 +53,47 @@ class MessageService {
         'message': messageText,
       },
     };
-    final result = await GraphQLService()
-        .performMutation(GraphQLService().sendMessageMutation, variables);
-    if (result['sendMessage']['ok']) {
-      return true;
-    } else {
-      return false;
-    }
+    final result =
+        await GraphQLService().performMutation(sendMessageMutation, variables);
+    return result['sendMessage']['ok'];
   }
 
   Future<List<Message>> fetchMessages(String nodeID) async {
     await getMessages(nodeID);
-    return _gqlMessages;
+    return gqlMessages;
   }
-}
 
-final messagesFutureProvider = FutureProvider.family<List<Message>, String>(
-  (ref, nodeID) async {
-    try {
-      final messageService = MessageService();
-      await messageService.getMessages(nodeID);
-      await Future.delayed(const Duration(seconds: 1)); // Wait for 1 second
-      return messageService.fetchMessages(nodeID);
-    } catch (e) {
-      //print('Error fetching messages: $e');
-      return [];
-    }
-  },
-);
-
-final messageStreamProvider =
-    StreamProvider.family<List<Message>, String>((ref, connectionID) {
-  final stream = GraphQLService()
-      .client
-      .watchQuery(
-        WatchQueryOptions(
-          fetchResults: true,
-          document: messagesQuery,
-          variables: {'id': connectionID},
-        ),
-      )
-      .stream
-      .map((event) {
-    try {
-      final List<dynamic> res = event.data?["connection"]["messages"]["edges"];
-      final List<Message> messages = res.map((e) {
-        final node = e?["node"];
-        return Message.fromJson(node);
-      }).toList();
-      return messages;
-    } catch (e) {
-      return <Message>[];
-      //throw Exception("No data returned");
-    }
+  final messageStreamProvider =
+      StreamProvider.family<List<Message>, String>((ref, connectionID) {
+    final stream = GraphQLService()
+        .client
+        .watchQuery(
+          WatchQueryOptions(
+            fetchResults: true,
+            document: messagesQuery,
+            variables: {'id': connectionID},
+          ),
+        )
+        .stream
+        .map((event) {
+      try {
+        fullResult = event;
+        final List<dynamic> res =
+            event.data?["connection"]["messages"]["edges"];
+        gqlMessages = res.map((e) {
+          final node = e?["node"];
+          return Message.fromJson(node);
+        }).toList();
+        pageInfo = event.data?["connection"]["messages"]["pageInfo"];
+        return gqlMessages;
+      } catch (e) {
+        fullResult = null;
+        gqlMessages = [];
+        pageInfo = {};
+        return gqlMessages;
+        //throw Exception("No data returned");
+      }
+    });
+    return stream;
   });
-  return stream;
-});
+}
