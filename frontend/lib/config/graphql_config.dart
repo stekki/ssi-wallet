@@ -1,5 +1,4 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:ferry/ferry.dart';
 
 const token = String.fromEnvironment('TOKEN');
 const baseURL = String.fromEnvironment('BASE_URL');
