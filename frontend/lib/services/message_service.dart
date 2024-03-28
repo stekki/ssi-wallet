@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/models.dart';
-
+import '../services/queries.dart';
 import 'package:frontend/services/graphql_service.dart';
-import 'package:frontend/services/queries.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class MessageService {
@@ -47,6 +46,29 @@ class MessageService {
       return false;
     }
   }
+
+Future<bool> sendProofRequest(String connectionId) async {
+  final List<Map<String, dynamic>> attributes = [
+    {
+      'name': 'harri',
+      'credDefId': '1234',
+    },
+  ];
+  final Map<String, dynamic> variables = {
+    'input': {
+      'connectionId': connectionId,
+      'attributes': attributes, 
+    },
+  };
+
+  final result = await GraphQLService()
+      .performMutation(GraphQLService().sendRequestProofMutation, variables);
+  if (result['sendProofRequest']['ok']) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
   Future<List<Message>> fetchMessages(String nodeID) async {
     await getMessages(nodeID);
