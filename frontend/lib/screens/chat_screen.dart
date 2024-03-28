@@ -7,7 +7,6 @@ import 'package:frontend/widgets/message.dart';
 // import '../models/models.dart';
 import '../services/connection_service.dart';
 import '../services/message_service.dart';
-import '../models/proof.dart';
 
 class ChatScreen extends ConsumerStatefulWidget {
   final String id;
