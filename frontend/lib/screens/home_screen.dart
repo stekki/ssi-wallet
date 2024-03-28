@@ -38,9 +38,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
-        ref.watch(connectionStreamProvider);
+        ref.watch(ConnectionService().connectionStreamProvider);
     final List<String> chatStateList = ref.watch(chatStatusProvider);
-
     return Scaffold(
       body: connectionsAsyncValue.when(
         loading: () => const LoadingScreen(),
@@ -97,7 +96,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            onPressed: () => ref.refresh(connectionsFutureProvider),
+            onPressed: () => ConnectionService().fetchConnections(),
             backgroundColor: Colors.green,
             heroTag: 'refreshButton',
             child: const Icon(Icons.refresh),
@@ -138,7 +137,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 if (connectionMade) {}
                 _connectionController.clear();
                 // ignore: unused_result
-                ref.refresh(connectionsFutureProvider);
+                // ref.refresh(connectionsFutureProvider);
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context);
               },
