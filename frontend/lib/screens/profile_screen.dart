@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../services/graphql_service.dart';
 import '../../utils/secure_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:frontend/utils/styles.dart';
 import '../utils/token.dart';
 import '../providers/providers.dart';
+import 'package:frontend/widgets/credential_card_info.dart';
 
 class TestScreen extends StatelessWidget {
   const TestScreen({super.key});
@@ -18,14 +20,14 @@ class TestScreen extends StatelessWidget {
   }
 }
 
-class ProfileScreen extends StatefulWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreen();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreen();
 }
 
-class _ProfileScreen extends State<ProfileScreen> {
+class _ProfileScreen extends ConsumerState<ProfileScreen> {
   String username = 'Stranger';
 
   int num = 0;
@@ -111,6 +113,10 @@ class _ProfileScreen extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final profileCredentialFuture = ref.watch(profileCredentialProvider);
+    //final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         decoration: scaffoldBackground,
@@ -135,53 +141,120 @@ class _ProfileScreen extends State<ProfileScreen> {
                       color: Colors.white),
                 ),
               ),
+              /*
               subtitle: const Center(
-                  child: Text("pisshead@gmail.com",
-                      style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 17.0,
-                          color: Colors.white))),
+                child: Text(
+                  "pisshead@gmail.com",
+                  style: TextStyle(
+                      fontFamily: 'Nunito',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 17.0,
+                      color: Colors.white),
+                ),
+              ),
+              */
             ),
             Expanded(
-              // This makes the content below scrollable
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    decoration: BoxDecoration(
+                      //color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxHeight: 200,
                       ),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxHeight: 200, // Adjust the height as necessary
-                        ),
-                        child: CredentialsListWidget(
-                          credentialsProvider: profileCredentialProvider,
-                          filterValue: '',
+                      child: profileCredentialFuture.when(
+                        error: (err, stack) =>
+                            const Text("Error loading credentials"),
+                        loading: () => const Text(""),
+                        data: (credential) => Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: const Color.fromARGB(255, 152, 226, 226),
+                                width: 2.0,
+                              ),
+                              gradient: const LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                stops: [0.001, 0.999],
+                                colors: [
+                                  Color.fromARGB(255, 212, 253, 248),
+                                  Color.fromARGB(255, 228, 255, 252)
+                                ],
+                              )),
+                          child: Theme(
+                            data: Theme.of(context).copyWith(
+                              dividerColor: Colors.transparent,
+                            ),
+                            child: ExpansionTile(
+                              title: Text(credential[0].issuer),
+                              subtitle: Text(credential[0].item),
+                              children: [
+                                CredentialCardInfo(
+                                  date: credential[0].date,
+                                  holder: credential[0].holder,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 15),
+                      width: width * 0.7,
+                      decoration: BoxDecoration(
                         color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        /*
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20),
                         ),
+                        */
                       ),
-                      padding: const EdgeInsets.all(40),
+                      padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                SizedBox(
+                                  width: 300,
+                                  child: TextField(
+                                    readOnly: true,
+                                    controller: TextEditingController(
+                                        text: stringForConnection),
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      labelText: 'Invitation link',
+                                      suffixIcon: IconButton(
+                                        icon: const Icon(Icons.copy),
+                                        onPressed: () {
+                                          Clipboard.setData(ClipboardData(
+                                              text: stringForConnection ??
+                                                  'Could not find the invitation link'));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      'Copied to clipboard')));
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 if (imageBytes != null)
                                   Image.memory(imageBytes!),
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 5),
                                 TextButton(
                                   onPressed: decodeImage,
                                   style: TextButton.styleFrom(
@@ -193,8 +266,8 @@ class _ProfileScreen extends State<ProfileScreen> {
                               ],
                             ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
