@@ -125,6 +125,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 final bool messageSent = await ref
                                     .read(messageServiceProvider)
                                     .sendMessage(widget.id, messageText);
+                                /*    
+                                final bool requestProof = await ref
+                                    .read(messageServiceProvider) // !! test for requesting proof, will be moved somewhere else occationally
+                                    .sendProofRequest(widget.id);
+                                    print(requestProof);
+                                */
                                 if (messageSent) {
                                   _textEditingController.clear();
                                 } else {

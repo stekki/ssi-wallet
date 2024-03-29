@@ -95,6 +95,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          /*
           FloatingActionButton(
             onPressed: () => ConnectionService().fetchConnections(),
             backgroundColor: Colors.green,
@@ -102,6 +103,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             child: const Icon(Icons.refresh),
           ),
           const SizedBox(height: 10),
+          */
           FloatingActionButton(
             onPressed: () => _showTokenInputDialog(context),
             backgroundColor: Colors.blue,

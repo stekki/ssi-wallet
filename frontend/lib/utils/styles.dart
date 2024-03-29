@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DesignColors {
   static const mainColor = Color.fromARGB(255, 0, 212, 161);
-  static const secondaryColor = Color.fromARGB(255, 50, 103, 141);
+  static const secondaryColor = Color.fromARGB(255, 58, 78, 151);
   static const buttonColor = Color.fromARGB(255, 78, 207, 176);
   static const textColor = Color.fromARGB(255, 99, 99, 99);
   static const messageColor = Color.fromARGB(255, 187, 223, 231);
@@ -13,11 +13,10 @@ class DesignColors {
 }
 
 class TextStyles {
-  // logo text
   static const TextStyle appBarUser = TextStyle(
     fontFamily: "Nunito",
     fontSize: 15,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w500,
     color: DesignColors.secondaryColor,
     decoration: TextDecoration.underline,
   );
@@ -25,35 +24,35 @@ class TextStyles {
   static const TextStyle logoText = TextStyle(
     fontFamily: "Nunito",
     fontSize: 35,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
     color: DesignColors.extraColorWhite,
   );
   // appBar text
   static const TextStyle appBarText = TextStyle(
     fontFamily: "Nunito",
     fontSize: 25,
-    fontWeight: FontWeight.normal,
+    fontWeight: FontWeight.w500,
     color: DesignColors.extraColorWhite,
   );
   // medium text (card subtitle, card texts)
   static const TextStyle mediumText = TextStyle(
     fontFamily: "Nunito",
     fontSize: 15,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w700,
     color: DesignColors.secondaryColor,
   );
   // medium text (card titles)
   static const TextStyle mediumTitle = TextStyle(
     fontFamily: "Nunito",
     fontSize: 17,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
     color: DesignColors.secondaryColor,
   );
   // label title (sign in, register)
   static const TextStyle labelTitle = TextStyle(
     fontFamily: "Nunito",
     fontSize: 17,
-    fontWeight: FontWeight.normal,
+    fontWeight: FontWeight.w700,
     color: DesignColors.extraColorGray,
   );
 }
