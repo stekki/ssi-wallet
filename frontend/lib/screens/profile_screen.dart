@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:frontend/utils/styles.dart';
 import '../utils/token.dart';
 import '../providers/providers.dart';
-import 'package:frontend/screens/loading_screen.dart';
 import 'package:frontend/widgets/credential_card_info.dart';
 
 class TestScreen extends StatelessWidget {
