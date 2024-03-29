@@ -35,7 +35,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     });
   }
 
-
   Widget _chooseChatBottomSheet() {
     if (_isInvited) {
       return ChatBottomSheetSeller(widget.id);
@@ -85,7 +84,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                             itemCount: messages.length,
                             itemBuilder: (context, index) {
                               final message = messages[index];
-                              return ChatMessageWidget(
+                              return BasicChatMessageWidget(
                                 message: message.message,
                                 sentBy: message.sentByMe ? 'me' : 'other',
                                 timestamp: message.createdAt,
@@ -118,6 +117,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 final bool messageSent = await ref
                                     .read(messageServiceProvider)
                                     .sendMessage(widget.id, messageText);
+                                /*    
+                                final bool requestProof = await ref
+                                    .read(messageServiceProvider) // !! test for requesting proof, will be moved somewhere else occationally
+                                    .sendProofRequest(widget.id);
+                                    print(requestProof);
+                                */
                                 if (messageSent) {
                                   _textEditingController.clear();
                                 } else {
