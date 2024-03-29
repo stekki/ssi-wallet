@@ -111,6 +111,9 @@ class _ProfileScreen extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         decoration: scaffoldBackground,
@@ -135,53 +138,85 @@ class _ProfileScreen extends State<ProfileScreen> {
                       color: Colors.white),
                 ),
               ),
+              /*
               subtitle: const Center(
-                  child: Text("pisshead@gmail.com",
-                      style: TextStyle(
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 17.0,
-                          color: Colors.white))),
+                child: Text(
+                  "pisshead@gmail.com",
+                  style: TextStyle(
+                      fontFamily: 'Nunito',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 17.0,
+                      color: Colors.white),
+                ),
+              ),
+              */
             ),
             Expanded(
-              // This makes the content below scrollable
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 5),
+                    decoration: BoxDecoration(
+                      //color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(
+                        maxHeight: 200,
+                      ),
+                      child: CredentialsListWidget(
+                        credentialsProvider: profileCredentialProvider,
+                        filterValue: '',
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 15),
+                      width: width * 0.7,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: ConstrainedBox(
-                        constraints: const BoxConstraints(
-                          maxHeight: 200, // Adjust the height as necessary
-                        ),
-                        child: CredentialsListWidget(
-                          credentialsProvider: profileCredentialProvider,
-                          filterValue: '',
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
+                        /*
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20),
                           topRight: Radius.circular(20),
                         ),
+                        */
                       ),
-                      padding: const EdgeInsets.all(40),
+                      padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
                       child: isLoading
                           ? const CircularProgressIndicator()
                           : Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                SizedBox(
+                                  width: 300,
+                                  child: TextField(
+                                    readOnly: true,
+                                    controller: TextEditingController(
+                                        text: stringForConnection),
+                                    decoration: InputDecoration(
+                                      border: const OutlineInputBorder(),
+                                      labelText: 'Invitation link',
+                                      suffixIcon: IconButton(
+                                        icon: const Icon(Icons.copy),
+                                        onPressed: () {
+                                          Clipboard.setData(ClipboardData(
+                                              text: stringForConnection ??
+                                                  'Could not find the invitation link'));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      'Copied to clipboard')));
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
                                 if (imageBytes != null)
                                   Image.memory(imageBytes!),
-                                const SizedBox(height: 20),
+                                const SizedBox(height: 5),
                                 TextButton(
                                   onPressed: decodeImage,
                                   style: TextButton.styleFrom(
@@ -193,8 +228,8 @@ class _ProfileScreen extends State<ProfileScreen> {
                               ],
                             ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
