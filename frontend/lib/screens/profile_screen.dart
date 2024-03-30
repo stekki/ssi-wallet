@@ -175,20 +175,21 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
                           margin: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 5),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: const Color.fromARGB(255, 152, 226, 226),
-                                width: 2.0,
-                              ),
-                              gradient: const LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                stops: [0.001, 0.999],
-                                colors: [
-                                  Color.fromARGB(255, 212, 253, 248),
-                                  Color.fromARGB(255, 228, 255, 252)
-                                ],
-                              )),
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: const Color.fromARGB(255, 152, 226, 226),
+                              width: 2.0,
+                            ),
+                            gradient: const LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              stops: [0.001, 0.999],
+                              colors: [
+                                Color.fromARGB(255, 212, 253, 248),
+                                Color.fromARGB(255, 228, 255, 252)
+                              ],
+                            ),
+                          ),
                           child: Theme(
                             data: Theme.of(context).copyWith(
                               dividerColor: Colors.transparent,
