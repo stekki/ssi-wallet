@@ -253,7 +253,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
                                   ),
                                 ),
                                 if (imageBytes != null)
-                                  Image.memory(imageBytes!),
+                                  Expanded(child: Image.memory(imageBytes!)),
                                 const SizedBox(height: 5),
                                 TextButton(
                                   onPressed: decodeImage,
