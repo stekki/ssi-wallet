@@ -57,35 +57,32 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        //decoration: scaffoldBackground,
-        child: Align(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("Add connection", style: TextStyles.scanProfileScreenText),
-              const SizedBox(
-                height: 20,
+      body: Align(        // Container -> decoration: scaffoldBackground
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Add connection", style: TextStyles.scanProfileScreenText),
+            const SizedBox(
+              height: 20,
+            ),
+            SizedBox(
+              width: 410,
+              height: 410,
+              child: MobileScanner(
+                controller: cameraController,
+                onDetect: (capture) {
+                  final List<Barcode> qrcodes = capture.barcodes;
+                  if (qrcodes.isNotEmpty) {
+                    final qrcode = qrcodes.first;
+                    cameraController.stop();
+                    debugPrint('Code found: ${qrcode.rawValue}');
+                    showConfirmationDialog(qrcode.rawValue);
+                  }
+                },
               ),
-              SizedBox(
-                width: 410,
-                height: 410,
-                child: MobileScanner(
-                  controller: cameraController,
-                  onDetect: (capture) {
-                    final List<Barcode> qrcodes = capture.barcodes;
-                    if (qrcodes.isNotEmpty) {
-                      final qrcode = qrcodes.first;
-                      cameraController.stop();
-                      debugPrint('Code found: ${qrcode.rawValue}');
-                      showConfirmationDialog(qrcode.rawValue);
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

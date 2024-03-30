@@ -118,157 +118,154 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Container(
-        //decoration: scaffoldBackground,
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: SizedBox(
-                width: 100,
-                height: 100,
-                child: Image.asset('assets/icons/profile.png'),
+      body: Column(       // Container -> decoration: scaffoldBackground,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: SizedBox(
+              width: 100,
+              height: 100,
+              child: Image.asset('assets/icons/profile.png'),
+            ),
+          ),
+          ListTile(
+            title: Center(
+              child: Text(
+                username,
+                style: TextStyles.scanProfileScreenText,
               ),
             ),
-            ListTile(
-              title: Center(
-                child: Text(
-                  username,
-                  style: TextStyles.scanProfileScreenText,
-                ),
+            /*
+            subtitle: const Center(
+              child: Text(
+                "pisshead@gmail.com",
+                style: TextStyle(
+                    fontFamily: 'Nunito',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 17.0,
+                    color: Colors.white),
               ),
-              /*
-              subtitle: const Center(
-                child: Text(
-                  "pisshead@gmail.com",
-                  style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 17.0,
-                      color: Colors.white),
-                ),
-              ),
-              */
             ),
-            Expanded(
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    decoration: BoxDecoration(
-                      //color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
+            */
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  decoration: BoxDecoration(
+                    //color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(
+                      maxHeight: 200,
                     ),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxHeight: 200,
-                      ),
-                      child: profileCredentialFuture.when(
-                        error: (err, stack) =>
-                            const Text("Error loading credentials"),
-                        loading: () => const Text(""),
-                        data: (credential) => Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 152, 226, 226),
-                              width: 2.0,
-                            ),
-                            gradient: const LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              stops: [0.001, 0.999],
-                              colors: [
-                                Color.fromARGB(255, 212, 253, 248),
-                                Color.fromARGB(255, 228, 255, 252)
-                              ],
-                            ),
+                    child: profileCredentialFuture.when(
+                      error: (err, stack) =>
+                          const Text("Error loading credentials"),
+                      loading: () => const Text(""),
+                      data: (credential) => Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 152, 226, 226),
+                            width: 2.0,
                           ),
-                          child: Theme(
-                            data: Theme.of(context).copyWith(
-                              dividerColor: Colors.transparent,
-                            ),
-                            child: ExpansionTile(
-                              title: Text(credential[0].issuer),
-                              subtitle: Text(credential[0].item),
-                              children: [
-                                CredentialCardInfo(
-                                  date: credential[0].date,
-                                  holder: credential[0].holder,
-                                ),
-                              ],
-                            ),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            stops: [0.001, 0.999],
+                            colors: [
+                              Color.fromARGB(255, 212, 253, 248),
+                              Color.fromARGB(255, 228, 255, 252)
+                            ],
+                          ),
+                        ),
+                        child: Theme(
+                          data: Theme.of(context).copyWith(
+                            dividerColor: Colors.transparent,
+                          ),
+                          child: ExpansionTile(
+                            title: Text(credential[0].issuer),
+                            subtitle: Text(credential[0].item),
+                            children: [
+                              CredentialCardInfo(
+                                date: credential[0].date,
+                                holder: credential[0].holder,
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 15),
-                      width: width * 0.7,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        /*
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                        */
+                ),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 15),
+                    width: width * 0.7,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      /*
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
-                      padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
-                      child: isLoading
-                          ? const CircularProgressIndicator()
-                          : Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  width: 300,
-                                  child: TextField(
-                                    readOnly: true,
-                                    controller: TextEditingController(
-                                        text: stringForConnection),
-                                    decoration: InputDecoration(
-                                      border: const OutlineInputBorder(),
-                                      labelText: 'Invitation link',
-                                      suffixIcon: IconButton(
-                                        icon: const Icon(Icons.copy),
-                                        onPressed: () {
-                                          Clipboard.setData(ClipboardData(
-                                              text: stringForConnection ??
-                                                  'Could not find the invitation link'));
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                                  content: Text(
-                                                      'Copied to clipboard')));
-                                        },
-                                      ),
+                      */
+                    ),
+                    padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
+                    child: isLoading
+                        ? const CircularProgressIndicator()
+                        : Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                width: 300,
+                                child: TextField(
+                                  readOnly: true,
+                                  controller: TextEditingController(
+                                      text: stringForConnection),
+                                  decoration: InputDecoration(
+                                    border: const OutlineInputBorder(),
+                                    labelText: 'Invitation link',
+                                    suffixIcon: IconButton(
+                                      icon: const Icon(Icons.copy),
+                                      onPressed: () {
+                                        Clipboard.setData(ClipboardData(
+                                            text: stringForConnection ??
+                                                'Could not find the invitation link'));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    'Copied to clipboard')));
+                                      },
                                     ),
                                   ),
                                 ),
-                                if (imageBytes != null)
-                                  Expanded(child: Image.memory(imageBytes!)),
-                                const SizedBox(height: 5),
-                                TextButton(
-                                  onPressed: decodeImage,
-                                  style: TextButton.styleFrom(
-                                      backgroundColor:
-                                          DesignColors.buttonColor),
-                                  child: const Text('Regenerate',
-                                      style: TextStyle(color: Colors.white)),
-                                ),
-                              ],
-                            ),
-                    ),
+                              ),
+                              if (imageBytes != null)
+                                Expanded(child: Image.memory(imageBytes!)),
+                              const SizedBox(height: 5),
+                              TextButton(
+                                onPressed: decodeImage,
+                                style: TextButton.styleFrom(
+                                    backgroundColor:
+                                        DesignColors.buttonColor),
+                                child: const Text('Regenerate',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
+                            ],
+                          ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
