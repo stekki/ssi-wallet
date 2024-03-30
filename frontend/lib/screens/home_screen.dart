@@ -107,7 +107,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           */
           FloatingActionButton(
             onPressed: () => _showTokenInputDialog(context),
-            backgroundColor: Colors.blue,
+            backgroundColor: DesignColors.mainColor,
             heroTag: 'addButton',
             child: const Icon(Icons.add),
           ),

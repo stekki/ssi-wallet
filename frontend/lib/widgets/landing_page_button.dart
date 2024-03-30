@@ -28,8 +28,9 @@ class LandingPageButton extends StatelessWidget {
       ),
       onPressed: onPressed,
       child: Padding(
-          padding: const EdgeInsets.fromLTRB(80, 15, 80, 15),
-          child: Text(text, style: TextStyles.labelTitle)),
+        padding: const EdgeInsets.fromLTRB(80, 15, 80, 15),
+        child: Text(text, style: TextStyles.labelTitle),
+      ),
     );
   }
 }
