@@ -10,6 +10,7 @@ class DesignColors {
   static const extraColorGray = Color.fromARGB(255, 238, 238, 238);
   static const extraColorBlack = Color.fromARGB(120, 37, 31, 31);
   static const devRed = Color.fromARGB(192, 255, 61, 61);
+  static const backgroundColor = Color.fromARGB(30, 51, 213, 154);
 }
 
 class TextStyles {
@@ -34,6 +35,13 @@ class TextStyles {
     fontWeight: FontWeight.w500,
     color: DesignColors.extraColorWhite,
   );
+  // scan screen text
+  static const TextStyle scanProfileScreenText = TextStyle(
+    fontFamily: "Nunito",
+    fontSize: 25,
+    fontWeight: FontWeight.w700,
+    color: DesignColors.mainColor,
+  );
   // medium text (card subtitle, card texts)
   static const TextStyle mediumText = TextStyle(
     fontFamily: "Nunito",
@@ -54,6 +62,13 @@ class TextStyles {
     fontSize: 17,
     fontWeight: FontWeight.w700,
     color: DesignColors.extraColorGray,
+  );
+
+  static const TextStyle emailRegisTitle = TextStyle(
+    fontFamily: "Nunito",
+    fontSize: 17,
+    fontWeight: FontWeight.w700,
+    color: DesignColors.mainColor,
   );
 }
 

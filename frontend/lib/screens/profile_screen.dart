@@ -119,7 +119,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       body: Container(
-        decoration: scaffoldBackground,
+        //decoration: scaffoldBackground,
         child: Column(
           children: [
             Container(
@@ -134,11 +134,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
               title: Center(
                 child: Text(
                   username,
-                  style: const TextStyle(
-                      fontFamily: 'Nunito',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 25.0,
-                      color: Colors.white),
+                  style: TextStyles.scanProfileScreenText,
                 ),
               ),
               /*

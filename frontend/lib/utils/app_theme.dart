@@ -20,7 +20,7 @@ class AppTheme {
           borderRadius: BorderRadius.all(
             Radius.circular(15.0),
           ),
-          borderSide: BorderSide.none),
+          borderSide: BorderSide(color: DesignColors.mainColor, width: 0.0)),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(15.0),
@@ -30,7 +30,7 @@ class AppTheme {
           width: 1.0,
         ),
       ),
-      labelStyle: TextStyles.labelTitle,
+      labelStyle: TextStyles.emailRegisTitle,
     ),
     tabBarTheme: const TabBarTheme(
       indicatorSize: TabBarIndicatorSize.tab,
@@ -49,7 +49,7 @@ class AppTheme {
       ),
     ),
     primaryColor: DesignColors.extraColorWhite,
-    scaffoldBackgroundColor: DesignColors.extraColorGray,
+    scaffoldBackgroundColor: DesignColors.backgroundColor,
     textTheme: const TextTheme(
       displayLarge: TextStyles.logoText,
       displayMedium: TextStyles.appBarText,
