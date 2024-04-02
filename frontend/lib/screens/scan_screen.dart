@@ -4,12 +4,14 @@ import '../providers/providers.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:async';
 
 MobileScannerController cameraController = MobileScannerController(
   autoStart: true,
   detectionSpeed: DetectionSpeed.normal,
   facing: CameraFacing.back,
   torchEnabled: false,
+  formats: [BarcodeFormat.qrCode],
 );
 
 class ScanScreen extends ConsumerStatefulWidget {
@@ -24,6 +26,52 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
   void createConnection(String? link) async {
     await ref.read(connectionServiceProvider).acceptConnection(link);
   }
+
+  bool _bottomSheetErrorOpen = false;
+
+  void _showFailureDialog(String message){
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Connection failed"),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(child: const Text("Close"),
+            onPressed: () {
+              Navigator.of(context).pop();
+              cameraController.start();
+            }
+            ,)
+          ]
+        );
+      }
+    );
+  }
+  void _showBottomSheetDialog(String? message) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
+      return AnimatedContainer(
+        color: Colors.transparent,
+        duration: const Duration(milliseconds: 40),
+        child: Container(
+          height: 100,
+          color: const Color.fromARGB(255, 255, 145, 75), // color??
+          child: const Center(child: Text("Not an invitation code"))
+        )
+      );
+     },
+    );
+    Timer(const Duration(seconds: 2), () {
+      if(_bottomSheetErrorOpen){
+        Navigator.of(context).pop();
+      }
+      _bottomSheetErrorOpen = false;
+    });
+  }  
 
   void showConfirmationDialog(String? qrValue) {
     showDialog(
@@ -42,10 +90,14 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
             ),
             TextButton(
               child: const Text('Accept'),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
-                createConnection(qrValue);
-                context.go('/home');
+                try {
+                  createConnection(qrValue);
+                  context.go('/home');                    
+                } catch (e) {
+                  _showFailureDialog(e.toString());
+                }
               },
             ),
           ],
@@ -75,16 +127,27 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
                   final List<Barcode> qrcodes = capture.barcodes;
                   if (qrcodes.isNotEmpty) {
                     final qrcode = qrcodes.first;
-                    cameraController.stop();
-                    debugPrint('Code found: ${qrcode.rawValue}');
-                    showConfirmationDialog(qrcode.rawValue);
+                    String? scannedValue = qrcode.rawValue;
+                      if (scannedValue != null && scannedValue.startsWith('didcomm://aries_connection_invitation') == true) {
+                        cameraController.stop();
+                        debugPrint('Code found: $scannedValue');
+                        showConfirmationDialog(scannedValue);
+                      } else {
+                        if(!_bottomSheetErrorOpen) {
+                          _bottomSheetErrorOpen = true;
+                          _showBottomSheetDialog(scannedValue);
+                          debugPrint('Faulty code found: $scannedValue');
+                      }
+                    }
                   }
                 },
-              ),
+              ), 
             ),
           ],
-        ),
+        ) 
+
       ),
     );
+    
   }
 }
