@@ -54,14 +54,12 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
       isDismissible: false,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-      // animation necessary?
       return AnimatedContainer(
         color: Colors.transparent,
-        // what is a good duration?
         duration: const Duration(milliseconds: 40),
         child: Container(
           height: 100,
-          color: const Color.fromARGB(255, 255, 145, 75), //change the color?
+          color: const Color.fromARGB(255, 255, 145, 75), // color??
           child: const Center(child: Text("Not an invitation code"))
         )
       );
@@ -143,7 +141,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
                     }
                   }
                 },
-              ),           
+              ), 
             ),
           ],
         ) 
