@@ -4,6 +4,7 @@ import '../providers/providers.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:async';
 
 MobileScannerController cameraController = MobileScannerController(
   autoStart: true,
@@ -26,7 +27,9 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
     await ref.read(connectionServiceProvider).acceptConnection(link);
   }
 
-  void showFailureDialog(String message){
+  bool _bottomSheetErrorOpen = false;
+
+  void _showFailureDialog(String message){
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -45,6 +48,28 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
       }
     );
   }
+  void _showBottomSheetDialog(String? message) {
+    showModalBottomSheet(context: context,
+     builder: (BuildContext context) {
+      // animation necessary?
+      return AnimatedContainer(
+        // what is a good duration?
+        duration: const Duration(milliseconds: 40),
+        child: Container(
+          height: 100,
+          color: const Color.fromARGB(255, 255, 145, 75), //change the color?
+          child: Center(child: Text("Not an invitation code: $message"))
+        )
+      );
+     },
+    );
+    Timer(const Duration(seconds: 3), () {
+      if(_bottomSheetErrorOpen){
+        Navigator.of(context).pop();
+      }
+      _bottomSheetErrorOpen = false;
+    });
+  }  
 
   void showConfirmationDialog(String? qrValue) {
     showDialog(
@@ -69,7 +94,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
                   createConnection(qrValue);
                   context.go('/home');                    
                 } catch (e) {
-                  showFailureDialog(e.toString());
+                  _showFailureDialog(e.toString());
                 }
               },
             ),
@@ -99,13 +124,21 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
                 if (qrcodes.isNotEmpty) {
                   final qrcode = qrcodes.first;
                   String? scannedValue = qrcode.rawValue;
-                  cameraController.stop();
-                  debugPrint('Code found: $scannedValue');
-                  if (scannedValue != null && scannedValue.startsWith('didcomm://aries_connection_invitation')==true){
-                    showConfirmationDialog(qrcode.rawValue);
+                  if (scannedValue != null && scannedValue.startsWith('didcomm://aries_connection_invitation') == true) {
+                    cameraController.stop();
+                    debugPrint('Code found: $scannedValue');
+                    //if (_bottomSheetErrorOpen == true) {
+                    //  Navigator.of(context).pop();
+                    //  _bottomSheetErrorOpen = false;
+                    //}
+                    showConfirmationDialog(scannedValue);
                   } else {
-                    showFailureDialog("Invalid invitation code");
-                  }      
+                    if(!_bottomSheetErrorOpen) {
+                      _bottomSheetErrorOpen = true;
+                      debugPrint('Faulty code found: $scannedValue');
+                      _showBottomSheetDialog(scannedValue);
+                    }
+                  }    
                 }
               },
             ),
