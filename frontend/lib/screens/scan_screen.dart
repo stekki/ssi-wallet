@@ -49,21 +49,25 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
     );
   }
   void _showBottomSheetDialog(String? message) {
-    showModalBottomSheet(context: context,
-     builder: (BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      backgroundColor: Colors.transparent,
+      builder: (BuildContext context) {
       // animation necessary?
       return AnimatedContainer(
+        color: Colors.transparent,
         // what is a good duration?
         duration: const Duration(milliseconds: 40),
         child: Container(
           height: 100,
           color: const Color.fromARGB(255, 255, 145, 75), //change the color?
-          child: Center(child: Text("Not an invitation code: $message"))
+          child: const Center(child: Text("Not an invitation code"))
         )
       );
      },
     );
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 2), () {
       if(_bottomSheetErrorOpen){
         Navigator.of(context).pop();
       }
@@ -133,8 +137,8 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
                     } else {
                       if(!_bottomSheetErrorOpen) {
                         _bottomSheetErrorOpen = true;
-                        debugPrint('Faulty code found: $scannedValue');
                         _showBottomSheetDialog(scannedValue);
+                        debugPrint('Faulty code found: $scannedValue');
                       }
                     }
                   }
