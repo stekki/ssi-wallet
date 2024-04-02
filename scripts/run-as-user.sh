@@ -3,7 +3,7 @@
 #set -x
 
 if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
-    echo "Usage: $0 <username> <local|findy>"
+    echo "Usage: source run-as-user.sh <username> <local|findy>"
     echo "Options:"
     echo "  -h, --help    Show this help message."
     echo " local - use locally deployed backend "
@@ -12,7 +12,7 @@ if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
 fi
 
 if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <username> <local|findy>"
+    echo "Usage: source run-as-user.sh <username> <local|findy>"
     return 1
 fi
 
@@ -22,11 +22,11 @@ HOST="$2"
 
 if [ "$HOST" = "findy" ]; then
     BASE_URL="https://findy-agency.op-ai.fi/query"
-    source setup-cli-env-findy.sh
+    source .setup-cli-env-findy.sh
 elif [ "$HOST" = "local" ]; then
     LOCAL_HOST=$(cat host_address)
     BASE_URL="http://"$LOCAL_HOST":8085/query"
-    source setup-cli-env-local.sh
+    source .setup-cli-env-local.sh
 else
     echo "Error: Invalid host argument. Must be 'local' or 'findy'."
     return 1

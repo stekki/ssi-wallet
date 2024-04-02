@@ -109,7 +109,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    body: Align(        // Container -> decoration: scaffoldBackground
+      body: Align(        // Container -> decoration: scaffoldBackground
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -131,12 +131,12 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
                       if (scannedValue != null && scannedValue.startsWith('didcomm://aries_connection_invitation') == true) {
                         cameraController.stop();
                         debugPrint('Code found: $scannedValue');
-                      showConfirmationDialog(scannedValue);
-                    } else {
-                      if(!_bottomSheetErrorOpen) {
-                        _bottomSheetErrorOpen = true;
-                        _showBottomSheetDialog(scannedValue);
-                        debugPrint('Faulty code found: $scannedValue');
+                        showConfirmationDialog(scannedValue);
+                      } else {
+                        if(!_bottomSheetErrorOpen) {
+                          _bottomSheetErrorOpen = true;
+                          _showBottomSheetDialog(scannedValue);
+                          debugPrint('Faulty code found: $scannedValue');
                       }
                     }
                   }
@@ -145,6 +145,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
             ),
           ],
         ) 
+
       ),
     );
     

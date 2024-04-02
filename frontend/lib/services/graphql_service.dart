@@ -113,6 +113,14 @@ mutation connect(\$input: ConnectInput!) {
       }
     }""");
 
+final sendRequestProofMutation = gql("""
+  mutation SendProofRequest(\$input: ProofRequestInput!) {
+    sendProofRequest(input: \$input) {
+      ok
+    }
+  }
+""");
+
   Future<Map<String, dynamic>> getMessageByNodeId(String nodeId) async {
     return await getQueryResult(getMessagesByNodeIdQuery, {'nodeId': nodeId});
   }
