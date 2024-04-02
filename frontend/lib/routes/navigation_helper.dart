@@ -145,12 +145,14 @@ class NavigationHelper {
         },
       ),
       GoRoute(
-          path: '/chat/:id',
+          path: '/chat/:id/:isInvited',
           name: 'chat',
           pageBuilder: (context, state) {
             final id = state.pathParameters['id']!;
+            final isInvited =
+                state.pathParameters['isInvited']! == '1' ? true : false;
             return getPage(
-              child: ChatScreen(id),
+              child: ChatScreen(id, isInvited),
               state: state,
             );
           }),
