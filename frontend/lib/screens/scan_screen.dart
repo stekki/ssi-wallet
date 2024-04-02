@@ -107,44 +107,44 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Connection', style: TextStyles.appBarText),
-      ),
-      body: Container(
-        decoration: scaffoldBackground,
-        child: Align(
-          alignment: Alignment.center,
-          child: SizedBox(
-            width: 410,
-            height: 410,
-            child: MobileScanner(
-              controller: cameraController,
-              onDetect: (capture) {
-                final List<Barcode> qrcodes = capture.barcodes;
-                if (qrcodes.isNotEmpty) {
-                  final qrcode = qrcodes.first;
-                  String? scannedValue = qrcode.rawValue;
-                  if (scannedValue != null && scannedValue.startsWith('didcomm://aries_connection_invitation') == true) {
-                    cameraController.stop();
-                    debugPrint('Code found: $scannedValue');
-                    //if (_bottomSheetErrorOpen == true) {
-                    //  Navigator.of(context).pop();
-                    //  _bottomSheetErrorOpen = false;
-                    //}
-                    showConfirmationDialog(scannedValue);
-                  } else {
-                    if(!_bottomSheetErrorOpen) {
-                      _bottomSheetErrorOpen = true;
-                      debugPrint('Faulty code found: $scannedValue');
-                      _showBottomSheetDialog(scannedValue);
-                    }
-                  }    
-                }
-              },
+    body: Align(        // Container -> decoration: scaffoldBackground
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Add connection", style: TextStyles.scanProfileScreenText),
+            const SizedBox(
+              height: 20,
             ),
-          ),
-        ),
+            SizedBox(
+              width: 410,
+              height: 410,
+              child: MobileScanner(
+                controller: cameraController,
+                onDetect: (capture) {
+                  final List<Barcode> qrcodes = capture.barcodes;
+                  if (qrcodes.isNotEmpty) {
+                    final qrcode = qrcodes.first;
+                    String? scannedValue = qrcode.rawValue;
+                      if (scannedValue != null && scannedValue.startsWith('didcomm://aries_connection_invitation') == true) {
+                        cameraController.stop();
+                        debugPrint('Code found: $scannedValue');
+                      showConfirmationDialog(scannedValue);
+                    } else {
+                      if(!_bottomSheetErrorOpen) {
+                        _bottomSheetErrorOpen = true;
+                        debugPrint('Faulty code found: $scannedValue');
+                        _showBottomSheetDialog(scannedValue);
+                      }
+                    }
+                  }
+                },
+              ),           
+            ),
+          ],
+        ) 
       ),
     );
+    
   }
 }
