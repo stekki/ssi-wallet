@@ -34,100 +34,13 @@ class GraphQLService {
       }
   }""");
 
-  final acceptConnectionMutation = gql("""
-mutation connect(\$input: ConnectInput!) {
-  connect(input: \$input) {
-    ok
-  }
-}""");
-
-  final getMessagesQuery = gql("""
-    query {
-      connections(first: 5) {
-        nodes {
-          id
-          ourDid
-          theirDid
-          theirEndpoint
-          theirLabel
-          createdMs
-          approvedMs
-          invited
-          messages(last: 10) {
-            nodes {
-              id
-              message
-              sentByMe
-              connection {
-                id
-              }
-            }
-          }
-        }
-      }
-    }""");
-
-  final getConnectionsQuery = gql("""
-    query {
-      connections(first: 100) {
-        nodes {
-          id
-          ourDid
-          theirDid
-          theirEndpoint
-          theirLabel
-          createdMs
-          approvedMs
-          invited
-        }
-      }
-    }""");
-
-  final getMessagesByNodeIdQuery = gql("""
-    query GetMessageByNodeId(\$nodeId: ID!) {
-      connection(id: \$nodeId) {
-        id
-        messages(first: 10) {
-          nodes {
-            id
-            message
-            sentByMe
-            delivered
-            createdMs
-          }
-        }
-      }
-    }""");
-
-    final getInvitatorQuery = gql("""
-    query GetInvitator(\$nodeId: ID!) {
-      connection(id: \$nodeId) {
-        invited
-      }
-    }""");
-
-  final sendMessageMutation = gql("""
-    mutation SendMessage(\$input: MessageInput!) {
-      sendMessage(input: \$input) {
-        ok
-      }
-    }""");
-
-final sendRequestProofMutation = gql("""
+  final sendRequestProofMutation = gql("""
   mutation SendProofRequest(\$input: ProofRequestInput!) {
     sendProofRequest(input: \$input) {
       ok
     }
   }
 """);
-
-  Future<Map<String, dynamic>> getMessageByNodeId(String nodeId) async {
-    return await getQueryResult(getMessagesByNodeIdQuery, {'nodeId': nodeId});
-  }
-
-  Future<Map<String, dynamic>> getInviterByNodeId(String nodeId) async {
-    return await getQueryResult(getInvitatorQuery, {'nodeId': nodeId});
-  }
 
   Future<Map<String, dynamic>> performMutation(
       dynamic mutation, Map<String, dynamic> variables) async {
@@ -157,6 +70,8 @@ final sendRequestProofMutation = gql("""
 
   Future<Map<String, dynamic>> getQueryResult(
       dynamic query, Map<String, dynamic> variables) async {
+    // This function only fetch from the server
+    // not from the cache
     try {
       QueryResult result = await client.query(QueryOptions(
           fetchPolicy: FetchPolicy.networkOnly,
@@ -167,6 +82,78 @@ final sendRequestProofMutation = gql("""
       if (res == null) {
         throw Exception("No data returned");
       } else {
+        return res;
+      }
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchMore(
+      dynamic query,
+      Map<String, dynamic> variables,
+      QueryResult prevResult,
+      bool before,
+      String cursor,
+      String nodeName,
+      String parentName) async {
+    FetchMoreOptions opts = FetchMoreOptions(
+        variables: {"cursor": cursor},
+        updateQuery: (previousResult, fetchMoreResult) {
+          if (fetchMoreResult == null || fetchMoreResult.isEmpty) {
+            return previousResult;
+          }
+          final tempPrev =
+              (parentName == '') ? previousResult : previousResult![parentName];
+          final tempMore = (parentName == '')
+              ? fetchMoreResult
+              : fetchMoreResult[parentName];
+          final List<dynamic> meregedEdges = before
+              ? [
+                  ...tempMore[nodeName]["edges"] as List<dynamic>,
+                  ...tempPrev[nodeName]["edges"] as List<dynamic>,
+                ]
+              : [
+                  ...tempPrev[nodeName]["edges"] as List<dynamic>,
+                  ...tempMore[nodeName]["edges"] as List<dynamic>,
+                ];
+          (parentName == '')
+              ? fetchMoreResult[nodeName]["edges"] = meregedEdges
+              : fetchMoreResult[parentName][nodeName]["edges"] = meregedEdges;
+          if (before) {
+            (parentName == '')
+                ? fetchMoreResult[nodeName]["pageInfo"]["hasNextPage"] =
+                    previousResult![nodeName]["pageInfo"]["hasNextPage"]
+                : fetchMoreResult[parentName][nodeName]["pageInfo"]
+                        ["hasNextPage"] =
+                    previousResult![parentName][nodeName]["pageInfo"]
+                        ["hasNextPage"];
+          } else {
+            (parentName == '')
+                ? fetchMoreResult[nodeName]["pageInfo"]["hasPreviousPage"] =
+                    previousResult![nodeName]["pageInfo"]["hasPreviousPage"]
+                : fetchMoreResult[parentName][nodeName]["pageInfo"]
+                        ["hasPreviousPage"] =
+                    previousResult![parentName][nodeName]["pageInfo"]
+                        ["hasPreviousPage"];
+          }
+          return fetchMoreResult;
+        });
+    QueryOptions original = QueryOptions(
+        document: query,
+        variables: variables,
+        errorPolicy: ErrorPolicy.all,
+        fetchPolicy: FetchPolicy.cacheAndNetwork);
+    try {
+      QueryResult result = await client.fetchMore(opts,
+          originalOptions: original, previousResult: prevResult);
+      Map<String, dynamic>? res = result.data;
+      if (res == null) {
+        throw Exception("No data returned");
+      } else {
+        final queryRequest = Request(
+            operation: Operation(document: query), variables: variables);
+        client.writeQuery(queryRequest, data: res);
         return res;
       }
     } catch (error) {

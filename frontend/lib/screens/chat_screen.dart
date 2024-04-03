@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/providers/providers.dart';
@@ -5,12 +7,22 @@ import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/chat_bottom_sheet.dart';
 import 'package:frontend/widgets/message.dart';
 // import '../models/models.dart';
-import '../services/connection_service.dart';
 import '../services/message_service.dart';
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        // etc.
+      };
+}
 
 class ChatScreen extends ConsumerStatefulWidget {
   final String id;
-  const ChatScreen(this.id, {super.key});
+  final bool isInvited;
+  const ChatScreen(this.id, this.isInvited, {super.key});
 
   @override
   ConsumerState<ChatScreen> createState() => _ChatScreenState();
@@ -19,28 +31,10 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textEditingController = TextEditingController();
-  bool _isInvited = false;
-
 
   @override
   void initState() {
     super.initState();
-    _fetchInviterStatus();
-  }
-
-  void _fetchInviterStatus() async {
-    bool invited = await ConnectionService().getInviter(widget.id);
-    setState(() {
-      _isInvited = invited;
-    });
-  }
-
-  Widget _chooseChatBottomSheet() {
-    if (_isInvited) {
-      return ChatBottomSheetSeller(widget.id);
-    } else {
-      return ChatBottomSheetBuyer(widget.id);
-    }
   }
 
   void _scrollToBottom() async {
@@ -56,7 +50,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<dynamic>> streamMessages =
-        ref.watch(messageStreamProvider(widget.id));
+        ref.watch(MessageService().messageStreamProvider(widget.id));
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Chat"),
@@ -73,23 +68,34 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (error, stackTrace) => Center(child: Text("Error: $error")),
             data: (messages) {
-              _scrollToBottom();
+              if (messages.isNotEmpty) {
+                _scrollToBottom();
+              }
               return Column(
                 children: [
                   Expanded(
                     child: messages.isEmpty
                         ? const Center(child: Text("No messages yet"))
-                        : ListView.builder(
-                            controller: _scrollController,
-                            itemCount: messages.length,
-                            itemBuilder: (context, index) {
-                              final message = messages[index];
-                              return BasicChatMessageWidget(
-                                message: message.message,
-                                sentBy: message.sentByMe ? 'me' : 'other',
-                                timestamp: message.createdAt,
-                              );
+                        : RefreshIndicator(
+                            onRefresh: () async {
+                              await MessageService().getMoreMessages(widget.id);
                             },
+                            child: ScrollConfiguration(
+                              behavior: MyCustomScrollBehavior(),
+                              child: ListView.builder(
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                controller: _scrollController,
+                                itemCount: messages.length,
+                                itemBuilder: (context, index) {
+                                  final message = messages[index];
+                                  return BasicChatMessageWidget(
+                                    message: message.message,
+                                    sentBy: message.sentByMe ? 'me' : 'other',
+                                    timestamp: message.createdAt,
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                   ),
                   Container(
@@ -98,7 +104,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                       padding: const EdgeInsets.all(5),
                       child: Row(
                         children: [
-                          _chooseChatBottomSheet(),
+                          widget.isInvited
+                              ? ChatBottomSheetSeller(widget.id)
+                              : ChatBottomSheetBuyer(widget.id),
                           Expanded(
                             child: TextField(
                               controller: _textEditingController,
@@ -117,12 +125,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 final bool messageSent = await ref
                                     .read(messageServiceProvider)
                                     .sendMessage(widget.id, messageText);
-                                /*    
-                                final bool requestProof = await ref
-                                    .read(messageServiceProvider) // !! test for requesting proof, will be moved somewhere else occationally
-                                    .sendProofRequest(widget.id);
-                                    print(requestProof);
-                                */
                                 if (messageSent) {
                                   _textEditingController.clear();
                                 } else {

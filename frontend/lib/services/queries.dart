@@ -21,7 +21,7 @@ final proofsQuery = gql("""
 final messagesQuery = gql("""
   query GetMessages(\$id: ID!, \$cursor: String) {
     connection(id: \$id) {
-      messages(last: 15, before: \$cursor) {
+      messages(last: 5, before: \$cursor) {
         edges {
           ...MessageEdgeFragment
         }
