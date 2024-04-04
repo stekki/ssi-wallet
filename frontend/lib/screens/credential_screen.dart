@@ -44,7 +44,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                         borderSide: BorderSide.none,
                       ),
                       filled: true,
-                      fillColor: DesignColors.extraColorWhite,
+                      fillColor: DesignColors.extraColorGray,
                     ),
                     onChanged: (value) {
                       setState(() => filterValue = value.toLowerCase());

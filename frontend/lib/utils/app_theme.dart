@@ -20,15 +20,12 @@ class AppTheme {
           borderRadius: BorderRadius.all(
             Radius.circular(15.0),
           ),
-          borderSide: BorderSide(color: DesignColors.mainColor, width: 0.0)),
+          borderSide: BorderSide.none),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(15.0),
         ),
-        borderSide: BorderSide(
-          color: DesignColors.mainColor,
-          width: 1.0,
-        ),
+        borderSide: BorderSide.none,
       ),
       labelStyle: TextStyles.emailRegisTitle,
     ),

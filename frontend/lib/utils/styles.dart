@@ -10,7 +10,7 @@ class DesignColors {
   static const extraColorGray = Color.fromARGB(255, 238, 238, 238);
   static const extraColorBlack = Color.fromARGB(120, 37, 31, 31);
   static const devRed = Color.fromARGB(192, 255, 61, 61);
-  static const backgroundColor = Color.fromARGB(30, 51, 213, 154);
+  static const backgroundColor = Colors.white;
 }
 
 class TextStyles {

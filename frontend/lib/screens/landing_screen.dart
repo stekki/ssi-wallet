@@ -191,7 +191,7 @@ class _LandingScreenState extends State<LandingScreen>
                     style: TextStyle(
                       fontFamily: "Nunito",
                       fontSize: max(height * 0.05, 20),
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.w900,
                       color: DesignColors.extraColorWhite,
                     ),
                   ),
