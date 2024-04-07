@@ -17,10 +17,11 @@ class AppTheme {
         ),
       ),
       enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(15.0),
-          ),
-          borderSide: BorderSide(color: DesignColors.mainColor, width: 0.0)),
+        borderRadius: BorderRadius.all(
+          Radius.circular(15.0),
+        ),
+        borderSide: BorderSide(color: DesignColors.mainColor, width: 0.0),
+      ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(15.0),

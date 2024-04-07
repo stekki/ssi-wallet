@@ -53,14 +53,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: 'Search connection',
+                    hintText: 'Search chat',
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
                       borderSide: BorderSide.none,
                     ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0),
+                      ),
+                      borderSide: BorderSide.none,
+                    ),
                     filled: true,
-                    fillColor: DesignColors.extraColorWhite,
+                    fillColor: DesignColors.extraColorGray,
                   ),
                   onChanged: (value) {
                     setState(() => filterValue = value.toLowerCase());
@@ -121,10 +127,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Add via invitation link'),
+          title: const Text('Add via invitation link',
+              style: TextStyles.floatingButtonText),
           content: TextField(
             controller: _connectionController,
-            decoration: const InputDecoration(hintText: 'Invitation link'),
+            decoration: const InputDecoration(
+              hintText: 'Invitation link',
+            ),
           ),
           actions: [
             TextButton(
