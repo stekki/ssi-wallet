@@ -43,6 +43,14 @@ class TextStyles {
     color: DesignColors.mainColor,
   );
 
+  // home screen floating button text
+  static const TextStyle floatingButtonText = TextStyle(
+    fontFamily: "Nunito",
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    color: DesignColors.mainColor,
+  );
+
   static const TextStyle profileScreenText = TextStyle(
     fontFamily: "Nunito",
     fontSize: 25,

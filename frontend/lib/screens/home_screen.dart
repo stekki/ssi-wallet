@@ -127,10 +127,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Add via invitation link'),
+          title: const Text('Add via invitation link',
+              style: TextStyles.floatingButtonText),
           content: TextField(
             controller: _connectionController,
-            decoration: const InputDecoration(hintText: 'Invitation link'),
+            decoration: const InputDecoration(
+              hintText: 'Invitation link',
+            ),
           ),
           actions: [
             TextButton(
