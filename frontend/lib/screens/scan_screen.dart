@@ -114,7 +114,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Add connection", style: TextStyles.scanProfileScreenText),
+            const Text("Add connection", style: TextStyles.scanScreenText),
             const SizedBox(
               height: 20,
             ),

@@ -37,15 +37,21 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: 'Search credential',
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: BorderSide.none,
-                      ),
-                      filled: true,
-                      fillColor: DesignColors.extraColorWhite,
+                    hintText: 'Search receipt',
+                    prefixIcon: const Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5),
+                      borderSide: BorderSide.none,
                     ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0),
+                      ),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: DesignColors.extraColorGray,
+                  ),
                     onChanged: (value) {
                       setState(() => filterValue = value.toLowerCase());
                     },

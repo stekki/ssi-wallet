@@ -53,14 +53,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: 'Search connection',
+                    hintText: 'Search chat',
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
                       borderSide: BorderSide.none,
                     ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0),
+                      ),
+                      borderSide: BorderSide.none,
+                    ),
                     filled: true,
-                    fillColor: DesignColors.extraColorWhite,
+                    fillColor: DesignColors.extraColorGray,
                   ),
                   onChanged: (value) {
                     setState(() => filterValue = value.toLowerCase());
