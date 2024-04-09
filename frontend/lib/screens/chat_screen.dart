@@ -2,12 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/providers/providers.dart';
-import 'package:frontend/utils/styles.dart';
-import 'package:frontend/widgets/chat_bottom_sheet.dart';
-import 'package:frontend/widgets/message.dart';
-// import '../models/models.dart';
+
+import '../providers/providers.dart';
 import '../services/message_service.dart';
+import '../utils/styles.dart';
+import '../widgets/chat_bottom_sheet.dart';
+import '../widgets/message.dart';
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices

@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../services/graphql_service.dart';
-import '../../utils/secure_storage.dart';
 import 'package:flutter/services.dart';
-import 'package:frontend/utils/styles.dart';
-import '../utils/token.dart';
+
 import '../providers/providers.dart';
-import 'package:frontend/widgets/credential_card_info.dart';
-import 'package:frontend/utils/helpers.dart' as helpers;
+import '../services/graphql_service.dart';
+import '../utils/helpers.dart' as helpers;
+import '../utils/styles.dart';
+import '../utils/secure_storage.dart';
+import '../utils/token.dart';
+import '../widgets/credential_card_info.dart';
 
 class TestScreen extends StatelessWidget {
   const TestScreen({super.key});

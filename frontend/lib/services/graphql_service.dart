@@ -1,6 +1,6 @@
-import '../config/graphql_config.dart';
-
 import 'package:graphql_flutter/graphql_flutter.dart';
+
+import '../config/graphql_config.dart';
 
 class GraphQLService {
   static final GraphQLService _instance = GraphQLService._();
