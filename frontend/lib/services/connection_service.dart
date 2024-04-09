@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/services/graphql_service.dart';
-import 'package:frontend/services/queries.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../models/models.dart';
+import '../services/graphql_service.dart';
+import '../services/queries.dart';
 
 class ConnectionService {
   static final ConnectionService _instance = ConnectionService._();

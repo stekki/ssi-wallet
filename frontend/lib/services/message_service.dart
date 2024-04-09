@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../models/models.dart';
-import 'package:frontend/services/queries.dart';
-import 'package:frontend/services/graphql_service.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+import '../services/queries.dart';
+import '../services/graphql_service.dart';
 
 class MessageService {
   static final MessageService _instance = MessageService._();

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/services/connection_service.dart';
-import 'package:frontend/utils/styles.dart';
-import 'package:frontend/widgets/connection_card.dart';
-import 'package:frontend/screens/loading_screen.dart';
+
+import '../services/connection_service.dart';
+import '../screens/loading_screen.dart';
 import '../models/models.dart';
 import '../providers/providers.dart';
+import '../utils/styles.dart';
+import '../widgets/connection_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

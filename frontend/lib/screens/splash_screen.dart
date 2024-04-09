@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+
 import '../routes/navigation_helper.dart';
 
 class SplashScreen extends StatefulWidget {

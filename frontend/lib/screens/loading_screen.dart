@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:frontend/utils/styles.dart';
+
+import '../utils/styles.dart';
 
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({super.key});

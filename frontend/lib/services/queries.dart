@@ -1,4 +1,5 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
+
 import 'fragments.dart';
 
 final proofsQuery = gql("""
