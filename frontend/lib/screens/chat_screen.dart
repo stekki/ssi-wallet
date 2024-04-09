@@ -47,6 +47,15 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
   }
 
+  void _showMessageSendFailure(){
+    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Failed to send message"),
+                        duration: Duration(seconds: 3),
+                      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<dynamic>> streamMessages =
@@ -128,12 +137,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 if (messageSent) {
                                   _textEditingController.clear();
                                 } else {
-                                  ScaffoldMessenger.of(context).showSnackBar( 
-                                    const SnackBar(
-                                      content: Text('Failed to send message'),
-                                      duration: Duration(seconds: 2)
-                                      )
-                                  );
+                                  _showMessageSendFailure();
                                   // Optional: Show an error if the message was not sent
                                 }
                               }

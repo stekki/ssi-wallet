@@ -167,7 +167,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   showErrorSnackbar('Invalid invitation link. Please try again.');
                 }
                 } catch (e) {
-                  showErrorSnackbar('An error occurred: ${e.toString()}');
+                  if(e is Error){
+                    showErrorSnackbar('An error occurred: ${e.toString()}');
+                  }
                 }
                 // ignore: unused_result
                 // ref.refresh(connectionsFutureProvider);
