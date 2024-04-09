@@ -96,6 +96,7 @@ class MessageService {
     return stream;
   });
 
+  // Should make a new ProofService
   Future<bool> sendProofRequest(String connectionId) async {
     final List<Map<String, dynamic>> attributes = [
       {
