@@ -46,7 +46,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
             ]),
             )
           ),
-          data: (credentials) {// data: (credentials) {
+          data: (credentials) {
             var filteredCredentials = credentials
                 .where((c) =>
                     c.issuer.toLowerCase().contains(filterValue) ||
