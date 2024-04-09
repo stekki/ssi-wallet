@@ -95,6 +95,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   if (job["protocol"] == "BASIC_MESSAGE") {
                                     final message =
                                         job["output"]["message"]["node"];
+                                    // Best if Component builder like BasicChatMessage
+                                    // take the whole node (above) and handle it there.
                                     final createdAt =
                                         DateTime.fromMillisecondsSinceEpoch(
                                             int.parse(message['createdMs']));
