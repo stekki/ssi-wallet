@@ -10,7 +10,7 @@ import '../utils/helpers.dart' as helpers;
 import '../utils/styles.dart';
 import '../utils/secure_storage.dart';
 import '../utils/token.dart';
-import '../widgets/credential_card_info.dart';
+import '../widgets/credential_card.dart';
 
 class TestScreen extends StatelessWidget {
   const TestScreen({super.key});
@@ -122,7 +122,9 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
 
     return Scaffold(
       body: Container(
-        decoration: scaffoldBackground,
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 246, 246, 246),
+        ),
         child: Column(
           children: [
             Container(
@@ -176,7 +178,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: const Color.fromARGB(255, 152, 226, 226),
+                              color: Color.fromARGB(255, 255, 255, 255),
                               width: 2.0,
                             ),
                             gradient: const LinearGradient(
@@ -184,8 +186,8 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
                               end: Alignment.bottomCenter,
                               stops: [0.001, 0.999],
                               colors: [
-                                Color.fromARGB(255, 212, 253, 248),
-                                Color.fromARGB(255, 228, 255, 252)
+                                Color.fromARGB(255, 255, 255, 255),
+                                Color.fromARGB(255, 255, 255, 255)
                               ],
                             ),
                           ),
@@ -197,9 +199,10 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
                               title: Text(credential[0].issuer),
                               subtitle: Text(credential[0].item),
                               children: [
-                                CredentialCardInfo(
+                                CredentialCard(
                                   date: credential[0].date,
                                   holder: credential[0].holder,
+                                  status: credential[0].status,
                                 ),
                               ],
                             ),
