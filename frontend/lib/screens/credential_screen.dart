@@ -90,16 +90,8 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                             data: Theme.of(context).copyWith(
                               dividerColor: Colors.transparent,
                             ),
-                            child: ExpansionTile(
-                              title: Text(credential.issuer),
-                              subtitle: Text(credential.item),
-                              children: [
-                                CredentialCard(
-                                  date: credential.date,
-                                  holder: credential.holder,
-                                  status: credential.status,
-                                ),
-                              ],
+                            child: CredentialCard(
+                              credential: credential,
                             ),
                           ),
                         );

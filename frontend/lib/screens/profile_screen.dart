@@ -195,16 +195,8 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
                             data: Theme.of(context).copyWith(
                               dividerColor: Colors.transparent,
                             ),
-                            child: ExpansionTile(
-                              title: Text(credential[0].issuer),
-                              subtitle: Text(credential[0].item),
-                              children: [
-                                CredentialCard(
-                                  date: credential[0].date,
-                                  holder: credential[0].holder,
-                                  status: credential[0].status,
-                                ),
-                              ],
+                            child: CredentialCard(
+                              credential: credential[0],
                             ),
                           ),
                         ),
