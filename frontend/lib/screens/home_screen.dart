@@ -35,6 +35,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
     super.dispose();
   }
 
+  void showErrorSnackbar(String text) {
+    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(text),
+                        duration: const Duration(seconds: 3),
+                      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
@@ -133,12 +142,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ),
             ElevatedButton(
               onPressed: () async {
+                try {
                 final String messageText = _connectionController.text.trim();
-                final bool connectionMade = await ref
-                    .read(connectionServiceProvider)
-                    .acceptConnection(messageText);
-                if (connectionMade) {}
-                _connectionController.clear();
+                if (messageText.startsWith('didcomm://aries_connection_invitation')) {
+                  final bool connectionMade = await ref
+                      .read(connectionServiceProvider)
+                      .acceptConnection(messageText);
+                  
+                  if (!connectionMade) {
+                    showErrorSnackbar("Failed to make the connection");
+                  }
+                  _connectionController.clear();
+                } else {
+                  showErrorSnackbar('Invalid invitation link. Please try again.');
+                }
+                } catch (e) {
+                  showErrorSnackbar('An error occurred: ${e.toString()}');
+                }
                 // ignore: unused_result
                 // ref.refresh(connectionsFutureProvider);
                 // ignore: use_build_context_synchronously
