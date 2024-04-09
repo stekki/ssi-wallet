@@ -10,7 +10,7 @@ class DesignColors {
   static const extraColorGray = Color.fromARGB(255, 238, 238, 238);
   static const extraColorBlack = Color.fromARGB(120, 37, 31, 31);
   static const devRed = Color.fromARGB(192, 255, 61, 61);
-  static const backgroundColor = Color.fromARGB(30, 51, 213, 154);
+  static const backgroundColor = Color.fromARGB(255, 255, 255, 255);
 }
 
 class TextStyles {
@@ -36,12 +36,28 @@ class TextStyles {
     color: DesignColors.extraColorWhite,
   );
   // scan screen text
-  static const TextStyle scanProfileScreenText = TextStyle(
+  static const TextStyle scanScreenText = TextStyle(
     fontFamily: "Nunito",
     fontSize: 25,
     fontWeight: FontWeight.w700,
     color: DesignColors.mainColor,
   );
+
+  // home screen floating button text
+  static const TextStyle floatingButtonText = TextStyle(
+    fontFamily: "Nunito",
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    color: DesignColors.mainColor,
+  );
+
+  static const TextStyle profileScreenText = TextStyle(
+    fontFamily: "Nunito",
+    fontSize: 25,
+    fontWeight: FontWeight.w700,
+    color: DesignColors.extraColorWhite,
+  );
+
   // medium text (card subtitle, card texts)
   static const TextStyle mediumText = TextStyle(
     fontFamily: "Nunito",
