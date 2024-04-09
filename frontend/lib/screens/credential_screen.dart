@@ -13,18 +13,42 @@ class CredentialScreen extends ConsumerStatefulWidget {
 }
 
 class _CredentialScreenState extends ConsumerState<CredentialScreen> {
+  bool _detailsOpen = false;
   final TextEditingController _searchController = TextEditingController();
   String filterValue = "";
 
+  void _reloadView() {setState((){});}
   @override
   Widget build(BuildContext context) {
     final credentialsFuture = ref.watch(credentialsFutureProvider);
 
+
     return Scaffold(
       body: credentialsFuture.when(
           loading: () => const LoadingScreen(),
-          error: (err, stack) => const Text("Error loading credentials"),
-          data: (credentials) {
+          error: (err, stack) => SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: Center(child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: 
+            [const Text("Error loading credentials"),
+            const SizedBox(height: 20),
+            if (_detailsOpen && (err is Exception || err is Error))
+                Text('Details: ${err.toString()}')
+            ,
+            if (!_detailsOpen)
+              ElevatedButton(
+                child: const Text("Show details"),
+                onPressed: () {
+                  setState((){_detailsOpen = true;});
+                }
+              )
+            ]),
+            )
+          ),
+          data: (credentials) {// data: (credentials) {
             var filteredCredentials = credentials
                 .where((c) =>
                     c.issuer.toLowerCase().contains(filterValue) ||
