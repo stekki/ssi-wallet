@@ -128,6 +128,12 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 if (messageSent) {
                                   _textEditingController.clear();
                                 } else {
+                                  ScaffoldMessenger.of(context).showSnackBar( 
+                                    const SnackBar(
+                                      content: Text('Failed to send message'),
+                                      duration: Duration(seconds: 2)
+                                      )
+                                  );
                                   // Optional: Show an error if the message was not sent
                                 }
                               }
