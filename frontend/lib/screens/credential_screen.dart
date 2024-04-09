@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/utils/styles.dart';
-import 'package:frontend/providers/providers.dart';
-import 'package:frontend/widgets/credential_card_info.dart';
-import 'package:frontend/screens/loading_screen.dart';
+
+import '../utils/styles.dart';
+import '../providers/providers.dart';
+import '../widgets/credential_card_info.dart';
+import '../screens/loading_screen.dart';
 
 class CredentialScreen extends ConsumerStatefulWidget {
   const CredentialScreen({super.key});
@@ -58,14 +59,20 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: 'Search credential',
+                      hintText: 'Search receipt',
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(5),
                         borderSide: BorderSide.none,
                       ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(15.0),
+                        ),
+                        borderSide: BorderSide.none,
+                      ),
                       filled: true,
-                      fillColor: DesignColors.extraColorWhite,
+                      fillColor: DesignColors.extraColorGray,
                     ),
                     onChanged: (value) {
                       setState(() => filterValue = value.toLowerCase());

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/services/connection_service.dart';
-import 'package:frontend/utils/styles.dart';
-import 'package:frontend/widgets/connection_card.dart';
-import 'package:frontend/screens/loading_screen.dart';
+
+import '../services/connection_service.dart';
+import '../screens/loading_screen.dart';
 import '../models/models.dart';
 import '../providers/providers.dart';
+import '../utils/styles.dart';
+import '../widgets/connection_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -62,14 +63,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: 'Search connection',
+                    hintText: 'Search chat',
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(5),
                       borderSide: BorderSide.none,
                     ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(15.0),
+                      ),
+                      borderSide: BorderSide.none,
+                    ),
                     filled: true,
-                    fillColor: DesignColors.extraColorWhite,
+                    fillColor: DesignColors.extraColorGray,
                   ),
                   onChanged: (value) {
                     setState(() => filterValue = value.toLowerCase());
@@ -130,10 +137,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Add via invitation link'),
+          title: const Text('Add via invitation link',
+              style: TextStyles.floatingButtonText),
           content: TextField(
             controller: _connectionController,
-            decoration: const InputDecoration(hintText: 'Invitation link'),
+            decoration: const InputDecoration(
+              hintText: 'Invitation link',
+            ),
           ),
           actions: [
             TextButton(

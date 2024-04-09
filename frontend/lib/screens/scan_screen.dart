@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/providers.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:frontend/utils/styles.dart';
 import 'package:go_router/go_router.dart';
-import 'dart:async';
+import 'package:mobile_scanner/mobile_scanner.dart';
+
+import '../utils/styles.dart';
+import '../providers/providers.dart';
 
 MobileScannerController cameraController = MobileScannerController(
   autoStart: true,
@@ -71,7 +73,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
       }
       _bottomSheetErrorOpen = false;
     });
-  }  
+  }
 
   void showConfirmationDialog(String? qrValue) {
     showDialog(
@@ -94,7 +96,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
                 Navigator.of(context).pop();
                 try {
                   createConnection(qrValue);
-                  context.go('/home');                    
+                  context.go('/home');
                 } catch (e) {
                   _showFailureDialog(e.toString());
                 }
@@ -114,13 +116,15 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Add connection", style: TextStyles.scanProfileScreenText),
+            const Text("Add connection", style: TextStyles.scanScreenText),
             const SizedBox(
               height: 20,
             ),
             SizedBox(
-              width: 410,
-              height: 410,
+              height: MediaQuery.of(context).size.height * 0.65,
+              width: MediaQuery.of(context).size.width,
+              //width:410,
+              //height: 410,
               child: MobileScanner(
                 controller: cameraController,
                 onDetect: (capture) {
@@ -141,13 +145,11 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
                     }
                   }
                 },
-              ), 
+              ),
             ),
           ],
-        ) 
-
+        )
       ),
     );
-    
   }
 }
