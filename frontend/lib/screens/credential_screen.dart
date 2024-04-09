@@ -17,12 +17,9 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
   final TextEditingController _searchController = TextEditingController();
   String filterValue = "";
 
-  void _reloadView() {setState((){});}
   @override
   Widget build(BuildContext context) {
     final credentialsFuture = ref.watch(credentialsFutureProvider);
-
-
     return Scaffold(
       body: credentialsFuture.when(
           loading: () => const LoadingScreen(),
