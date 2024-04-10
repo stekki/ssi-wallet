@@ -174,7 +174,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: Color.fromARGB(255, 255, 255, 255),
+                              color: const Color.fromARGB(255, 255, 255, 255),
                               width: 2.0,
                             ),
                             gradient: const LinearGradient(
