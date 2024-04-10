@@ -2,12 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../providers/providers.dart';
+import 'package:frontend/providers/providers.dart';
+import 'package:frontend/utils/styles.dart';
+import 'package:frontend/widgets/chat_bottom_sheet.dart';
+import 'package:frontend/widgets/message.dart';
+// import 'package:frontend/widgets/message.dart';
+// import '../models/models.dart';
 import '../services/message_service.dart';
-import '../utils/styles.dart';
-import '../widgets/chat_bottom_sheet.dart';
-import '../widgets/message.dart';
+import '../services/job_service.dart';
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
   // Override behavior methods and getters like dragDevices
@@ -58,8 +60,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<List<dynamic>> streamMessages =
-        ref.watch(MessageService().messageStreamProvider(widget.id));
+    final AsyncValue<List<Map<String, dynamic>>> streamEvents =
+        ref.watch(JobService().jobStreamProvider(widget.id));
 
     return Scaffold(
       appBar: AppBar(
@@ -73,17 +75,17 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           Container(
             color: Colors.black.withOpacity(0.15),
           ),
-          streamMessages.when(
+          streamEvents.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (error, stackTrace) => Center(child: Text("Error: $error")),
-            data: (messages) {
-              if (messages.isNotEmpty) {
+            data: (events) {
+              if (events.isNotEmpty) {
                 _scrollToBottom();
               }
               return Column(
                 children: [
                   Expanded(
-                    child: messages.isEmpty
+                    child: events.isEmpty
                         ? const Center(child: Text("No messages yet"))
                         : RefreshIndicator(
                             onRefresh: () async {
@@ -94,14 +96,30 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                               child: ListView.builder(
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 controller: _scrollController,
-                                itemCount: messages.length,
+                                itemCount: events.length,
                                 itemBuilder: (context, index) {
-                                  final message = messages[index];
-                                  return BasicChatMessageWidget(
-                                    message: message.message,
-                                    sentBy: message.sentByMe ? 'me' : 'other',
-                                    timestamp: message.createdAt,
-                                  );
+                                  // final event = events[index];
+                                  // final job = event["job"]["node"];
+                                  final job = events[index];
+                                  if (job["protocol"] == "BASIC_MESSAGE") {
+                                    final message =
+                                        job["output"]["message"]["node"];
+                                    // Best if Component builder like BasicChatMessage
+                                    // take the whole node (above) and handle it there.
+                                    final createdAt =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            int.parse(message['createdMs']));
+                                    return BasicChatMessageWidget(
+                                        message: message["message"],
+                                        sentBy: message["sentByMe"]
+                                            ? 'me'
+                                            : 'other',
+                                        timestamp: createdAt);
+                                  } else if (job["protocol"] == "PROOF") {
+                                    return Container();
+                                  } else {
+                                    return Container();
+                                  }
                                 },
                               ),
                             ),

@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../utils/styles.dart';
 
-class IDMessageWidget extends StatelessWidget{
+class IDMessageWidget extends StatelessWidget {
   final String message;
   final String sentBy;
   final DateTime timestamp;
