@@ -73,7 +73,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: Color.fromARGB(255, 232, 232, 232),
+                              color: const Color.fromARGB(255, 232, 232, 232),
                               width: 2.0,
                             ),
                             gradient: const LinearGradient(
