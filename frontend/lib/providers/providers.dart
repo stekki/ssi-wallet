@@ -1,12 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-//import 'package:flutter/material.dart';
 import 'package:frontend/models/credential.dart';
-//import 'package:frontend/screens/loading_screen.dart';
 import 'package:frontend/services/connection_service.dart';
 import 'package:frontend/services/message_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:frontend/widgets/credential_card_info.dart';
 
 final connectionServiceProvider = Provider((ref) => ConnectionService());
 final messageServiceProvider = Provider((ref) => MessageService());
