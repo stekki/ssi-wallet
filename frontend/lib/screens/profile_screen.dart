@@ -219,7 +219,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
                             child: SizedBox(
                               width: 50,
                               height: 50,
-                              child: const CircularProgressIndicator(),
+                              child: CircularProgressIndicator(),
                             ),
                           )
                           : Column(
