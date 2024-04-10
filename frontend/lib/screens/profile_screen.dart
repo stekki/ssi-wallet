@@ -34,13 +34,9 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
   String username = 'Stranger';
 
   int num = 0;
-
   Map? result = {};
-
   Uint8List? imageBytes;
-
   String? stringForConnection;
-
   bool isLoading = false;
 
   @override
@@ -219,7 +215,13 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
                       ),
                       padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
                       child: isLoading
-                          ? const CircularProgressIndicator()
+                          ? const Center(
+                            child: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: const CircularProgressIndicator(),
+                            ),
+                          )
                           : Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
