@@ -3,6 +3,7 @@ class Credential {
   final String item; // target item
   final String date;
   final String holder; // holder's name
+  final String status; // validity of the credential
 
   bool isExpanded = true;
 
@@ -11,5 +12,6 @@ class Credential {
     required this.item,
     required this.date,
     required this.holder,
+    required this.status,
   });
 }

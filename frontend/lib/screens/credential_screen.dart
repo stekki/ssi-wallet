@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../utils/styles.dart';
 import '../providers/providers.dart';
-import '../widgets/credential_card_info.dart';
+import '../widgets/credential_card.dart';
 import '../screens/loading_screen.dart';
 
 class CredentialScreen extends ConsumerStatefulWidget {
@@ -94,7 +94,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: const Color.fromARGB(255, 152, 226, 226),
+                              color: const Color.fromARGB(255, 232, 232, 232),
                               width: 2.0,
                             ),
                             gradient: const LinearGradient(
@@ -102,8 +102,8 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                               end: Alignment.bottomCenter,
                               stops: [0.001, 0.999],
                               colors: [
-                                Color.fromARGB(255, 212, 253, 248),
-                                Color.fromARGB(255, 228, 255, 252)
+                                Color.fromARGB(255, 255, 255, 255),
+                                Color.fromARGB(255, 255, 255, 255)
                               ],
                             ),
                           ),
@@ -111,15 +111,8 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                             data: Theme.of(context).copyWith(
                               dividerColor: Colors.transparent,
                             ),
-                            child: ExpansionTile(
-                              title: Text(credential.issuer),
-                              subtitle: Text(credential.item),
-                              children: [
-                                CredentialCardInfo(
-                                  date: credential.date,
-                                  holder: credential.holder,
-                                ),
-                              ],
+                            child: CredentialCard(
+                              credential: credential,
                             ),
                           ),
                         );

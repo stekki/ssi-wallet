@@ -55,7 +55,7 @@ class TextStyles {
     fontFamily: "Nunito",
     fontSize: 25,
     fontWeight: FontWeight.w700,
-    color: DesignColors.extraColorWhite,
+    color: Color.fromARGB(255, 60, 60, 60),
   );
 
   // medium text (card subtitle, card texts)
