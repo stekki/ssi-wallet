@@ -37,12 +37,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   void showErrorSnackbar(String text) {
-    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(text),
-                        duration: const Duration(seconds: 3),
-                      )
-    );
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(text),
+      duration: const Duration(seconds: 3),
+    ));
   }
 
   @override
@@ -153,21 +151,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
             ElevatedButton(
               onPressed: () async {
                 try {
-                final String messageText = _connectionController.text.trim();
-                if (messageText.startsWith('didcomm://aries_connection_invitation')) {
-                  final bool connectionMade = await ref
-                      .read(connectionServiceProvider)
-                      .acceptConnection(messageText);
-                  
-                  if (!connectionMade) {
-                    showErrorSnackbar("Failed to make the connection");
+                  final String messageText = _connectionController.text.trim();
+                  if (messageText
+                      .startsWith('didcomm://aries_connection_invitation')) {
+                    final bool connectionMade =
+                        await ConnectionService().acceptConnection(messageText);
+
+                    if (!connectionMade) {
+                      showErrorSnackbar("Failed to make the connection");
+                    }
+                    _connectionController.clear();
+                  } else {
+                    showErrorSnackbar(
+                        'Invalid invitation link. Please try again.');
                   }
-                  _connectionController.clear();
-                } else {
-                  showErrorSnackbar('Invalid invitation link. Please try again.');
-                }
                 } catch (e) {
-                  if(e is Error){
+                  if (e is Error) {
                     showErrorSnackbar('An error occurred: ${e.toString()}');
                   }
                 }

@@ -209,8 +209,12 @@ class EventNotification {
       final node = data["eventAdded"]["node"];
       final connection = data["eventAdded"]["node"]["connection"];
       if (connection != null) {
+        // updateCacheWithNewItem("events", eventAdded, true, "connection", {
+        //   "query": connectionEventsQuery,
+        //   "variables": {"id": connection["id"]}
+        // });
         updateCacheWithNewItem("events", eventAdded, true, "connection", {
-          "query": connectionEventsQuery,
+          "query": connectionMockQuery,
           "variables": {"id": connection["id"]}
         });
       }

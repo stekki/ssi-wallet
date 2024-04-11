@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-
+import 'package:frontend/services/connection_service.dart';
 import '../utils/styles.dart';
-import '../providers/providers.dart';
 
 MobileScannerController cameraController = MobileScannerController(
   autoStart: true,
@@ -26,49 +25,47 @@ class ScanScreen extends ConsumerStatefulWidget {
 class _ScanScreenState extends ConsumerState<ScanScreen>
     with SingleTickerProviderStateMixin {
   void createConnection(String? link) async {
-    await ref.read(connectionServiceProvider).acceptConnection(link);
+    await ConnectionService().acceptConnection(link);
   }
 
   bool _bottomSheetErrorOpen = false;
 
-  void _showFailureDialog(String message){
+  void _showFailureDialog(String message) {
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Connection failed"),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(child: const Text("Close"),
-            onPressed: () {
-              Navigator.of(context).pop();
-              cameraController.start();
-            }
-            ,)
-          ]
-        );
-      }
-    );
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: const Text("Connection failed"),
+              content: Text(message),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text("Close"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    cameraController.start();
+                  },
+                )
+              ]);
+        });
   }
+
   void _showBottomSheetDialog(String? message) {
     showModalBottomSheet(
       context: context,
       isDismissible: false,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
-      return AnimatedContainer(
-        color: Colors.transparent,
-        duration: const Duration(milliseconds: 40),
-        child: Container(
-          height: 100,
-          color: const Color.fromARGB(255, 255, 145, 75), // color??
-          child: const Center(child: Text("Not an invitation code"))
-        )
-      );
-     },
+        return AnimatedContainer(
+            color: Colors.transparent,
+            duration: const Duration(milliseconds: 40),
+            child: Container(
+                height: 100,
+                color: const Color.fromARGB(255, 255, 145, 75), // color??
+                child: const Center(child: Text("Not an invitation code"))));
+      },
     );
     Timer(const Duration(seconds: 2), () {
-      if(_bottomSheetErrorOpen){
+      if (_bottomSheetErrorOpen) {
         Navigator.of(context).pop();
       }
       _bottomSheetErrorOpen = false;
@@ -111,45 +108,48 @@ class _ScanScreenState extends ConsumerState<ScanScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Align(        // Container -> decoration: scaffoldBackground
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("Add connection", style: TextStyles.scanScreenText),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.65,
-              width: MediaQuery.of(context).size.width,
-              //width:410,
-              //height: 410,
-              child: MobileScanner(
-                controller: cameraController,
-                onDetect: (capture) {
-                  final List<Barcode> qrcodes = capture.barcodes;
-                  if (qrcodes.isNotEmpty) {
-                    final qrcode = qrcodes.first;
-                    String? scannedValue = qrcode.rawValue;
-                      if (scannedValue != null && scannedValue.startsWith('didcomm://aries_connection_invitation') == true) {
+      body: Align(
+          // Container -> decoration: scaffoldBackground
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Add connection", style: TextStyles.scanScreenText),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.65,
+                width: MediaQuery.of(context).size.width,
+                //width:410,
+                //height: 410,
+                child: MobileScanner(
+                  controller: cameraController,
+                  onDetect: (capture) {
+                    final List<Barcode> qrcodes = capture.barcodes;
+                    if (qrcodes.isNotEmpty) {
+                      final qrcode = qrcodes.first;
+                      String? scannedValue = qrcode.rawValue;
+                      if (scannedValue != null &&
+                          scannedValue.startsWith(
+                                  'didcomm://aries_connection_invitation') ==
+                              true) {
                         cameraController.stop();
                         debugPrint('Code found: $scannedValue');
                         showConfirmationDialog(scannedValue);
                       } else {
-                        if(!_bottomSheetErrorOpen) {
+                        if (!_bottomSheetErrorOpen) {
                           _bottomSheetErrorOpen = true;
                           _showBottomSheetDialog(scannedValue);
                           debugPrint('Faulty code found: $scannedValue');
+                        }
                       }
                     }
-                  }
-                },
+                  },
+                ),
               ),
-            ),
-          ],
-        )
-      ),
+            ],
+          )),
     );
   }
 }

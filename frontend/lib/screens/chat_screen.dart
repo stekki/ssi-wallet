@@ -2,13 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/providers/providers.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/chat_bottom_sheet.dart';
 import 'package:frontend/widgets/message.dart';
 // import 'package:frontend/widgets/message.dart';
 // import '../models/models.dart';
-import '../services/message_service.dart';
 import '../services/job_service.dart';
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
@@ -49,13 +47,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
     );
   }
 
-  void _showMessageSendFailure(){
-    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Failed to send message"),
-                        duration: Duration(seconds: 3),
-                      )
-    );
+  void _showMessageSendFailure() {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Failed to send message"),
+      duration: Duration(seconds: 3),
+    ));
   }
 
   @override
@@ -89,7 +85,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         ? const Center(child: Text("No messages yet"))
                         : RefreshIndicator(
                             onRefresh: () async {
-                              await MessageService().getMoreMessages(widget.id);
+                              await JobService().getMoreJobs(widget.id);
                             },
                             child: ScrollConfiguration(
                               behavior: MyCustomScrollBehavior(),
@@ -98,9 +94,10 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 controller: _scrollController,
                                 itemCount: events.length,
                                 itemBuilder: (context, index) {
-                                  // final event = events[index];
-                                  // final job = event["job"]["node"];
-                                  final job = events[index];
+                                  final event = events[index];
+                                  final job = event["job"]["node"];
+                                  // final job = events[index];
+                                  // final status = job["status"];
                                   if (job["protocol"] == "BASIC_MESSAGE") {
                                     final message =
                                         job["output"]["message"]["node"];
@@ -149,8 +146,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   .isNotEmpty) {
                                 final messageText =
                                     _textEditingController.text.trim();
-                                final bool messageSent = await ref
-                                    .read(messageServiceProvider)
+                                final bool messageSent = await JobService()
                                     .sendMessage(widget.id, messageText);
                                 if (messageSent) {
                                   _textEditingController.clear();

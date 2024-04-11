@@ -100,6 +100,23 @@ final connectionJobsQuery = gql("""
   $pageInfo
 """);
 
+final connectionJobsQueryString = """
+  query GetConnectionJobs(\$id: ID!, \$cursor: String) {
+    connection(id: \$id) {
+      jobs(last: 3, before: \$cursor) {
+        edges {
+          ...JobEdgeFragment
+        }
+        pageInfo {
+          ...PageInfoFragment
+        }
+      }
+    }
+  }
+  ${job["edge"]}
+  $pageInfo
+""";
+
 final eventsQuery = gql("""
   query GetEvents(\$cursor: String) {
     events(last: 5, before: \$cursor) {
@@ -161,6 +178,23 @@ final connectionQuery = gql("""
   query GetConnection(\$id: ID!, \$cursor: String) {
     connection(id: \$id) {
       ...PairwiseNodeFragment
+      events(last: 20, before: \$cursor) {
+        edges {
+          ...FullEventEdgeFragment
+        }
+        pageInfo {
+          ...PageInfoFragment
+        }
+      }
+    }
+  }
+  ${event["fullEdge"]}
+  $pageInfo
+""");
+
+final connectionMockQuery = gql("""
+  query GetConnection(\$id: ID!, \$cursor: String) {
+    connection(id: \$id) {
       events(last: 20, before: \$cursor) {
         edges {
           ...FullEventEdgeFragment
