@@ -1,11 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/models/credential.dart';
-import 'package:frontend/services/connection_service.dart';
-import 'package:frontend/services/message_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final connectionServiceProvider = Provider((ref) => ConnectionService());
-final messageServiceProvider = Provider((ref) => MessageService());
 final credentialsFutureProvider = FutureProvider<List<Credential>>(
   (ref) async {
     return await Future.delayed(
