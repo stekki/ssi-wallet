@@ -1,6 +1,7 @@
 //import 'dart:developer';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:frontend/config/graphql_config.dart';
 import 'package:go_router/go_router.dart';
 
 import '../utils/constants.dart';
@@ -54,10 +55,11 @@ class _LandingScreenState extends State<LandingScreen>
             ),
             TextButton(
               child: const Text('Submit'),
-              onPressed: () {
+              onPressed: () async {
                 String token = tokenController.text;
                 // TODO: validate the token before proceeding, assume that token input is always correct
-                SecureStorageUtil().writeToken(token);
+                await SecureStorageUtil().writeToken(token);
+                await GraphQLConfig().createClient();
                 Navigator.of(context).pop(); // Close the dialog
                 context.go('/home');
               },

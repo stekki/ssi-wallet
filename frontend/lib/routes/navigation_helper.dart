@@ -9,7 +9,6 @@ import '../screens/landing_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/scan_screen.dart';
 import '../screens/splash_screen.dart';
-import '../services/event_notification.dart';
 import '../widgets/navigation_screen_outline.dart';
 
 class NavigationHelper {
@@ -32,7 +31,6 @@ class NavigationHelper {
   static final GlobalKey<NavigatorState> credentialTabNavigatorKey =
       GlobalKey<NavigatorState>();
 */
-  final subscription = EventNotification().subscription;
 
   BuildContext get context =>
       router.routerDelegate.navigatorKey.currentContext!;
@@ -59,7 +57,7 @@ class NavigationHelper {
                 path: '/home',
                 pageBuilder: (context, GoRouterState state) {
                   return getPage(
-                    child: const HomeScreen(),
+                    child: HomeScreen(),
                     state: state,
                   );
                 },

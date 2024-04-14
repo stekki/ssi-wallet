@@ -1,6 +1,6 @@
+import 'package:frontend/utils/secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-const token = String.fromEnvironment('TOKEN');
 const baseURL = String.fromEnvironment('BASE_URL');
 
 String initializeWsLink() {
@@ -16,9 +16,6 @@ String initializeWsLink() {
 final webSocketLink = initializeWsLink();
 
 class GraphQLConfig {
-  static var httpLink =
-      HttpLink(baseURL, defaultHeaders: {'Authorization': 'Bearer $token'});
-
   static final GraphQLConfig _instance = GraphQLConfig._();
 
   GraphQLConfig._();
@@ -26,21 +23,27 @@ class GraphQLConfig {
   factory GraphQLConfig() {
     return _instance;
   }
-
-  static final _wsLink = WebSocketLink("$webSocketLink?access_token=$token",
-      config: const SocketClientConfig(autoReconnect: true, initialPayload: {
-        'header': {'Authorization': 'Bearer $token'}
-      }));
-
-  static final Link _authLink = AuthLink(getToken: () {
-    return 'Bearer $token';
-  });
-  static final HttpLink _httpLink = HttpLink(baseURL);
-  final _link = Link.split((request) => request.isSubscription, _wsLink,
-      _authLink.concat(_httpLink));
-
-  GraphQLClient clientToQuery() => GraphQLClient(
-        cache: GraphQLCache(store: InMemoryStore()),
-        link: _link,
-      );
+  static GraphQLClient? client;
+  Future<void> createClient() async {
+    final String? token = await SecureStorageUtil().getToken();
+    if (token == null) {
+      throw Exception("The token registered in secure storage is null");
+    }
+    try {
+      final httpLink = HttpLink(baseURL);
+      final authLink = AuthLink(getToken: () {
+        return 'Bearer $token';
+      });
+      final wsLink = WebSocketLink("$webSocketLink?access_token=$token",
+          config: SocketClientConfig(autoReconnect: true, initialPayload: {
+            'header': {'Authorization': 'Bearer $token'}
+          }));
+      final link = Link.split((request) => request.isSubscription, wsLink,
+          authLink.concat(httpLink));
+      client = GraphQLClient(
+          link: link, cache: GraphQLCache(store: InMemoryStore()));
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }
