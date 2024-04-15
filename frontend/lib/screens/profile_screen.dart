@@ -113,160 +113,137 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profileCredentialFuture = ref.watch(profileCredentialProvider);
-    //final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 246, 246, 246),
-        ),
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.only(top: 20),
-              child: SizedBox(
-                width: 100,
-                height: 100,
-                child: Image.asset('assets/icons/profile.png'),
-              ),
+      body: SingleChildScrollView(
+        child: Column(children: [
+          // ------- QR Code section -------
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.35,
+            child: Stack(
+              children: [
+                Container(
+                  decoration: scaffoldBackground,
+                ),
+                Center(
+                  child: imageBytes != null
+                      ? Container(
+                          margin: const EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.transparent,
+                          ),
+                          clipBehavior: Clip.antiAlias,
+                          child: Image.memory(imageBytes!))
+                      : const CircularProgressIndicator(),
+                ),
+              ],
             ),
-            ListTile(
-              title: Center(
-                child: Text(
+          ),
+          Column(
+            children: [
+              // ---- Name section ----
+              ListTile(
+                title: Text(
                   username,
                   style: TextStyles.profileScreenText,
                 ),
               ),
-              /*
-              subtitle: const Center(
-                child: Text(
-                  "pisshead@gmail.com",
-                  style: TextStyle(
-                      fontFamily: 'Nunito',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 17.0,
-                      color: Colors.white),
+
+              // ---- Credential card section ----
+              ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxHeight: 200,
+                ),
+                child: profileCredentialFuture.when(
+                  error: (err, stack) =>
+                      const Text("Error loading credentials"),
+                  loading: () => const Text(""),
+                  data: (credential) => Container(
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 243, 243, 243),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(
+                        dividerColor: Colors.transparent,
+                      ),
+                      child: CredentialCard(
+                        credential: credential[0],
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              */
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    decoration: BoxDecoration(
-                      //color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(
-                        maxHeight: 200,
-                      ),
-                      child: profileCredentialFuture.when(
-                        error: (err, stack) =>
-                            const Text("Error loading credentials"),
-                        loading: () => const Text(""),
-                        data: (credential) => Container(
-                          margin: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              width: 2.0,
-                            ),
-                            gradient: const LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              stops: [0.001, 0.999],
-                              colors: [
-                                Color.fromARGB(255, 255, 255, 255),
-                                Color.fromARGB(255, 255, 255, 255)
-                              ],
+
+              // ----- Start of invitation link -----
+
+              Container(
+                width: width,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                padding: const EdgeInsets.fromLTRB(10, 30, 10, 0),
+                child: isLoading
+                    ? const Center(
+                        child: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            width: width * 0.9,
+                            child: TextField(
+                              readOnly: true,
+                              controller: TextEditingController(
+                                  text: stringForConnection),
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                labelText: 'Invitation link',
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.copy),
+                                  onPressed: () {
+                                    Clipboard.setData(ClipboardData(
+                                        text: stringForConnection ??
+                                            'Could not find the invitation link'));
+                                    helpers.showInfoSnackBar(
+                                        context, 'Copied to clipboard');
+                                  },
+                                ),
+                              ),
                             ),
                           ),
-                          child: Theme(
-                            data: Theme.of(context).copyWith(
-                              dividerColor: Colors.transparent,
-                            ),
-                            child: CredentialCard(
-                              credential: credential[0],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 15),
-                      width: width * 0.7,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        /*
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        ),
-                        */
-                      ),
-                      padding: const EdgeInsets.fromLTRB(10, 30, 10, 20),
-                      child: isLoading
-                          ? const Center(
+                          Container(
+                            padding: const EdgeInsets.only(top: 20),
                             child: SizedBox(
-                              width: 50,
+                              width: width * 0.6,
                               height: 50,
-                              child: CircularProgressIndicator(),
+                              child: TextButton(
+                                onPressed: decodeImage,
+                                style: TextButton.styleFrom(
+                                    backgroundColor: DesignColors.buttonColor),
+                                child: const Text('Regenerate',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
                             ),
-                          )
-                          : Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(
-                                  width: 300,
-                                  child: TextField(
-                                    readOnly: true,
-                                    controller: TextEditingController(
-                                        text: stringForConnection),
-                                    decoration: InputDecoration(
-                                      border: const OutlineInputBorder(),
-                                      labelText: 'Invitation link',
-                                      suffixIcon: IconButton(
-                                        icon: const Icon(Icons.copy),
-                                        onPressed: () {
-                                          Clipboard.setData(ClipboardData(
-                                              text: stringForConnection ??
-                                                  'Could not find the invitation link'));
-                                          helpers.showInfoSnackBar(
-                                              context, 'Copied to clipboard');
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                if (imageBytes != null)
-                                  Expanded(child: Image.memory(imageBytes!)),
-                                const SizedBox(height: 5),
-                                TextButton(
-                                  onPressed: decodeImage,
-                                  style: TextButton.styleFrom(
-                                      backgroundColor:
-                                          DesignColors.buttonColor),
-                                  child: const Text('Regenerate',
-                                      style: TextStyle(color: Colors.white)),
-                                ),
-                              ],
-                            ),
-                    ),
-                  ),
-                ],
+                          ),
+                        ],
+                      ),
               ),
-            ),
-          ],
-        ),
+              // ----- End of Regenerate button -----
+            ],
+          )
+        ]),
       ),
     );
   }
