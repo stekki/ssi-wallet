@@ -59,5 +59,5 @@ esac
 
 cd ../frontend/
 echo "$BASE_URL"
-flutter run --dart-define=TOKEN="$LOGIN_OUTPUT" --dart-define=BASE_URL="$BASE_URL"
+flutter run --dart-define=BASE_URL="$BASE_URL"
 cd ../scripts/
