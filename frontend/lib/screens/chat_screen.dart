@@ -35,6 +35,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    eventStream = JobService().jobStreamProvider(widget.id);
   }
 
   void _scrollToBottom() async {
@@ -57,7 +58,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<Map<String, dynamic>>> streamEvents =
-        ref.watch(JobService().jobStreamProvider(widget.id));
+        ref.watch(eventStream);
 
     return Scaffold(
       appBar: AppBar(
