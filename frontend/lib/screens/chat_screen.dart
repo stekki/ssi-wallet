@@ -31,10 +31,12 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textEditingController = TextEditingController();
-
+  late StreamProvider<List<Map<String, dynamic>>> eventStream;
+  
   @override
   void initState() {
     super.initState();
+    eventStream = JobService().jobStreamProvider(widget.id);
   }
 
   void _scrollToBottom() async {
@@ -57,7 +59,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<Map<String, dynamic>>> streamEvents =
-        ref.watch(JobService().jobStreamProvider(widget.id));
+        ref.watch(eventStream);
 
     return Scaffold(
       appBar: AppBar(

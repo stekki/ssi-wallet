@@ -93,38 +93,38 @@ class JobService {
     }
   }
 
-  final jobStreamProvider =
-      StreamProvider.family<List<Map<String, dynamic>>, String>(
-          (ref, connectionID) {
-    final GraphQLClient client = GraphQLConfig.client!;
-    final stream = client
-        .watchQuery(
-          WatchQueryOptions(
-            fetchPolicy: FetchPolicy.cacheAndNetwork,
-            fetchResults: true,
-            document: connectionMockQuery,
-            variables: {'id': connectionID},
-          ),
-        )
-        .stream
-        .map((job) {
-      try {
-        fullResult = job;
-        final List<dynamic> res = job.data?["connection"]["events"]["edges"];
-        gqlJobs = res.map((e) {
-          final Map<String, dynamic> node = e?["node"];
-          return node;
-        }).toList();
-        pageInfo = job.data?["connection"]["events"]["pageInfo"];
-        return gqlJobs;
-      } catch (e) {
-        fullResult = null;
-        gqlJobs = [];
-        pageInfo = {};
-        return gqlJobs;
-        //throw Exception("No data returned");
-      }
-    });
-    return stream;
-  });
+  StreamProvider<List<Map<String, dynamic>>> jobStreamProvider(connectionID) =>
+      StreamProvider<List<Map<String, dynamic>>>((ref) {
+        final GraphQLClient client = GraphQLConfig.client!;
+        final stream = client
+            .watchQuery(
+              WatchQueryOptions(
+                fetchPolicy: FetchPolicy.cacheAndNetwork,
+                fetchResults: true,
+                document: connectionMockQuery,
+                variables: {'id': connectionID},
+              ),
+            )
+            .stream
+            .map((job) {
+          try {
+            fullResult = job;
+            final List<dynamic> res =
+                job.data?["connection"]["events"]["edges"];
+            gqlJobs = res.map((e) {
+              final Map<String, dynamic> node = e?["node"];
+              return node;
+            }).toList();
+            pageInfo = job.data?["connection"]["events"]["pageInfo"];
+            return gqlJobs;
+          } catch (e) {
+            fullResult = null;
+            gqlJobs = [];
+            pageInfo = {};
+            return gqlJobs;
+            //throw Exception("No data returned");
+          }
+        });
+        return stream;
+      });
 }
