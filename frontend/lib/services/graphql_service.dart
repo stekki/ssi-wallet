@@ -9,9 +9,6 @@ class GraphQLService {
     return _instance;
   }
 
-  static GraphQLConfig graphQLConfig = GraphQLConfig();
-  GraphQLClient client = graphQLConfig.clientToQuery();
-
   static get nodeId => null;
 
   final getIdQuery = gql("""
@@ -44,6 +41,7 @@ class GraphQLService {
 
   Future<Map<String, dynamic>> performMutation(
       dynamic mutation, Map<String, dynamic> variables) async {
+    final GraphQLClient client = GraphQLConfig.client!;
     try {
       QueryResult result = await client.mutate(
         MutationOptions(
@@ -72,6 +70,7 @@ class GraphQLService {
       dynamic query, Map<String, dynamic> variables) async {
     // This function only fetch from the server
     // not from the cache
+    final GraphQLClient client = GraphQLConfig.client!;
     try {
       QueryResult result = await client.query(QueryOptions(
           fetchPolicy: FetchPolicy.networkOnly,
@@ -145,6 +144,7 @@ class GraphQLService {
         errorPolicy: ErrorPolicy.all,
         fetchPolicy: FetchPolicy.cacheAndNetwork);
     try {
+      final GraphQLClient client = GraphQLConfig.client!;
       QueryResult result = await client.fetchMore(opts,
           originalOptions: original, previousResult: prevResult);
       Map<String, dynamic>? res = result.data;

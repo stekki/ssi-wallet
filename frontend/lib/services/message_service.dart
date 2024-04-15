@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/config/graphql_config.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../models/models.dart';
@@ -64,8 +65,8 @@ class MessageService {
 
   final messageStreamProvider =
       StreamProvider.family<List<Message>, String>((ref, connectionID) {
-    final stream = GraphQLService()
-        .client
+    final GraphQLClient client = GraphQLConfig.client!;
+    final stream = client
         .watchQuery(
           WatchQueryOptions(
             fetchResults: true,

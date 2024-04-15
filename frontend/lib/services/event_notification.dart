@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:frontend/config/graphql_config.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'fragments.dart';
-import 'graphql_service.dart';
 import 'queries.dart';
 
 class EventNotification {
@@ -14,7 +15,6 @@ class EventNotification {
   factory EventNotification() {
     return _instance;
   }
-  static GraphQLClient client = GraphQLService().client;
   static final subscriptionDocument = gql("""
   subscription OnEventAdded {
     eventAdded {
@@ -106,7 +106,7 @@ class EventNotification {
           "__typename": "Query",
           itemName: newState?["state"][itemName]
         };
-        client.writeQuery(queryRequest, data: wsState);
+        GraphQLConfig.client!.writeQuery(queryRequest, data: wsState);
       } else {
         final wState = {
           "__typename": "Query",
@@ -115,7 +115,7 @@ class EventNotification {
             itemName: newState?["state"][itemName]
           }
         };
-        client.writeQuery(queryRequest, data: wState);
+        GraphQLConfig.client!.writeQuery(queryRequest, data: wState);
       }
     }
   }
@@ -130,7 +130,7 @@ class EventNotification {
     final queryRequest = Request(
         operation: Operation(document: query["query"]),
         variables: query["variables"]);
-    dynamic state = client.readQuery(queryRequest);
+    dynamic state = GraphQLConfig.client!.readQuery(queryRequest);
     if (state == null) {
       updateState({}, itemName, newItem, last, parentName, query);
       return;
@@ -199,7 +199,7 @@ class EventNotification {
       log('Subscription: No data');
       return;
     }
-    final prevEventState = client
+    final prevEventState = GraphQLConfig.client!
             .readQuery(Request(operation: Operation(document: eventsQuery))) ??
         {};
     final newState =
@@ -228,9 +228,10 @@ class EventNotification {
     }
   }
 
-  final subscription = client
-      .subscribe(SubscriptionOptions(document: subscriptionDocument))
-      .listen((event) {
-    updateSubScription(event.data);
-  });
+  StreamSubscription<QueryResult<Object?>> subscription() =>
+      GraphQLConfig.client!
+          .subscribe(SubscriptionOptions(document: subscriptionDocument))
+          .listen((event) {
+        updateSubScription(event.data);
+      });
 }

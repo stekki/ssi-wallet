@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/config/graphql_config.dart';
 import 'package:frontend/services/graphql_service.dart';
 import 'package:frontend/services/queries.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -95,8 +96,8 @@ class JobService {
   final jobStreamProvider =
       StreamProvider.family<List<Map<String, dynamic>>, String>(
           (ref, connectionID) {
-    final stream = GraphQLService()
-        .client
+    final GraphQLClient client = GraphQLConfig.client!;
+    final stream = client
         .watchQuery(
           WatchQueryOptions(
             fetchPolicy: FetchPolicy.cacheAndNetwork,

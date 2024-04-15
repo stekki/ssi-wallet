@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/config/graphql_config.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../models/models.dart';
@@ -63,29 +64,29 @@ class ConnectionService {
     return gqlConnections;
   }
 
-  final connectionStreamProvider = StreamProvider<List<Connection>>((ref) {
-    final stream = GraphQLService()
-        .client
-        .watchQuery(WatchQueryOptions(
-          fetchResults: true,
-          document: connectionsQuery,
-        ))
-        .stream
-        .map((event) {
-      try {
-        final List<dynamic> res = event.data?["connections"]["edges"];
-        gqlConnections = res.map((e) {
-          final node = e?["node"];
-          return Connection.fromJson(node);
-        }).toList();
-        pageInfo = event.data?["connections"]["pageInfo"];
-        return gqlConnections;
-      } catch (e) {
-        gqlConnections = [];
-        pageInfo = {};
-        return gqlConnections;
-      }
-    });
-    return stream;
-  });
+  StreamProvider<List<Connection>> connectionStreamProvider() =>
+      StreamProvider<List<Connection>>((ref) {
+        final stream = GraphQLConfig.client!
+            .watchQuery(WatchQueryOptions(
+              fetchResults: true,
+              document: connectionsQuery,
+            ))
+            .stream
+            .map((event) {
+          try {
+            final List<dynamic> res = event.data?["connections"]["edges"];
+            gqlConnections = res.map((e) {
+              final node = e?["node"];
+              return Connection.fromJson(node);
+            }).toList();
+            pageInfo = event.data?["connections"]["pageInfo"];
+            return gqlConnections;
+          } catch (e) {
+            gqlConnections = [];
+            pageInfo = {};
+            return gqlConnections;
+          }
+        });
+        return stream;
+      });
 }

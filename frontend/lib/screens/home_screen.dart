@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/services/event_notification.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 import '../services/connection_service.dart';
 import '../screens/loading_screen.dart';
@@ -10,6 +14,7 @@ import '../widgets/connection_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
+  // final subscription = EventNotification().subscription;
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
@@ -21,10 +26,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   final TextEditingController _connectionController = TextEditingController();
   late TabController _tabController;
   String filterValue = "";
+  late StreamSubscription<QueryResult<Object?>> subscription;
+  late StreamProvider<List<Connection>> connectionStreamProvider;
 
   @override
   void initState() {
     super.initState();
+    subscription = EventNotification().subscription();
+    connectionStreamProvider = ConnectionService().connectionStreamProvider();
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -46,7 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
-        ref.watch(ConnectionService().connectionStreamProvider);
+        ref.watch(connectionStreamProvider);
     final List<String> chatStateList = ref.watch(chatStatusProvider);
 
     return Scaffold(
