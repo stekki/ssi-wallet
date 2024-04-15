@@ -31,7 +31,8 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textEditingController = TextEditingController();
-
+  late StreamProvider<List<Map<String, dynamic>>> eventStream;
+  
   @override
   void initState() {
     super.initState();
