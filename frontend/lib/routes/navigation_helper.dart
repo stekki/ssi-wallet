@@ -57,7 +57,7 @@ class NavigationHelper {
                 path: '/home',
                 pageBuilder: (context, GoRouterState state) {
                   return getPage(
-                    child: HomeScreen(),
+                    child: const HomeScreen(),
                     state: state,
                   );
                 },

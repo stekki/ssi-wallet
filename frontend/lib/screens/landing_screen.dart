@@ -1,4 +1,6 @@
 //import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:frontend/config/graphql_config.dart';
