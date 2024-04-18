@@ -22,10 +22,12 @@ class ConnectionCard extends ConsumerWidget {
       color: Colors.white,
       //margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: InkWell(
-        onTap: () => context.pushNamed("chat", pathParameters: {
-          "id": connection.id,
-          "isInvited": connection.invited ? '1' : '0'
-        }),
+        onTap: () {
+          context.pushNamed("chat", pathParameters: {
+            "id": connection.id,
+            "isInvited": connection.invited ? '1' : '0'
+          });
+        },
         child: Ink(
           decoration: const BoxDecoration(
             color: DesignColors.extraColorWhite,

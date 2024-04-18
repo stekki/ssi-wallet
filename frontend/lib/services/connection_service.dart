@@ -24,27 +24,12 @@ class ConnectionService {
 
   Future<void> getConnections() async {
     try {
-      await GraphQLService().getQueryResult(
+      await GraphQLService.getQueryResult(
         connectionsQuery,
         {},
       );
     } catch (e) {
       throw Exception(e);
-    }
-  }
-
-  Future<void> getMoreMessages(String nodeID) async {
-    final cursor = pageInfo["startCursor"];
-    try {
-      // fullResult should be not null
-      if (fullResult == null) {
-        getConnections();
-        return;
-      }
-      await GraphQLService().fetchMore(
-          connectionsQuery, {}, fullResult!, true, cursor, "connections", "");
-    } catch (error) {
-      throw Exception(error);
     }
   }
 
@@ -54,8 +39,8 @@ class ConnectionService {
         'invitation': invitation,
       },
     };
-    final result = await GraphQLService()
-        .performMutation(acceptConnectionMutation, variables);
+    final result = await GraphQLService.performMutation(
+        acceptConnectionMutation, variables);
     return result['connect']['ok'];
   }
 

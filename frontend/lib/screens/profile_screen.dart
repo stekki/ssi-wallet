@@ -47,8 +47,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
   }
 
   void makeQuery() async {
-    result =
-        await GraphQLService().getQueryResult(GraphQLService().getIdQuery, {});
+    result = await GraphQLService.getQueryResult(GraphQLService.getIdQuery, {});
     //print(result);
     setState(() {
       num++;
@@ -56,8 +55,8 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
   }
 
   void makeInvitation() async {
-    result = await GraphQLService()
-        .getQueryResult(GraphQLService().invitationQuery, {});
+    result =
+        await GraphQLService.getQueryResult(GraphQLService.invitationQuery, {});
     //print(result);
     setState(() {
       num++;
@@ -76,8 +75,8 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
     // Make a check if agent has done login
     String? token = await SecureStorageUtil().getToken();
     if (token != null) {
-      result = await GraphQLService()
-          .getQueryResult(GraphQLService().invitationQuery, {});
+      result = await GraphQLService.getQueryResult(
+          GraphQLService.invitationQuery, {});
       Map<String, dynamic>? invite = result?['invite'];
       if (invite != null &&
           invite.containsKey('imageB64') &&

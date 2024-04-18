@@ -1,7 +1,7 @@
 import 'package:frontend/utils/secure_storage.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-const baseURL = String.fromEnvironment('BASE_URL');
+const baseURL = "http://localhost:8085/query";
 
 String initializeWsLink() {
   if (baseURL.startsWith('https://')) {

@@ -31,12 +31,15 @@ class ChatScreen extends ConsumerStatefulWidget {
 class _ChatScreenState extends ConsumerState<ChatScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _textEditingController = TextEditingController();
-  late StreamProvider<List<Map<String, dynamic>>> eventStream;
-  
+  late JobService jobService;
+  late StreamProvider<List<Map<String, dynamic>>> jobStream;
+
   @override
   void initState() {
     super.initState();
-    eventStream = JobService().jobStreamProvider(widget.id);
+    jobService = JobService(widget.id);
+    jobStream = jobService.jobStreamProvider();
+    jobService.initJobStream();
   }
 
   void _scrollToBottom() async {
@@ -59,7 +62,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final AsyncValue<List<Map<String, dynamic>>> streamEvents =
-        ref.watch(eventStream);
+        ref.watch(jobStream);
 
     return Scaffold(
       appBar: AppBar(
@@ -87,7 +90,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         ? const Center(child: Text("No messages yet"))
                         : RefreshIndicator(
                             onRefresh: () async {
-                              await JobService().getMoreJobs(widget.id);
+                              await jobService.getMoreJobs();
                             },
                             child: ScrollConfiguration(
                               behavior: MyCustomScrollBehavior(),
@@ -96,10 +99,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 controller: _scrollController,
                                 itemCount: events.length,
                                 itemBuilder: (context, index) {
-                                  final event = events[index];
-                                  final job = event["job"]["node"];
-                                  // final job = events[index];
-                                  // final status = job["status"];
+                                  // final event = events[index];
+                                  // final job = event["job"]["node"];
+                                  final job = events[index];
                                   if (job["protocol"] == "BASIC_MESSAGE") {
                                     final message =
                                         job["output"]["message"]["node"];
@@ -115,7 +117,47 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                             : 'other',
                                         timestamp: createdAt);
                                   } else if (job["protocol"] == "PROOF") {
-                                    return Container();
+                                    final proofRequest =
+                                        job["output"]["proof"]["node"];
+                                    final createdAt =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            int.parse(
+                                                proofRequest['createdMs']));
+                                    /*
+                                    final verifiedAt =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            int.parse(proofRequest['verifiedMs']));
+                                    final approvedAt =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            int.parse(proofRequest['approvedMs']));
+                                      */
+                                    if (proofRequest['role'] == 'VERIFIER') {
+                                      return ProofRequestWidget(
+                                        key: ValueKey(job['id']),
+                                        sentBy: proofRequest["role"],
+                                        timestamp: createdAt,
+                                      );
+                                      //verifiedAt: verifiedAt,
+                                      //approvedAt: approvedAt,);
+                                    } else if ((proofRequest['role'] ==
+                                            'PROVER') &&
+                                        (job['status'] == 'COMPLETE')) {
+                                      return ProofRequestCompleteWidget(
+                                        key: ValueKey(job['id']),
+                                        sentBy: proofRequest["role"],
+                                        timestamp: createdAt,
+                                      );
+                                    } else if (proofRequest['role'] ==
+                                        'PROVER') {
+                                      return ProofRequestWidgetBuyer(
+                                          key: ValueKey(job['id']),
+                                          sentBy: proofRequest["role"],
+                                          timestamp: createdAt,
+                                          jobID: job["id"],
+                                          status: job["status"]);
+                                    } else {
+                                      return Container();
+                                    }
                                   } else {
                                     return Container();
                                   }
@@ -148,8 +190,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   .isNotEmpty) {
                                 final messageText =
                                     _textEditingController.text.trim();
-                                final bool messageSent = await JobService()
-                                    .sendMessage(widget.id, messageText);
+                                final bool messageSent =
+                                    await JobService.sendMessage(
+                                        widget.id, messageText);
                                 if (messageSent) {
                                   _textEditingController.clear();
                                 } else {
