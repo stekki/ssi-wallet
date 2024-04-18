@@ -155,6 +155,8 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           timestamp: createdAt,
                                           jobID: job["id"],
                                           status: job["status"]);
+                                    } else {
+                                      return Container();
                                     }
                                   } else {
                                     return Container();
