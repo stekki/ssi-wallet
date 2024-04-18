@@ -29,8 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Map? result = {};
 
   void makeQuery() async {
-    result =
-        await GraphQLService().getQueryResult(GraphQLService().getIdQuery, {});
+    result = await GraphQLService.getQueryResult(GraphQLService.getIdQuery, {});
     //print(result);
     setState(() {
       num++;
@@ -38,8 +37,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void makeInvitation() async {
-    result = await GraphQLService()
-        .getQueryResult(GraphQLService().invitationQuery, {});
+    result =
+        await GraphQLService.getQueryResult(GraphQLService.invitationQuery, {});
     //print(result);
     setState(() {
       num++;

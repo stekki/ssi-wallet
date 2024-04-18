@@ -3,15 +3,9 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import '../config/graphql_config.dart';
 
 class GraphQLService {
-  static final GraphQLService _instance = GraphQLService._();
-  GraphQLService._();
-  factory GraphQLService() {
-    return _instance;
-  }
-
   static get nodeId => null;
 
-  final getIdQuery = gql("""
+  static final getIdQuery = gql("""
   query {
     user {
       id,
@@ -20,7 +14,7 @@ class GraphQLService {
 
   }""");
 
-  final invitationQuery = gql("""
+  static final invitationQuery = gql("""
   mutation {
       invite {
           id,
@@ -31,7 +25,7 @@ class GraphQLService {
       }
   }""");
 
-  final sendRequestProofMutation = gql("""
+  static final sendRequestProofMutation = gql("""
   mutation SendProofRequest(\$input: ProofRequestInput!) {
     sendProofRequest(input: \$input) {
       ok
@@ -39,7 +33,7 @@ class GraphQLService {
   }
 """);
 
-  Future<Map<String, dynamic>> performMutation(
+  static Future<Map<String, dynamic>> performMutation(
       dynamic mutation, Map<String, dynamic> variables) async {
     final GraphQLClient client = GraphQLConfig.client!;
     try {
@@ -66,7 +60,7 @@ class GraphQLService {
     }
   }
 
-  Future<Map<String, dynamic>> getQueryResult(
+  static Future<Map<String, dynamic>> getQueryResult(
       dynamic query, Map<String, dynamic> variables) async {
     // This function only fetch from the server
     // not from the cache
@@ -88,74 +82,70 @@ class GraphQLService {
     }
   }
 
-  Future<Map<String, dynamic>> fetchMore(
+  static Map<String, dynamic>? relayMerge(
       dynamic query,
       Map<String, dynamic> variables,
-      QueryResult prevResult,
+      bool before,
+      Map<String, dynamic>? prevResult,
+      Map<String, dynamic>? fetchMoreResult,
+      String nodeName,
+      String parentName) {
+    final Map<String, dynamic>? prevResult = GraphQLConfig.client!.readQuery(
+        Request(operation: Operation(document: query), variables: variables));
+    Map<String, dynamic>? fetchMoreData = fetchMoreResult;
+    if (fetchMoreData == null || fetchMoreData.isEmpty) {
+      return prevResult;
+    }
+    final tempPrev = (parentName == '') ? prevResult : prevResult![parentName];
+    final tempMore =
+        (parentName == '') ? fetchMoreData : fetchMoreData[parentName];
+    final List<dynamic> meregedEdges = before
+        ? [
+            ...tempMore[nodeName]["edges"] as List<dynamic>,
+            ...tempPrev[nodeName]["edges"] as List<dynamic>,
+          ]
+        : [
+            ...tempPrev[nodeName]["edges"] as List<dynamic>,
+            ...tempMore[nodeName]["edges"] as List<dynamic>,
+          ];
+    (parentName == '')
+        ? fetchMoreData[nodeName]["edges"] = meregedEdges
+        : fetchMoreData[parentName][nodeName]["edges"] = meregedEdges;
+    if (before) {
+      (parentName == '')
+          ? fetchMoreData[nodeName]["pageInfo"]["hasNextPage"] =
+              prevResult![nodeName]["pageInfo"]["hasNextPage"]
+          : fetchMoreData[parentName][nodeName]["pageInfo"]["hasNextPage"] =
+              prevResult![parentName][nodeName]["pageInfo"]["hasNextPage"];
+    } else {
+      (parentName == '')
+          ? fetchMoreData[nodeName]["pageInfo"]["hasPreviousPage"] =
+              prevResult![nodeName]["pageInfo"]["hasPreviousPage"]
+          : fetchMoreData[parentName][nodeName]["pageInfo"]["hasPreviousPage"] =
+              prevResult![parentName][nodeName]["pageInfo"]["hasPreviousPage"];
+    }
+    return fetchMoreData;
+  }
+
+  static Future<Map<String, dynamic>?> fetchMore(
+      dynamic query,
+      Map<String, dynamic> variables,
       bool before,
       String cursor,
       String nodeName,
       String parentName) async {
-    FetchMoreOptions opts = FetchMoreOptions(
-        variables: {"cursor": cursor},
-        updateQuery: (previousResult, fetchMoreResult) {
-          if (fetchMoreResult == null || fetchMoreResult.isEmpty) {
-            return previousResult;
-          }
-          final tempPrev =
-              (parentName == '') ? previousResult : previousResult![parentName];
-          final tempMore = (parentName == '')
-              ? fetchMoreResult
-              : fetchMoreResult[parentName];
-          final List<dynamic> meregedEdges = before
-              ? [
-                  ...tempMore[nodeName]["edges"] as List<dynamic>,
-                  ...tempPrev[nodeName]["edges"] as List<dynamic>,
-                ]
-              : [
-                  ...tempPrev[nodeName]["edges"] as List<dynamic>,
-                  ...tempMore[nodeName]["edges"] as List<dynamic>,
-                ];
-          (parentName == '')
-              ? fetchMoreResult[nodeName]["edges"] = meregedEdges
-              : fetchMoreResult[parentName][nodeName]["edges"] = meregedEdges;
-          if (before) {
-            (parentName == '')
-                ? fetchMoreResult[nodeName]["pageInfo"]["hasNextPage"] =
-                    previousResult![nodeName]["pageInfo"]["hasNextPage"]
-                : fetchMoreResult[parentName][nodeName]["pageInfo"]
-                        ["hasNextPage"] =
-                    previousResult![parentName][nodeName]["pageInfo"]
-                        ["hasNextPage"];
-          } else {
-            (parentName == '')
-                ? fetchMoreResult[nodeName]["pageInfo"]["hasPreviousPage"] =
-                    previousResult![nodeName]["pageInfo"]["hasPreviousPage"]
-                : fetchMoreResult[parentName][nodeName]["pageInfo"]
-                        ["hasPreviousPage"] =
-                    previousResult![parentName][nodeName]["pageInfo"]
-                        ["hasPreviousPage"];
-          }
-          return fetchMoreResult;
-        });
-    QueryOptions original = QueryOptions(
-        document: query,
-        variables: variables,
-        errorPolicy: ErrorPolicy.all,
-        fetchPolicy: FetchPolicy.cacheAndNetwork);
     try {
-      final GraphQLClient client = GraphQLConfig.client!;
-      QueryResult result = await client.fetchMore(opts,
-          originalOptions: original, previousResult: prevResult);
-      Map<String, dynamic>? res = result.data;
-      if (res == null) {
-        throw Exception("No data returned");
-      } else {
-        final queryRequest = Request(
-            operation: Operation(document: query), variables: variables);
-        client.writeQuery(queryRequest, data: res);
-        return res;
-      }
+      final fetchMoreVariables = {...variables, "cursor": cursor};
+      QueryOptions queryOption = QueryOptions(
+          document: query,
+          variables: fetchMoreVariables,
+          errorPolicy: ErrorPolicy.all,
+          fetchPolicy: FetchPolicy.networkOnly);
+      QueryResult fetchMoreResult = await GraphQLConfig.client!.query(
+        queryOption,
+      );
+      Map<String, dynamic>? fetchMoreData = fetchMoreResult.data;
+      return fetchMoreData;
     } catch (error) {
       throw Exception(error);
     }

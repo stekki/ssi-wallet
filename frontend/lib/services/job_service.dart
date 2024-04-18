@@ -5,43 +5,12 @@ import 'package:frontend/services/queries.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class JobService {
-  static final JobService _instance = JobService._();
-  JobService._();
-  factory JobService() {
-    return _instance;
-  }
-  static QueryResult? fullResult;
-  static List<Map<String, dynamic>> gqlJobs = [];
-  static Map<String, dynamic> pageInfo = {};
-
-  // Query
-
-  Future<void> getJobs(String connectionID) async {
-    try {
-      await GraphQLService().getQueryResult(
-        connectionMockQuery,
-        {'id': connectionID},
-      );
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<void> getMoreJobs(String nodeID) async {
-    final cursor = pageInfo["startCursor"];
-    try {
-      // fullResult should be not null
-      if (fullResult == null) {
-        getJobs(nodeID);
-        return;
-      }
-      await GraphQLService().fetchMore(connectionMockQuery, {'id': nodeID},
-          fullResult!, true, cursor, "events", "connection");
-    } catch (error) {
-      throw Exception(error);
-    }
-  }
-
+  Map<String, dynamic>? fullResult;
+  List<Map<String, dynamic>> gqlJobs = [];
+  Map<String, dynamic> pageInfo = {};
+  String connectionID;
+  // Constructor
+  JobService(this.connectionID);
   // Mutations:
   static final sendMessageMutation = gql("""
     mutation SendMessage(\$input: MessageInput!) {
@@ -58,7 +27,8 @@ class JobService {
   }
 """);
 
-  Future<bool> sendMessage(String connectionId, String messageText) async {
+  static Future<bool> sendMessage(
+      String connectionId, String messageText) async {
     final variables = {
       'input': {
         'connectionId': connectionId,
@@ -66,11 +36,11 @@ class JobService {
       },
     };
     final result =
-        await GraphQLService().performMutation(sendMessageMutation, variables);
+        await GraphQLService.performMutation(sendMessageMutation, variables);
     return result['sendMessage']['ok'];
   }
 
-  Future<bool> sendProofRequest(String connectionId) async {
+  static Future<bool> sendProofRequest(String connectionId) async {
     final List<Map<String, dynamic>> attributes = [
       {
         'name': 'harri',
@@ -84,8 +54,8 @@ class JobService {
       },
     };
 
-    final result = await GraphQLService()
-        .performMutation(sendRequestProofMutation, variables);
+    final result = await GraphQLService.performMutation(
+        sendRequestProofMutation, variables);
     if (result['sendProofRequest']['ok']) {
       return true;
     } else {
@@ -93,32 +63,107 @@ class JobService {
     }
   }
 
-  StreamProvider<List<Map<String, dynamic>>> jobStreamProvider(connectionID) =>
+  // Object function of job service
+  static Map<String, dynamic> updateJobFromEvent(fullEvents) {
+    final List<dynamic>? eventEdges =
+        fullEvents["connection"]["events"]["edges"];
+    final List<dynamic> jobEdges =
+        eventEdges!.map((e) => e["node"]["job"]).toList();
+    final pageInfo = fullEvents["connection"]["events"]["pageInfo"];
+    final Map<String, dynamic> fullJobs = {
+      "__typename": "Query",
+      "connection": {
+        "__typename": "Pairwise",
+        "jobs": {
+          "__typename": "JobConnection",
+          "edges": jobEdges,
+          "pageInfo": pageInfo
+        }
+      }
+    };
+    return fullJobs;
+  }
+
+  // Direct connectionJobQuery is not supported by the backend,
+  // get the data from eventQuery instead and init the
+  // job query data.
+  Future<void> initJobStream() async {
+    try {
+      final Map<String, dynamic> fullEvents =
+          await GraphQLService.getQueryResult(
+        connectionMockQuery,
+        {'id': connectionID},
+      );
+      Map<String, dynamic> fullJobs = updateJobFromEvent(fullEvents);
+      final variables = {"id": connectionID};
+      final queryRequest = Request(
+          operation: Operation(document: connectionJobsQuery),
+          variables: variables);
+      GraphQLConfig.client!.writeQuery(queryRequest, data: fullJobs);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  Future<void> getMoreJobs() async {
+    try {
+      // fullResult should be not null
+      if (fullResult == null) {
+        return;
+      }
+      // Get more event data
+      final cursor = pageInfo["startCursor"];
+      Map<String, dynamic>? fetchMoreResult = await GraphQLService.fetchMore(
+          connectionMockQuery,
+          {'id': connectionID},
+          true,
+          cursor,
+          "events",
+          "connection");
+      // Map event data to job data
+      Map<String, dynamic> moreJobResult = updateJobFromEvent(fetchMoreResult);
+      Map<String, dynamic>? mergeJobResult = GraphQLService.relayMerge(
+          connectionJobsQuery,
+          {'id': connectionID},
+          true,
+          fullResult,
+          moreJobResult,
+          "jobs",
+          "connection");
+      final queryRequest = Request(
+          operation: Operation(document: connectionJobsQuery),
+          variables: {'id': connectionID});
+      GraphQLConfig.client!.writeQuery(queryRequest, data: mergeJobResult!);
+    } catch (error) {
+      throw Exception(error);
+    }
+  }
+
+  StreamProvider<List<Map<String, dynamic>>> jobStreamProvider() =>
       StreamProvider<List<Map<String, dynamic>>>((ref) {
         final GraphQLClient client = GraphQLConfig.client!;
         final stream = client
             .watchQuery(
               WatchQueryOptions(
-                fetchPolicy: FetchPolicy.cacheAndNetwork,
+                fetchPolicy: FetchPolicy.cacheOnly,
                 fetchResults: true,
-                document: connectionMockQuery,
+                document: connectionJobsQuery,
                 variables: {'id': connectionID},
               ),
             )
             .stream
             .map((job) {
           try {
-            fullResult = job;
-            final List<dynamic> res =
-                job.data?["connection"]["events"]["edges"];
-            gqlJobs = res.map((e) {
+            fullResult = job.data;
+            final List<dynamic> res = job.data?["connection"]["jobs"]["edges"];
+            gqlJobs = res.where((element) => element != null).map((e) {
               final Map<String, dynamic> node = e?["node"];
               return node;
             }).toList();
-            pageInfo = job.data?["connection"]["events"]["pageInfo"];
+            pageInfo = job.data?["connection"]["jobs"]["pageInfo"];
             return gqlJobs;
           } catch (e) {
-            fullResult = null;
+            fullResult = {};
             gqlJobs = [];
             pageInfo = {};
             return gqlJobs;

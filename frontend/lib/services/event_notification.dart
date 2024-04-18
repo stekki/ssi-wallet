@@ -59,8 +59,10 @@ class EventNotification {
               };
     final items = state[itemName];
     if (newItem.isEmpty ||
-        items["edges"]
-            .any((element) => element["node"]["id"] == newItem["node"]["id"])) {
+        items["edges"].any((element) {
+          return element != null &&
+              element["node"]["id"] == newItem["node"]["id"];
+        })) {
       return {"state": state, "updated": false};
     }
     if (last) {
