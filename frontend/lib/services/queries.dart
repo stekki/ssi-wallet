@@ -195,7 +195,7 @@ final connectionQuery = gql("""
 final connectionMockQuery = gql("""
   query GetConnection(\$id: ID!, \$cursor: String) {
     connection(id: \$id) {
-      events(last: 10, before: \$cursor) {
+      events(last: 20, before: \$cursor) {
         edges {
           ...FullEventEdgeFragment
         }
