@@ -5,9 +5,10 @@ import 'package:frontend/services/queries.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class JobService {
-  Map<String, dynamic>? fullResult;
+  Map<String, dynamic>? fullJobResult;
   List<Map<String, dynamic>> gqlJobs = [];
-  Map<String, dynamic> pageInfo = {};
+  // PageInfo of events
+  Map<String, dynamic> eventPageInfo = {};
   String connectionID;
   // Constructor
   JobService(this.connectionID);
@@ -43,8 +44,8 @@ class JobService {
   static Future<bool> sendProofRequest(String connectionId) async {
     final List<Map<String, dynamic>> attributes = [
       {
-        'name': 'harri',
-        'credDefId': '1234',
+        'name': 'name',
+        'credDefId': 'EuxiHbKyk7uHWQa8LKrrQh:3:CL:14:SuomenValtio',
       },
     ];
     final Map<String, dynamic> variables = {
@@ -63,12 +64,34 @@ class JobService {
     }
   }
 
+  static Future<bool> sendResumeJobMutation(String jobId, bool accept) async {
+    final Map<String, dynamic> variables = {
+      'input': {
+        'id': jobId,
+        'accept': accept,
+      },
+    };
+    final result =
+        await GraphQLService.performMutation(resumeJobMutation, variables);
+    if (result['resume']['ok']) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   // Object function of job service
   static Map<String, dynamic> updateJobFromEvent(fullEvents) {
     final List<dynamic>? eventEdges =
         fullEvents["connection"]["events"]["edges"];
-    final List<dynamic> jobEdges =
-        eventEdges!.map((e) => e["node"]["job"]).toList();
+    final List<String> jobEdgeID = [];
+    final List<dynamic> jobEdges = [];
+    for (var edge in eventEdges!) {
+      if (!jobEdgeID.contains(edge["node"]["job"]["node"]["id"])) {
+        jobEdgeID.add(edge["node"]["job"]["node"]["id"]);
+        jobEdges.add(edge["node"]["job"]);
+      }
+    }
     final pageInfo = fullEvents["connection"]["events"]["pageInfo"];
     final Map<String, dynamic> fullJobs = {
       "__typename": "Query",
@@ -108,11 +131,14 @@ class JobService {
   Future<void> getMoreJobs() async {
     try {
       // fullResult should be not null
-      if (fullResult == null) {
+      if (fullJobResult == null) {
+        return;
+      }
+      if (!eventPageInfo["hasPreviousPage"]) {
         return;
       }
       // Get more event data
-      final cursor = pageInfo["startCursor"];
+      final cursor = eventPageInfo["startCursor"];
       Map<String, dynamic>? fetchMoreResult = await GraphQLService.fetchMore(
           connectionMockQuery,
           {'id': connectionID},
@@ -126,7 +152,7 @@ class JobService {
           connectionJobsQuery,
           {'id': connectionID},
           true,
-          fullResult,
+          fullJobResult,
           moreJobResult,
           "jobs",
           "connection");
@@ -154,18 +180,16 @@ class JobService {
             .stream
             .map((job) {
           try {
-            fullResult = job.data;
+            fullJobResult = job.data;
             final List<dynamic> res = job.data?["connection"]["jobs"]["edges"];
             gqlJobs = res.where((element) => element != null).map((e) {
               final Map<String, dynamic> node = e?["node"];
               return node;
             }).toList();
-            pageInfo = job.data?["connection"]["jobs"]["pageInfo"];
             return gqlJobs;
           } catch (e) {
-            fullResult = {};
+            fullJobResult = {};
             gqlJobs = [];
-            pageInfo = {};
             return gqlJobs;
             //throw Exception("No data returned");
           }

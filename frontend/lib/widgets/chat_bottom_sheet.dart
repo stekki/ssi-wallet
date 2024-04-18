@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/services/job_service.dart';
 
 import '../providers/providers.dart';
 
@@ -32,12 +33,14 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                               .infinity, // Ensure the button takes full width
                           height: 40,
                           child: ElevatedButton(
-                            child: const Text('Im a seller (these buttons in development)'),
-                            onPressed: () => {
-                              ref
-                                  .watch(chatStatusProvider.notifier)
-                                  .updateChatStatus(id),
-                              Navigator.pop(context)
+                            child: const Text(
+                                'Im a seller (these buttons in development)'),
+                            onPressed: () async => {
+                              await JobService.sendProofRequest(id)
+                              // ref
+                              //     .watch(chatStatusProvider.notifier)
+                              //     .updateChatStatus(id),
+                              // Navigator.pop(context)
                             },
                           ),
                         ),
@@ -65,7 +68,6 @@ class ChatBottomSheetSeller extends ConsumerWidget {
     );
   }
 }
-
 
 class ChatBottomSheetBuyer extends ConsumerWidget {
   final String id;
@@ -96,7 +98,8 @@ class ChatBottomSheetBuyer extends ConsumerWidget {
                               .infinity, // Ensure the button takes full width
                           height: 40,
                           child: ElevatedButton(
-                            child: const Text('Im a buyer (these buttons in development)'),
+                            child: const Text(
+                                'Im a buyer (these buttons in development)'),
                             onPressed: () => {
                               ref
                                   .watch(chatStatusProvider.notifier)

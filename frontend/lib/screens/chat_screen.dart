@@ -117,7 +117,45 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                             : 'other',
                                         timestamp: createdAt);
                                   } else if (job["protocol"] == "PROOF") {
-                                    return Container();
+                                    final proofRequest =
+                                        job["output"]["proof"]["node"];
+                                    final createdAt =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            int.parse(
+                                                proofRequest['createdMs']));
+                                    /*
+                                    final verifiedAt =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            int.parse(proofRequest['verifiedMs']));
+                                    final approvedAt =
+                                        DateTime.fromMillisecondsSinceEpoch(
+                                            int.parse(proofRequest['approvedMs']));
+                                      */
+                                    if (proofRequest['role'] == 'VERIFIER') {
+                                      return ProofRequestWidget(
+                                        key: ValueKey(job['id']),
+                                        sentBy: proofRequest["role"],
+                                        timestamp: createdAt,
+                                      );
+                                      //verifiedAt: verifiedAt,
+                                      //approvedAt: approvedAt,);
+                                    } else if ((proofRequest['role'] ==
+                                            'PROVER') &&
+                                        (job['status'] == 'COMPLETE')) {
+                                      return ProofRequestCompleteWidget(
+                                        key: ValueKey(job['id']),
+                                        sentBy: proofRequest["role"],
+                                        timestamp: createdAt,
+                                      );
+                                    } else if (proofRequest['role'] ==
+                                        'PROVER') {
+                                      return ProofRequestWidgetBuyer(
+                                          key: ValueKey(job['id']),
+                                          sentBy: proofRequest["role"],
+                                          timestamp: createdAt,
+                                          jobID: job["id"],
+                                          status: job["status"]);
+                                    }
                                   } else {
                                     return Container();
                                   }
