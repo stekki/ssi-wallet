@@ -297,7 +297,7 @@ class ProofRequestCompleteWidget extends AbstractChatCard {
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
           children: [
-            const Text('credu acceptattu'),
+            const Text('Identification provided'),
             const SizedBox(height: 4),
             Text(
               formattedTime,
