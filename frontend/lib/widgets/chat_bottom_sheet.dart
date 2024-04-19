@@ -7,7 +7,7 @@ import '../providers/providers.dart';
 class ChatBottomSheetSeller extends ConsumerWidget {
   final String id;
   const ChatBottomSheetSeller(this.id, {super.key});
-
+  
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(
@@ -33,8 +33,8 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                               .infinity, // Ensure the button takes full width
                           height: 40,
                           child: ElevatedButton(
-                            child: const Text(
-                                'Im a seller (these buttons in development)'),
+                            // SELLER
+                            child: const Text('Confirm connection'),
                             onPressed: () async => {
                               await JobService.sendProofRequest(id)
                               // ref
@@ -52,7 +52,7 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                               .infinity, // Ensure the button takes full width
                           height: 40,
                           child: ElevatedButton(
-                            child: const Text('Delete chat'),
+                            child: const Text('Delete connection'),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ),
@@ -98,6 +98,7 @@ class ChatBottomSheetBuyer extends ConsumerWidget {
                               .infinity, // Ensure the button takes full width
                           height: 40,
                           child: ElevatedButton(
+                            // BUYER
                             child: const Text(
                                 'Im a buyer (these buttons in development)'),
                             onPressed: () => {
@@ -116,7 +117,7 @@ class ChatBottomSheetBuyer extends ConsumerWidget {
                               .infinity, // Ensure the button takes full width
                           height: 40,
                           child: ElevatedButton(
-                            child: const Text('Delete chat'),
+                            child: const Text('Delete connection'),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ),

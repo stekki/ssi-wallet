@@ -40,8 +40,10 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
     final bool success =
         await JobService.sendResumeJobMutation(widget.jobID, accept);
     if (success) {
-      acceptDisabled = true;
-      declineDisabled = true;
+      setState(() {
+        acceptDisabled = true;
+        declineDisabled = true;
+      });
     } else {
       setState(() {
         acceptDisabled = false;
@@ -91,22 +93,11 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
               : CrossAxisAlignment.start,
           children: [
             ElevatedButton(
-              onPressed: () async {
-                acceptDisabled = true;
-                declineDisabled = true;
-                JobService.sendResumeJobMutation(widget.jobID, true);
-              },
-              //onPressed: declineDisabled ? null : () => doResume(false),
+              onPressed: declineDisabled ? null : () => doResume(false),
               child: const Text('Decline'),
             ),
             const SizedBox(width: 8), // For spacing
             ElevatedButton(
-              /* onPressed:  () async {
-                MessageService().sendResumeJobMutation(widget.jobID, false);
-                acceptDisabled = false;
-                declineDisabled = false;
-                },
-                */
               onPressed: acceptDisabled ? null : () => doResume(true),
               child: const Text('Accept'),
             ),
