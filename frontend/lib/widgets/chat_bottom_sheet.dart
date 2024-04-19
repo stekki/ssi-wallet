@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/services/job_service.dart';
-
 import '../providers/providers.dart';
+import 'package:frontend/utils/constants.dart';
 
+// SELLER
 class ChatBottomSheetSeller extends ConsumerWidget {
   final String id;
   const ChatBottomSheetSeller(this.id, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<String> chatStateList = ref.watch(chatStatusProvider);
+    final Map<String, ConnectionStatus> chatStateList =
+        ref.watch(chatStatusProvider);
 
     return Center(
       child: IconButton(
@@ -26,7 +28,7 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                 child: Center(
                   child: SizedBox(
                     width: width * 0.6,
-                    child: !chatStateList.contains(id)
+                    child: !chatStateList.containsKey(id)
                         ? Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
@@ -36,7 +38,6 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                                     .infinity, // Ensure the button takes full width
                                 height: 40,
                                 child: ElevatedButton(
-                                  // SELLER
                                   child: const Text('Confirm connection'),
                                   onPressed: () async => {
                                     Navigator.pop(context),
@@ -44,8 +45,9 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                                     /*
                                     ref
                                         .watch(chatStatusProvider.notifier)
-                                        .updateChatStatus(id),
-                                        */
+                                        .updateChatStatus(
+                                            id, ConnectionStatus.confirmed),
+                                            */
                                   },
                                 ),
                               ),
@@ -59,15 +61,35 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                                 child: ElevatedButton(
                                   child: const Text('Delete connection'),
                                   onPressed: () => {
-                                    Navigator.pop(context),
+                                    //Navigator.popUntil(
+                                        //context, (route) => false),
+                                    ref
+                                        .watch(chatStatusProvider.notifier)
+                                        .updateChatStatus(
+                                            id, ConnectionStatus.deleted),
                                   },
                                 ),
                               ),
                             ],
                           )
-                        : const Center(
-                            child: Text("Waiting for the buyer..."),
-                          ),
+                        : chatStateList[id] == ConnectionStatus.confirmed
+                            ? const Center(
+                                child: Text("Waiting for the buyer..."),
+                              )
+                            : Center(
+                                child: SizedBox(
+                                  width: double
+                                      .infinity, // Ensure the button takes full width
+                                  height: 40,
+                                  child: ElevatedButton(
+                                    // SELLER
+                                    child: const Text('Make payment'),
+                                    onPressed: () => {
+                                      Navigator.pop(context),
+                                    },
+                                  ),
+                                ),
+                              ),
                   ),
                 ),
               );
@@ -79,13 +101,15 @@ class ChatBottomSheetSeller extends ConsumerWidget {
   }
 }
 
+// BUYER
 class ChatBottomSheetBuyer extends ConsumerWidget {
   final String id;
   const ChatBottomSheetBuyer(this.id, {super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<String> chatStateList = ref.watch(chatStatusProvider);
+    final Map<String, ConnectionStatus> chatStateList =
+        ref.watch(chatStatusProvider);
     return Center(
       child: IconButton(
         icon: const Icon(Icons.add),
@@ -100,36 +124,27 @@ class ChatBottomSheetBuyer extends ConsumerWidget {
                 child: Center(
                   child: SizedBox(
                     width: width * 0.6,
-                    child: chatStateList.contains(id)
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              SizedBox(
-                                width: double
-                                    .infinity, // Ensure the button takes full width
-                                height: 40,
-                                child: ElevatedButton(
-                                  // BUYER
-                                  child: const Text('Request receipt'),
-                                  onPressed: () => {
-                                    Navigator.pop(context),
-                                  },
-                                ),
+                    child: (chatStateList.containsKey(id) &&
+                            chatStateList[id] == ConnectionStatus.confirmed)
+                        ? Center(
+                            child: SizedBox(
+                              width: double
+                                  .infinity, // Ensure the button takes full width
+                              height: 40,
+                              child: ElevatedButton(
+                                child: const Text('Get receipt'),
+                                onPressed: () async => {
+                                  Navigator.pop(context),
+                                  await JobService.sendProofRequest(id),
+                                  /*
+                                  ref
+                                      .watch(chatStatusProvider.notifier)
+                                      .updateChatStatus(
+                                          id, ConnectionStatus.receipted),
+                                          */
+                                },
                               ),
-                              const SizedBox(
-                                height: 30,
-                              ),
-                              SizedBox(
-                                width: double
-                                    .infinity, // Ensure the button takes full width
-                                height: 40,
-                                child: ElevatedButton(
-                                  child: const Text('Delete connection'),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                              ),
-                            ],
+                            ),
                           )
                         : const Center(
                             child: Text("Waiting for the seller..."),

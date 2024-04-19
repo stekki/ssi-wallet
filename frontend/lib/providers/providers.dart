@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/models/credential.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:frontend/utils/constants.dart';
 
 final credentialsFutureProvider = FutureProvider<List<Credential>>(
   (ref) async {
@@ -45,33 +47,29 @@ final profileCredentialProvider = FutureProvider<List<Credential>>(
 );
 
 // Provider for storing chat states
-class ChatIdsNotifier extends StateNotifier<List<String>> {
+class ChatIdsNotifier extends StateNotifier<Map<String, ConnectionStatus>> {
   final SharedPreferences prefs;
-  ChatIdsNotifier(this.prefs) : super([]);
+  ChatIdsNotifier(this.prefs) : super({});
 
   _initialize() async {
-    if (prefs.containsKey("chats")) {
-      state = prefs.getStringList("chats")!;
+    if (!prefs.containsKey("chats")) {
+      return;
     }
+
+    Iterable chats = json.decode(prefs.getString("chats")!);
+    state = Map.fromIterable(chats);
   }
 
-  updateChatStatus(String id) async {
-    //final chats = state;
-    state = [id, ...state];
-    /*
-    if (!state.contains(id)) {
-      state = [id, ...state];
-    } else {
-      chats.removeWhere((venueId) => venueId == id);
-      state = [...chats];
-    }
-    */
-    prefs.setStringList("chats", state);
+  updateChatStatus(String id, ConnectionStatus status) async {
+    state = {...state, id: status};
+
+    //prefs.setString("chats", json.encode(state)); //DOES NOT WORK ON CHROME
   }
 }
 
 final chatStatusProvider =
-    StateNotifierProvider<ChatIdsNotifier, List<String>>((ref) {
+    StateNotifierProvider<ChatIdsNotifier, Map<String, ConnectionStatus>>(
+        (ref) {
   final ids = ChatIdsNotifier(ref.watch(sharedPreferencesProvider));
   ids._initialize();
   return ids;
