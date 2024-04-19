@@ -55,7 +55,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
         ref.watch(connectionStreamProvider);
-    final Map<String, ConnectionStatus> chatStateList = ref.watch(chatStatusProvider);
+    final Map<String, ConnectionStatus> chatStateList =
+        ref.watch(chatStatusProvider);
+    chatStateList
+        .removeWhere((key, value) => value == ConnectionStatus.deleted);
 
     return Scaffold(
       body: connectionsAsyncValue.when(

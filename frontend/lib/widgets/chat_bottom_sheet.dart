@@ -61,7 +61,12 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                                 child: ElevatedButton(
                                   child: const Text('Delete connection'),
                                   onPressed: () => {
-                                    Navigator.pop(context),
+                                    //Navigator.popUntil(
+                                        //context, (route) => false),
+                                    ref
+                                        .watch(chatStatusProvider.notifier)
+                                        .updateChatStatus(
+                                            id, ConnectionStatus.deleted),
                                   },
                                 ),
                               ),
