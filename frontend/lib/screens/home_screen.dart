@@ -1,16 +1,15 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/services/event_notification.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-
 import '../services/connection_service.dart';
 import '../screens/loading_screen.dart';
 import '../models/models.dart';
 import '../providers/providers.dart';
 import '../utils/styles.dart';
 import '../widgets/connection_card.dart';
+import 'package:frontend/utils/constants.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -56,7 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   Widget build(BuildContext context) {
     final AsyncValue<List<Connection>> connectionsAsyncValue =
         ref.watch(connectionStreamProvider);
-    final List<String> chatStateList = ref.watch(chatStatusProvider);
+    final Map<String, ConnectionStatus> chatStateList = ref.watch(chatStatusProvider);
 
     return Scaffold(
       body: connectionsAsyncValue.when(
@@ -98,7 +97,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   const Tab(text: 'Open chats'),
                   Tab(
                       text:
-                          'Chat requests (${connections.where((connection) => !chatStateList.contains(connection.id)).length})'), // Update dynamically if needed
+                          'Chat requests (${connections.where((connection) => !chatStateList.containsKey(connection.id)).length})'), // Update dynamically if needed
                 ],
               ),
               Expanded(
@@ -193,11 +192,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   Widget _buildConnectionListViewRequest(BuildContext context,
-      List<Connection> connections, List<String> chatStates) {
+      List<Connection> connections, Map<String, ConnectionStatus> chatStates) {
     var filteredConnections = connections
         .where((connection) =>
             connection.theirLabel.toLowerCase().contains(filterValue) &&
-            !chatStates.contains(connection.id))
+            !chatStates.containsKey(connection.id))
         .toList();
 
     return ListView.builder(
@@ -209,11 +208,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
   }
 
   Widget _buildConnectionListViewOpen(BuildContext context,
-      List<Connection> connections, List<String> chatStates) {
+      List<Connection> connections, Map<String, ConnectionStatus> chatStates) {
     var filteredConnections = connections
         .where((connection) =>
             connection.theirLabel.toLowerCase().contains(filterValue) &&
-            chatStates.contains(connection.id))
+            chatStates.containsKey(connection.id))
         .toList();
 
     return ListView.builder(
