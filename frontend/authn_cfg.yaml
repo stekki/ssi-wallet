@@ -1,0 +1,8 @@
+---
+keyFile: ../tools/findy-agent-cli/scripts/fullstack/config/cert/client/client.key
+certFile: ../tools/findy-agent-cli/scripts/fullstack/config/cert/client/client.crt
+salt: 99
+address: findy-agency-api.op-ai.fi
+port: 50051
+url: https://findy-agency.op-ai.fi
+aaguid: 12c85a48-4baf-47bd-b51f-f192871a1511
