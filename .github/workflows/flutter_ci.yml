@@ -15,7 +15,7 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         channel: 'beta'
-        flutter-version: '3.22.0'
+        flutter-version: '3.22.0-0.1.pre'
     - uses: dart-lang/setup-dart@v1
       with:
         sdk: '3.1.5'
@@ -37,7 +37,7 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         channel: 'beta'
-        flutter-version: '3.22.0'
+        flutter-version: '3.22.0-0.1.pre'
     - uses: dart-lang/setup-dart@v1
       with:
         sdk: '3.1.5'
