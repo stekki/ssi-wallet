@@ -16,6 +16,9 @@ jobs:
       with:
         flutter-version: '3.13.x'
         channel: 'beta'
+    - uses: dart-lang/setup-dart@v1
+      with:
+        sdk: '>=3.1.5 <4.0.0'
     - run: flutter pub get
       working-directory: frontend
     - run: flutter build apk
@@ -35,6 +38,9 @@ jobs:
       with:
         flutter-version: '3.13.x'
         channel: 'beta'
+    - uses: dart-lang/setup-dart@v1
+      with:
+        sdk: '>=3.1.5 <4.0.0'
     - run: flutter pub get
       working-directory: frontend
     - run: flutter build ios --release --no-codesign
