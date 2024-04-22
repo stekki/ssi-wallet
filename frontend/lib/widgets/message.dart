@@ -19,9 +19,11 @@ class ProofRequestWidgetBuyer extends StatefulWidget {
   final DateTime timestamp;
   final String jobID;
   final String status;
+  final String id;
 
   const ProofRequestWidgetBuyer({
     super.key,
+    required this.id,
     required this.sentBy,
     required this.timestamp,
     required this.jobID,
@@ -37,18 +39,22 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
   bool declineDisabled = false;
 
   void doResume(bool accept) async {
-    final bool success =
-        await JobService.sendResumeJobMutation(widget.jobID, accept);
-    if (success) {
-      setState(() {
-        acceptDisabled = true;
-        declineDisabled = true;
-      });
+      final success = await JobService.sendResumeJobMutation(widget.jobID, accept);
+    if (accept && success) {
+      await JobService.sendMessage(widget.id, 'Buyer has accepted your identification request.');
+    if (mounted) {
+        setState(() {
+            acceptDisabled = !accept;
+            declineDisabled = !accept;
+        });
+      }
     } else {
+      if (mounted) {
       setState(() {
         acceptDisabled = false;
         declineDisabled = false;
-      });
+        });
+      }
     }
   }
 
@@ -57,7 +63,7 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
     Color color =
         widget.sentBy == 'PROVER' ? DesignColors.messageColor : Colors.white;
     BorderRadiusGeometry borderRadius;
-    if (widget.sentBy == 'PROVER') {
+    if (widget.sentBy == 'VERIFIER') {
       borderRadius = const BorderRadius.only(
         topLeft: Radius.circular(20),
         topRight: Radius.circular(20),
@@ -76,7 +82,7 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
     String formattedTime = DateFormat('hh:mm a').format(widget.timestamp);
 
     return Align(
-      alignment: widget.sentBy == 'PROVER'
+      alignment: widget.sentBy == 'VERIFIER'
           ? Alignment.centerRight
           : Alignment.centerLeft,
       child: Container(
@@ -88,20 +94,21 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: widget.sentBy == 'PROVER'
+          crossAxisAlignment: widget.sentBy == 'VERIFIER'
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
           children: [
-            ElevatedButton(
-              onPressed: declineDisabled ? null : () => doResume(false),
-              child: const Text('Decline'),
-            ),
-            const SizedBox(width: 8), // For spacing
+            const Text('The Seller requests identification'),
             ElevatedButton(
               onPressed: acceptDisabled ? null : () => doResume(true),
               child: const Text('Accept'),
             ),
             const SizedBox(height: 4),
+            ElevatedButton(
+              onPressed: declineDisabled ? null : () => doResume(false),
+              child: const Text('Decline'),
+            ),
+            const SizedBox(width: 8), // For spacing
             Text(
               formattedTime,
               style: TextStyle(
@@ -255,6 +262,65 @@ class BasicChatMessageWidget extends AbstractChatCard {
 
 class ProofRequestCompleteWidget extends AbstractChatCard {
   const ProofRequestCompleteWidget({
+    super.key,
+    required super.sentBy,
+    required super.timestamp,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Color color = sentBy == 'me' ? DesignColors.messageColor : Colors.white;
+    BorderRadiusGeometry borderRadius;
+    if (sentBy == 'me') {
+      borderRadius = const BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
+        bottomLeft: Radius.circular(10),
+        bottomRight: Radius.circular(0),
+      );
+    } else {
+      borderRadius = const BorderRadius.only(
+        topLeft: Radius.circular(10),
+        topRight: Radius.circular(10),
+        bottomLeft: Radius.circular(0),
+        bottomRight: Radius.circular(10),
+      );
+    }
+
+    String formattedTime = DateFormat('hh:mm a').format(timestamp);
+
+    return Align(
+      alignment: sentBy == 'me' ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin: const EdgeInsets.all(8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: borderRadius,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: sentBy == 'me'
+              ? CrossAxisAlignment.end
+              : CrossAxisAlignment.start,
+          children: [
+            const Text('Identification provided'),
+            const SizedBox(height: 4),
+            Text(
+              formattedTime,
+              style: TextStyle(
+                color: DesignColors.textColor.withOpacity(0.6),
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class IdentificationProvidedWidget extends AbstractChatCard {
+  const IdentificationProvidedWidget({
     super.key,
     required super.sentBy,
     required super.timestamp,
