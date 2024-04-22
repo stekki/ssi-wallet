@@ -1,162 +1,99 @@
-//import 'dart:developer';
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unused_local_variable
 
 import 'dart:math';
+
+import 'package:authn/authn.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/config/graphql_config.dart';
 import 'package:go_router/go_router.dart';
 
-import '../utils/constants.dart';
 import '../utils/secure_storage.dart';
+import '../utils/helpers.dart' as helpers;
 import '../utils/styles.dart';
 import '../widgets/landing_page_button.dart';
-import '../utils/helpers.dart' as helpers;
 
-class LandingScreen extends StatefulWidget {
-  const LandingScreen({super.key});
+class LandingScreen extends StatelessWidget {
+  LandingScreen({super.key});
 
-  @override
-  // ignore: library_private_types_in_public_api
-  _LandingScreenState createState() => _LandingScreenState();
-}
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController pinController = TextEditingController();
 
-class _LandingScreenState extends State<LandingScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+  Future<void> login(BuildContext context) async {
+    String jwt = '';
+    _showLoadingDialog(context);
+    try {
+      jwt = await authnCmd("login", emailController.text, pinController.text);
+      SecureStorageUtil().writeToken(jwt);
+      GraphQLConfig().createClient();
+      context.go('/home');
+    } on Exception catch (e) {
+      //helpers.showErrorSnackBar(context, "An unexpected error occurred");
+      helpers.showErrorSnackBar(context, e.toString());
+    } finally {
+      Navigator.of(context).pop();
+    }
   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
+  Future<void> register(BuildContext context) async {
+    _showLoadingDialog(context);
+    try {
+      final jwt =
+          await authnCmd("register", emailController.text, pinController.text);
+      helpers.showInfoSnackBar(context, "Registration successful");
+    } catch (e) {
+      helpers.showErrorSnackBar(context, e.toString());
+    } finally {
+      Navigator.of(context).pop();
+    }
   }
 
-  Future<void> promptForToken(BuildContext context) async {
-    TextEditingController tokenController = TextEditingController();
-    return showDialog<void>(
+  void _showLoadingDialog(BuildContext context) {
+    showDialog(
       context: context,
-      barrierDismissible: false, // User must tap button to close the dialog
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          content: Row(
+            children: <Widget>[
+              CircularProgressIndicator(),
+              SizedBox(width: 24),
+              Text("Please wait..."),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> devSignIn(BuildContext context) async {
+    TextEditingController tokenController = TextEditingController();
+
+    showDialog(
+      context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Enter JWT Token'),
           content: TextField(
             controller: tokenController,
-            decoration: const InputDecoration(hintText: 'JWT Token'),
+            decoration: const InputDecoration(hintText: 'Enter JWT Token'),
           ),
           actions: <Widget>[
             TextButton(
               child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
             ),
             TextButton(
-              child: const Text('Submit'),
-              onPressed: () async {
-                String token = tokenController.text;
-                // TODO: validate the token before proceeding, assume that token input is always correct
-                await SecureStorageUtil().writeToken(token);
-                await GraphQLConfig().createClient();
-                Navigator.of(context).pop(); // Close the dialog
+              child: const Text('Sign In'),
+              onPressed: () {
+                SecureStorageUtil().writeToken(tokenController.text);
+                GraphQLConfig().createClient();
+                Navigator.of(context).pop();
                 context.go('/home');
               },
             ),
           ],
         );
       },
-    );
-  }
-
-  Widget signInOptions() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        LandingPageButton(
-          text: 'Sign in with Email',
-          onPressed: () {
-            // Sign in with Email logic
-          },
-        ),
-        const SizedBox(height: Constants.lpLoginButtonSpacing),
-        LandingPageButton(
-          text: 'Sign in with FaceID',
-          onPressed: () {
-            // Sign in with FaceID logic
-          },
-        ),
-      ],
-    );
-  }
-
-/*
-  Widget developerOptions() {
-    return Column(
-      children: <Widget>[
-        const SizedBox(height: Constants.lpLoginButtonSpacing),
-        LandingPageButton(
-          text: 'Sign in with token (dev)',
-          onPressed: () {
-            // Sign in with token
-            promptForToken(context);
-          },
-          color: DesignColors.extraColorGray,
-        ),
-        const SizedBox(height: Constants.lpLoginButtonSpacing),
-        LandingPageButton(
-          text: 'Skip to home (dev)',
-          onPressed: () {
-            // Sign in with Piss-Head
-            //log('My man, Piss-Head');
-            context.go('/home');
-          },
-          color: DesignColors.extraColorGray,
-        )
-      ],
-    );
-  }
-  */
-
-  void _showDeveloperOptions(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Wrap(
-          children: <Widget>[
-            ListTile(
-              leading: const Icon(Icons.vpn_key),
-              title: const Text('Sign in with token (dev)'),
-              onTap: () {
-                Navigator.of(context).pop(); // Dismiss bottom sheet
-                promptForToken(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.skip_next),
-              title: const Text('Skip to home (dev)'),
-              onTap: () {
-                Navigator.of(context).pop(); // Dismiss bottom sheet
-                context.go('/home');
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget registerForm(double height) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: height * 0.07),
-      child: const TextField(
-        decoration: InputDecoration(
-          labelText: 'Email',
-        ),
-      ),
     );
   }
 
@@ -166,105 +103,125 @@ class _LandingScreenState extends State<LandingScreen>
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Container(
-        decoration: scaffoldBackground,
-        height: height,
-        width: width,
-        alignment: Alignment.center,
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Positioned(
-              top: height * 0.15,
-              child: Column(
-                children: [
-                  Container(
-                    width: width * 0.22,
-                    height: height * 0.12,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.fitHeight,
-                        alignment: FractionalOffset.center,
-                        image: AssetImage('assets/logos/findywallet_white.png'),
-                      ),
+      body: Column(
+        children: [
+          Container(
+            height: height * 0.3,
+            width: width,
+            decoration: scaffoldBackground,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: width * 0.22,
+                  height: height * 0.12,
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fitHeight,
+                      alignment: FractionalOffset.center,
+                      image: AssetImage('assets/logos/findywallet_white.png'),
                     ),
                   ),
-                  Text(
-                    "Credi",
-                    //Theme.of(context).textTheme.displayLarge,
+                ),
+                Text(
+                  "Credi",
+                  style: TextStyle(
+                    fontFamily: "Nunito",
+                    fontSize: max(height * 0.05, 20),
+                    fontWeight: FontWeight.normal,
+                    color: DesignColors.extraColorWhite,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Text(
+                    "Secure, Private, Yours",
                     style: TextStyle(
-                      fontFamily: "Nunito",
-                      fontSize: max(height * 0.05, 20),
-                      fontWeight: FontWeight.normal,
-                      color: DesignColors.extraColorWhite,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white70,
                     ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: const TextSpan(
+                      style: TextStyle(
+                        fontFamily: "Open Sans",
+                        fontSize: 20,
+                        color: Colors.black87,
+                      ),
+                      children: [
+                        TextSpan(text: "Welcome to "),
+                        TextSpan(
+                          text: "Credi",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(
+                            text:
+                                ", your secure SSI wallet. Get started by signing up or logging in."),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextField(
+                    controller: emailController,
+                    maxLength: 20,
+                    decoration: const InputDecoration(
+                      labelText: 'Username',
+                      labelStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: pinController,
+                    maxLength: 2,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    obscureText: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Pin Code',
+                      labelStyle: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      LandingPageButton(
+                        text: 'Sign Up',
+                        onPressed: () => register(context),
+                      ),
+                      LandingPageButton(
+                        text: 'Sign In',
+                        onPressed: () => login(context),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            Positioned.fill(
-              top: height * 0.4,
-              child: ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
-                ),
-                child: Container(
-                  color: DesignColors.extraColorWhite,
-                  child: Column(
-                    children: [
-                      TabBar(
-                        controller: _tabController,
-                        tabs: const [
-                          Tab(text: 'Sign In'),
-                          Tab(text: 'Register'),
-                        ],
-                      ),
-                      Expanded(
-                        child: TabBarView(
-                          controller: _tabController,
-                          children: [
-                            Center(
-                              child: SingleChildScrollView(
-                                child: signInOptions(),
-                              ),
-                            ),
-                            Center(
-                              child: Column(
-                                children: [
-                                  registerForm(height),
-                                  LandingPageButton(
-                                    text: 'Register',
-                                    onPressed: () {
-                                      // Register logic
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) =>
-                                              helpers.showInfoSnackBar(context,
-                                                  "Registration successful"));
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
-              right: 20,
-              bottom: 20,
-              child: FloatingActionButton(
-                onPressed: () => _showDeveloperOptions(context),
-                backgroundColor: Colors.grey.withOpacity(0.5),
-                mini: true,
-                child: const Icon(Icons.developer_mode, size: 20),
-              ),
-            ),
-          ],
+          ),
+        ],
+      ),
+      floatingActionButton: Visibility(
+        visible: true,
+        child: FloatingActionButton(
+          mini: true,
+          onPressed: () => devSignIn(context),
+          child: const Icon(Icons.developer_mode),
         ),
       ),
     );

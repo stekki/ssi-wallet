@@ -20,6 +20,8 @@ dependencies:
   intl: ^0.17.0
   shared_preferences: ^2.2.1
   #flutter_secure_storage: ^9.0.0 #uncomment this if you want to use real secure storage
+  authn:
+    path: dart_cli/packages/authn
 
 dev_dependencies:
   flutter_test:

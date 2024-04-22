@@ -5,8 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/chat_bottom_sheet.dart';
 import 'package:frontend/widgets/message.dart';
-// import 'package:frontend/widgets/message.dart';
-// import '../models/models.dart';
+
 import '../services/job_service.dart';
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {
