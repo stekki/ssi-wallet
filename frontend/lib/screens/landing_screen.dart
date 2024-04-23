@@ -1,5 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, unused_local_variable
-
+import 'dart:io' show Platform;
 import 'dart:math';
 
 import 'package:authn/authn.dart';
@@ -20,31 +20,41 @@ class LandingScreen extends StatelessWidget {
   final TextEditingController pinController = TextEditingController();
 
   Future<void> login(BuildContext context) async {
-    String jwt = '';
-    _showLoadingDialog(context);
-    try {
-      jwt = await authnCmd("login", emailController.text, pinController.text);
-      SecureStorageUtil().writeToken(jwt);
-      GraphQLConfig().createClient();
-      context.go('/home');
-    } on Exception catch (e) {
-      //helpers.showErrorSnackBar(context, "An unexpected error occurred");
-      helpers.showErrorSnackBar(context, e.toString());
-    } finally {
-      Navigator.of(context).pop();
+    if (Platform.isLinux) {
+      _showLoadingDialog(context);
+      try {
+        String jwt =
+            await authnCmd("login", emailController.text, pinController.text);
+        SecureStorageUtil().writeToken(jwt);
+        GraphQLConfig().createClient();
+        context.go('/home');
+      } on Exception catch (e) {
+        helpers.showErrorSnackBar(context,
+            "An unexpected error occurred. User not found or incorrect password");
+      } finally {
+        Navigator.of(context).pop();
+      }
+    } else {
+      helpers.showErrorSnackBar(
+          context, "Action not supported for this Platform");
     }
   }
 
   Future<void> register(BuildContext context) async {
-    _showLoadingDialog(context);
-    try {
-      final jwt =
-          await authnCmd("register", emailController.text, pinController.text);
-      helpers.showInfoSnackBar(context, "Registration successful");
-    } catch (e) {
-      helpers.showErrorSnackBar(context, e.toString());
-    } finally {
-      Navigator.of(context).pop();
+    if (Platform.isLinux) {
+      _showLoadingDialog(context);
+      try {
+        final jwt = await authnCmd(
+            "register", emailController.text, pinController.text);
+        helpers.showInfoSnackBar(context, "Registration successful");
+      } catch (e) {
+        helpers.showErrorSnackBar(context, e.toString());
+      } finally {
+        Navigator.of(context).pop();
+      }
+    } else {
+      helpers.showErrorSnackBar(
+          context, "Action not supported for this Platform");
     }
   }
 

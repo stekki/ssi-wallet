@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io' show Platform;
 
 import 'package:authn/authn.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   NavigationHelper.instance;
-  setupFromYAML('authn_cfg.yaml');
+  if (Platform.isLinux) {
+    setupFromYAML('authn_cfg.yaml');
+  }
   runApp(MyApp(prefs));
 }
 
