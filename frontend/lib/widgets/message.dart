@@ -39,20 +39,24 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
   bool declineDisabled = false;
 
   void doResume(bool accept) async {
-      final success = await JobService.sendResumeJobMutation(widget.jobID, accept);
+    final success =
+        await JobService.sendResumeJobMutation(widget.jobID, accept);
     if (accept && success) {
-      await JobService.sendMessage(widget.id, 'Buyer has accepted your identification request.');
-    if (mounted) {
+      await JobService.sendMessage(
+          widget.id, 'Buyer has accepted your identification request.');
+      if (mounted) {
         setState(() {
-            acceptDisabled = !accept;
-            declineDisabled = !accept;
+          acceptDisabled = !accept;
+          declineDisabled = !accept;
         });
       }
     } else {
       if (mounted) {
-      setState(() {
-        acceptDisabled = false;
-        declineDisabled = false;
+         await JobService.sendMessage(
+          widget.id, 'Buyer has denied your identification request.');
+        setState(() {
+          acceptDisabled = false;
+          declineDisabled = false;
         });
       }
     }
@@ -99,14 +103,23 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
               : CrossAxisAlignment.start,
           children: [
             const Text('The Seller requests identification'),
-            ElevatedButton(
-              onPressed: acceptDisabled ? null : () => doResume(true),
-              child: const Text('Accept'),
-            ),
-            const SizedBox(height: 4),
-            ElevatedButton(
-              onPressed: declineDisabled ? null : () => doResume(false),
-              child: const Text('Decline'),
+            const SizedBox(width: 4),
+            SizedBox(
+              width: 250,
+              height: 40,
+              child: Row(
+                children: [
+                  ElevatedButton(
+                    onPressed: acceptDisabled ? null : () => doResume(true),
+                    child: const Text('Accept'),
+                  ),
+                  const SizedBox(width: 40),
+                  ElevatedButton(
+                    onPressed: declineDisabled ? null : () => doResume(false),
+                    child: const Text('Decline'),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(width: 8), // For spacing
             Text(

@@ -106,21 +106,26 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                     final message =
                                         job["output"]["message"]["node"];
                                     final messageText = message["message"];
-                                    if ((message["sentByMe"])
-                                        && (messageText == 'Buyer has accepted your identification request.')) {
+                                    if ((message["sentByMe"]) &&
+                                        (messageText ==
+                                            'Buyer has accepted your identification request.')) {
+                                      return Container();
+                                    } else if ((message["sentByMe"]) &&
+                                        (messageText ==
+                                            'Buyer has denied your identification request.')) {
                                       return Container();
                                     } else {
-                                    // Best if Component builder like BasicChatMessage
-                                    // take the whole node (above) and handle it there.
-                                    final createdAt =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(message['createdMs']));
-                                    return BasicChatMessageWidget(
-                                        message: message["message"],
-                                        sentBy: message["sentByMe"]
-                                            ? 'me'
-                                            : 'other',
-                                        timestamp: createdAt);
+                                      // Best if Component builder like BasicChatMessage
+                                      // take the whole node (above) and handle it there.
+                                      final createdAt =
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                              int.parse(message['createdMs']));
+                                      return BasicChatMessageWidget(
+                                          message: message["message"],
+                                          sentBy: message["sentByMe"]
+                                              ? 'me'
+                                              : 'other',
+                                          timestamp: createdAt);
                                     }
                                   } else if (job["protocol"] == "PROOF") {
                                     final proofRequest =
