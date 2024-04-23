@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unused_local_variable
+// ignore_for_file: use_build_context_synchronously, unused_local_variable, unused_catch_clause
 import 'dart:io' show Platform;
 import 'dart:math';
 
