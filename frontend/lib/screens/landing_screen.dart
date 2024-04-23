@@ -103,118 +103,130 @@ class LandingScreen extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            height: height * 0.3,
-            width: width,
-            decoration: scaffoldBackground,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  width: width * 0.22,
-                  height: height * 0.12,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.fitHeight,
-                      alignment: FractionalOffset.center,
-                      image: AssetImage('assets/logos/findywallet_white.png'),
-                    ),
-                  ),
-                ),
-                Text(
-                  "Credi",
-                  style: TextStyle(
-                    fontFamily: "Nunito",
-                    fontSize: max(height * 0.05, 20),
-                    fontWeight: FontWeight.normal,
-                    color: DesignColors.extraColorWhite,
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 10),
-                  child: Text(
-                    "Secure, Private, Yours",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus &&
+              currentFocus.focusedChild != null) {
+            FocusManager.instance.primaryFocus!.unfocus();
+          }
+        },
+        child: Column(
+          children: [
+            Container(
+              height: height * 0.3,
+              width: width,
+              decoration: scaffoldBackground,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: const TextSpan(
+                  Container(
+                    width: width * 0.22,
+                    height: height * 0.12,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.fitHeight,
+                        alignment: FractionalOffset.center,
+                        image: AssetImage('assets/logos/findywallet_white.png'),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    "Credi",
+                    style: TextStyle(
+                      fontFamily: "Nunito",
+                      fontSize: max(height * 0.05, 20),
+                      fontWeight: FontWeight.normal,
+                      color: DesignColors.extraColorWhite,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: Text(
+                      "Secure, Private, Yours",
                       style: TextStyle(
-                        fontFamily: "Open Sans",
-                        fontSize: 20,
-                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white70,
                       ),
-                      children: [
-                        TextSpan(text: "Welcome to "),
-                        TextSpan(
-                          text: "Credi",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                            text:
-                                ", your secure SSI wallet. Get started by signing up or logging in."),
-                      ],
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  TextField(
-                    controller: emailController,
-                    maxLength: 20,
-                    decoration: const InputDecoration(
-                      labelText: 'Username',
-                      labelStyle: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextField(
-                    controller: pinController,
-                    maxLength: 2,
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Pin Code',
-                      labelStyle: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      LandingPageButton(
-                        text: 'Sign Up',
-                        onPressed: () => register(context),
-                      ),
-                      LandingPageButton(
-                        text: 'Sign In',
-                        onPressed: () => login(context),
-                      ),
-                    ],
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: SingleChildScrollView(
+                child: Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: const TextSpan(
+                          style: TextStyle(
+                            fontFamily: "Open Sans",
+                            fontSize: 20,
+                            color: Colors.black87,
+                          ),
+                          children: [
+                            TextSpan(text: "Welcome to "),
+                            TextSpan(
+                              text: "Credi",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextSpan(
+                                text:
+                                    ", your secure SSI wallet. Get started by signing up or logging in."),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: emailController,
+                        maxLength: 20,
+                        decoration: const InputDecoration(
+                          labelText: 'Username',
+                          labelStyle: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: pinController,
+                        maxLength: 2,
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Pin Code',
+                          labelStyle: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          LandingPageButton(
+                            text: 'Sign Up',
+                            onPressed: () => register(context),
+                          ),
+                          SizedBox(height: 20),
+                          LandingPageButton(
+                            text: 'Sign In',
+                            onPressed: () => login(context),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: Visibility(
         visible: true,
