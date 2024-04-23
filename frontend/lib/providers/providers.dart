@@ -4,6 +4,8 @@ import 'package:frontend/models/credential.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/utils/constants.dart';
 
+final disableProvider = StateProvider<bool>((ref) => false);
+
 final credentialsFutureProvider = FutureProvider<List<Credential>>(
   (ref) async {
     return await Future.delayed(
