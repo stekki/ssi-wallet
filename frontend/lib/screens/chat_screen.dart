@@ -105,6 +105,11 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                   if (job["protocol"] == "BASIC_MESSAGE") {
                                     final message =
                                         job["output"]["message"]["node"];
+                                    final messageText = message["message"];
+                                    if ((message["sentByMe"])
+                                        && (messageText == 'Buyer has accepted your identification request.')) {
+                                      return Container();
+                                    } else {
                                     // Best if Component builder like BasicChatMessage
                                     // take the whole node (above) and handle it there.
                                     final createdAt =
@@ -116,6 +121,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                             ? 'me'
                                             : 'other',
                                         timestamp: createdAt);
+                                    }
                                   } else if (job["protocol"] == "PROOF") {
                                     final proofRequest =
                                         job["output"]["proof"]["node"];
@@ -154,6 +160,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                           sentBy: proofRequest["role"],
                                           timestamp: createdAt,
                                           jobID: job["id"],
+                                          id: widget.id,
                                           status: job["status"]);
                                     } else {
                                       return Container();
