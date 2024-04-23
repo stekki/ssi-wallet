@@ -11,6 +11,7 @@ class DesignColors {
   static const extraColorBlack = Color.fromARGB(120, 37, 31, 31);
   static const devRed = Color.fromARGB(192, 255, 61, 61);
   static const backgroundColor = Color.fromARGB(255, 255, 255, 255);
+  static const greenCheckmark = Colors.green;
 }
 
 class TextStyles {

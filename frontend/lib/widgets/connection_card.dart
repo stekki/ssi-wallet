@@ -6,6 +6,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/models.dart';
 import 'package:frontend/utils/styles.dart';
 
+final connectionCardColorProvider = StateProvider<Color>((ref) {
+  final iconColors = [
+    const Color.fromARGB(255, 193, 135, 250),
+    const Color.fromARGB(255, 80, 240, 230),
+    const Color.fromARGB(255, 96, 235, 152),
+    const Color.fromARGB(255, 121, 183, 255),
+    Colors.orange,
+  ];
+  return iconColors[Random().nextInt(iconColors.length)];
+});
+
 class ConnectionCard extends ConsumerWidget {
   final Connection connection;
 
@@ -17,10 +28,11 @@ class ConnectionCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
+    final color =
+        ref.watch(connectionCardColorProvider); // Get color from provider
 
     return Card(
       color: Colors.white,
-      //margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       child: InkWell(
         onTap: () {
           context.pushNamed("chat", pathParameters: {
@@ -41,20 +53,16 @@ class ConnectionCard extends ConsumerWidget {
           height: max(height * 0.11, 80),
           child: Center(
             child: ListTile(
-              leading: const CircleAvatar(
+              leading: CircleAvatar(
                 radius: 25,
-                backgroundColor: Colors.transparent,
-                backgroundImage: NetworkImage(
-                    'https://as2.ftcdn.net/v2/jpg/00/97/58/97/1000_F_97589769_t45CqXyzjz0KXwoBZT9PRaWGHRk5hQqQ.jpg'),
+                backgroundColor: color,
+                child: const Icon(Icons.person, color: Colors.white, size: 30),
               ),
               title: Text(connection.theirLabel,
                   style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight:
-                          FontWeight.bold)), // Adjust text style as needed
-              subtitle: const Text("Target item",
-                  style:
-                      TextStyle(fontSize: 16)), // Adjust text style as needed
+                      fontSize: 18, fontWeight: FontWeight.bold)),
+              subtitle:
+                  const Text("Target item", style: TextStyle(fontSize: 16)),
               trailing: const Text(
                 "Tap to chat",
                 style: TextStyle(
@@ -68,65 +76,3 @@ class ConnectionCard extends ConsumerWidget {
     );
   }
 }
-
-
-/*
-
-Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15.0),
-                      child: AspectRatio(
-                        aspectRatio: 1,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fitHeight,
-                              alignment: FractionalOffset.center,
-                              image: AssetImage('assets/logos/findywallet.png'),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            bottom: 7,
-                            top: 23,
-                          ),
-                          child: Text(
-                            name,
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w900, fontSize: 16),
-                          ),
-                        ),
-                        const Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 5),
-                            child: SingleChildScrollView(
-                              child: Text(
-                                "description",
-                                textAlign: TextAlign.left,
-                                style: TextStyle(fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-*/
