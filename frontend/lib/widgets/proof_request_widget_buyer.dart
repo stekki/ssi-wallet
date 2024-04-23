@@ -92,7 +92,7 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
           children: [
-            const Text('The Seller requests identification'),
+            const Text('Provide id to the seller'),
             const SizedBox(width: 4),
             SizedBox(
               width: 250,
