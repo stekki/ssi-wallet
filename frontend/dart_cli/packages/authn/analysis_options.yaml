@@ -21,8 +21,6 @@ include: package:lints/recommended.yaml
 analyzer:
   errors:
     depend_on_referenced_packages: ignore
-  exclude:
-    - dart_cli/***
 # For more information about the core and recommended set of lints, see
 # https://dart.dev/go/core-lints
 

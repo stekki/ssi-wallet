@@ -9,6 +9,7 @@ import 'package:frontend/widgets/basic_message_widget.dart';
 import 'package:frontend/widgets/proof_request_widget_buyer.dart';
 // import 'package:frontend/widgets/message.dart';
 // import '../models/models.dart';
+
 import '../services/job_service.dart';
 
 class MyCustomScrollBehavior extends MaterialScrollBehavior {

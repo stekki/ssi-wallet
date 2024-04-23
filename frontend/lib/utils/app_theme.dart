@@ -41,10 +41,10 @@ class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
+        backgroundColor: WidgetStateProperty.all<Color>(
           DesignColors.mainColor,
         ), //button color
-        foregroundColor: MaterialStateProperty.all<Color>(
+        foregroundColor: WidgetStateProperty.all<Color>(
           DesignColors.extraColorWhite,
         ),
       ),
