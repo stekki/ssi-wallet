@@ -18,11 +18,11 @@ include: package:lints/recommended.yaml
 # linter:
 #   rules:
 #     - camel_case_types
-analyzer:
-  errors:
-    depend_on_referenced_packages: ignore
-  exclude:
-    - dart_cli/***
+
+# analyzer:
+#   exclude:
+#     - path/to/excluded/files/**
+
 # For more information about the core and recommended set of lints, see
 # https://dart.dev/go/core-lints
 

@@ -136,7 +136,7 @@ class NavigationHelper {
         path: '/landing',
         pageBuilder: (context, state) {
           return getPage(
-            child: const LandingScreen(),
+            child: LandingScreen(),
             state: state,
           );
         },
