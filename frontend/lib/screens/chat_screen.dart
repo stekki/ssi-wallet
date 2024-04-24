@@ -1,10 +1,14 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/chat_bottom_sheet.dart';
-import 'package:frontend/widgets/message.dart';
+import 'package:frontend/widgets/proof_request_complete.dart';
+import 'package:frontend/widgets/proof_request_widget.dart';
+import 'package:frontend/widgets/basic_message_widget.dart';
+import 'package:frontend/widgets/proof_request_widget_buyer.dart';
+// import 'package:frontend/widgets/message.dart';
+// import '../models/models.dart';
 
 import '../services/job_service.dart';
 
@@ -105,21 +109,26 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                     final message =
                                         job["output"]["message"]["node"];
                                     final messageText = message["message"];
-                                    if ((message["sentByMe"])
-                                        && (messageText == 'Buyer has accepted your identification request.')) {
+                                    if ((message["sentByMe"]) &&
+                                        (messageText ==
+                                            'Buyer has accepted your identification request.')) {
+                                      return Container();
+                                    } else if ((message["sentByMe"]) &&
+                                        (messageText ==
+                                            'Buyer has denied your identification request.')) {
                                       return Container();
                                     } else {
-                                    // Best if Component builder like BasicChatMessage
-                                    // take the whole node (above) and handle it there.
-                                    final createdAt =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(message['createdMs']));
-                                    return BasicChatMessageWidget(
-                                        message: message["message"],
-                                        sentBy: message["sentByMe"]
-                                            ? 'me'
-                                            : 'other',
-                                        timestamp: createdAt);
+                                      // Best if Component builder like BasicChatMessage
+                                      // take the whole node (above) and handle it there.
+                                      final createdAt =
+                                          DateTime.fromMillisecondsSinceEpoch(
+                                              int.parse(message['createdMs']));
+                                      return BasicChatMessageWidget(
+                                          message: message["message"],
+                                          sentBy: message["sentByMe"]
+                                              ? 'me'
+                                              : 'other',
+                                          timestamp: createdAt);
                                     }
                                   } else if (job["protocol"] == "PROOF") {
                                     final proofRequest =

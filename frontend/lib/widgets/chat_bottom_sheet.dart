@@ -95,7 +95,7 @@ class ChatBottomSheetSeller extends ConsumerWidget {
               );
             },
           );
-        },
+        }, 
       ),
     );
   }
