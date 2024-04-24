@@ -15,7 +15,7 @@ Future<void> main(List<String> args) async {
   final cmd = args[0];
   final name = args[1];
   final pin = args[2];
-  print('cmd: $cmd, name: $name, keyID: $pin');
+
   if (args.length == neededArgsSizeForCloud) {
     setupFromYAML(args[3]);
   } else {

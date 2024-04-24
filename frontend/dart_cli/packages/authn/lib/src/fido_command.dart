@@ -14,5 +14,6 @@ class FidoCommand {
   });
 
   factory FidoCommand.loadMap(Map<String, dynamic> m) =>
-      FidoCommand(m['url'], m['aaguid']);
+      FidoCommand(m['url'], m['aaguid'],
+          counter: m['counter'], jwt: m['jwt'], origin: m['origin']);
 }

@@ -73,7 +73,7 @@ class PemPair {
 }
 
 class Xorel {
-  int salt = 56; // todo:
+  int salt = cfg!.salt;
   int key;
 
   Xorel(this.key, {this.salt = 0});
@@ -91,10 +91,9 @@ class Xorel {
 class Handle {
   Int64 id;
   ECPrivateKey? privateKey;
-  List<int>? _data; // is credID todo: rename?
+  List<int>? _data;
   ECPublicKey? publicKey;
 
-  // should we rename to Xor todo: or XorData
   Uint8List get credID => seal!.xor(_data! as Uint8List);
 
   Handle.load(Uint8List d) : id = keyHandleId {
@@ -142,13 +141,6 @@ Config? cfg;
 Command? baseCmd;
 FidoCommand? fidoCommand;
 
-const keyPath =
-    '/home/parallels/go/src/github.com/findy-network/cert/server/server.key';
-const certPath =
-    '/home/parallels/go/src/github.com/findy-network/cert/server/server.crt';
-
-// '/home/parallels/go/src/github.com/findy-network/cert/client/client.crt';
-
 class SecurityContextChannelCredentials extends ChannelCredentials {
   final SecurityContext _securityContext;
 
@@ -176,7 +168,7 @@ Future<String> exec(String cmd, name, xorKey) async {
   assert(baseCmd != null);
   assert(fidoCommand != null);
 
-  //final cert = File(certPath).readAsBytesSync();
+  dPrint('cmd: $cmd, name: $name, keyID: $xorKey');
 
   final channelContext =
       SecurityContextChannelCredentials.baseSecurityContext();
@@ -202,34 +194,35 @@ Future<String> exec(String cmd, name, xorKey) async {
   seal = Xorel(int.parse(xorKey));
   keyHandleId = keyHandleID;
 
-  print('keyHandleID: $keyHandleID');
+  dPrint('keyHandleID: $keyHandleID');
 
   var tokenPayload = '';
 
   try {
-    print('for starts');
+    dPrint('for starts');
     await for (var cmdStat in stub.enter(
       Cmd(
-        type: myCMD, //type: Cmd_Type.REGISTER,
+        type: myCMD,
         userName: name,
-        uRL: fidoCommand!.url, // todo: argument/var
-        aAGUID: fidoCommand!.aaguid, // todo: argument/var
+        uRL: fidoCommand!.url,
+        aAGUID: fidoCommand!.aaguid,
+        origin: fidoCommand!.origin ?? '',
       ),
       //options: CallOptions(compression: const GzipCodec()), // this works!!
     )) {
-      print('status msg arrives: ${cmdStat.type}');
+      dPrint('status msg arrives: ${cmdStat.type}');
       switch (cmdStat.type) {
         case CmdStatus_Type.READY_OK:
           tokenPayload = cmdStat.ok.jWT;
           break;
         case CmdStatus_Type.READY_ERR:
           final msg = cmdStat.err;
-          print('cmd status ERR, throwing-> "$msg"');
+          dPrint('cmd status ERR, throwing-> "$msg"');
           throw 'Exp: error';
         //break;
         case CmdStatus_Type.STATUS:
-          print('==> Has OK: ${cmdStat.type}');
-          print('--> received ${cmdStat.secType}');
+          dPrint('==> Has OK: ${cmdStat.type}');
+          dPrint('--> received ${cmdStat.secType}');
 
           switch (cmdStat.secType) {
             case SecretMsg_Type.IS_KEY_HANDLE:
@@ -290,15 +283,15 @@ Future<String> exec(String cmd, name, xorKey) async {
               break;
 
             default:
-              print('ERROR: unknown sec type');
+              dPrint('ERROR: unknown sec type');
           }
           break;
         default:
-          print('ERR: type');
+          dPrint('ERR: type');
       }
     }
   } catch (e) {
-    print('Caught error: $e');
+    dPrint('Caught error: $e');
   }
   await channel.shutdown();
 
@@ -309,6 +302,13 @@ Future<String> exec(String cmd, name, xorKey) async {
       return jwt;
     default:
       return 'Registering OK';
+  }
+}
+
+void dPrint(Object? obj) {
+  final isDebug = cfg!.debug ?? false;
+  if (isDebug) {
+    print(obj);
   }
 }
 
