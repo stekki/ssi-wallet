@@ -115,6 +115,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      key: const ValueKey('profileScreen'),
       body: SingleChildScrollView(
         child: Column(children: [
           // ------- QR Code section -------
@@ -183,6 +184,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
               // ----- Start of invitation link -----
 
               Container(
+                key: const ValueKey('invitationLink'),
                 width: width,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -228,6 +230,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
                               width: width * 0.6,
                               height: 50,
                               child: TextButton(
+                                key: const ValueKey('regenerateButton'),
                                 onPressed: decodeImage,
                                 style: TextButton.styleFrom(
                                     backgroundColor: DesignColors.buttonColor),

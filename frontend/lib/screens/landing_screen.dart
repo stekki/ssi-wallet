@@ -45,6 +45,7 @@ class _LandingScreenState extends State<LandingScreen>
         return AlertDialog(
           title: const Text('Enter JWT Token'),
           content: TextField(
+            key: const ValueKey('jwtTokenField'),
             controller: tokenController,
             decoration: const InputDecoration(hintText: 'JWT Token'),
           ),
@@ -56,6 +57,7 @@ class _LandingScreenState extends State<LandingScreen>
               },
             ),
             TextButton(
+              key: const ValueKey('submitToken'),
               child: const Text('Submit'),
               onPressed: () async {
                 String token = tokenController.text;
@@ -128,6 +130,7 @@ class _LandingScreenState extends State<LandingScreen>
         return Wrap(
           children: <Widget>[
             ListTile(
+              key: const ValueKey('devTokenSignIn'),
               leading: const Icon(Icons.vpn_key),
               title: const Text('Sign in with token (dev)'),
               onTap: () {
@@ -136,6 +139,7 @@ class _LandingScreenState extends State<LandingScreen>
               },
             ),
             ListTile(
+              key: const ValueKey('skipToHome'),
               leading: const Icon(Icons.skip_next),
               title: const Text('Skip to home (dev)'),
               onTap: () {
@@ -258,6 +262,7 @@ class _LandingScreenState extends State<LandingScreen>
               right: 20,
               bottom: 20,
               child: FloatingActionButton(
+                key: const ValueKey("developerLoginOptions"),
                 onPressed: () => _showDeveloperOptions(context),
                 backgroundColor: Colors.grey.withOpacity(0.5),
                 mini: true,
