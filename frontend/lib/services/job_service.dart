@@ -64,6 +64,29 @@ class JobService {
     }
   }
 
+  static Future<bool> sendProofRequestReceipt(String connectionId) async {
+    final List<Map<String, dynamic>> attributes = [
+      {
+        'name': 'item',
+        'credDefId': 'F5GzEzb5HCZYkbZK5jr3vU:3:CL:17:Verkkokauppa',
+      },
+    ];
+    final Map<String, dynamic> variables = {
+      'input': {
+        'connectionId': connectionId,
+        'attributes': attributes,
+      },
+    };
+
+    final result = await GraphQLService.performMutation(
+        sendRequestProofMutation, variables);
+    if (result['sendProofRequest']['ok']) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   static Future<bool> sendResumeJobMutation(String jobId, bool accept) async {
     final Map<String, dynamic> variables = {
       'input': {

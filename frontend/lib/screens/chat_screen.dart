@@ -9,6 +9,7 @@ import 'package:frontend/widgets/proof_request_complete_seller.dart';
 import 'package:frontend/widgets/proof_request_widget.dart';
 import 'package:frontend/widgets/basic_message_widget.dart';
 import 'package:frontend/widgets/proof_request_widget_buyer.dart';
+import 'package:frontend/widgets/proof_request_widget_seller.dart';
 import '../providers/providers.dart';
 // import 'package:frontend/widgets/message.dart';
 // import '../models/models.dart';
@@ -131,8 +132,16 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                         if(job["status"] == 'COMPLETE' && chatStatus[widget.id] == ConnectionStatus.receipted) {
                                           return Container();
                                         }
+                                        else if(job["status"] == 'WAITING' && chatStatus[widget.id] == ConnectionStatus.confirmed) {
+                                          return ProofRequestWidgetSeller(
+                                          key: ValueKey(job['id']),
+                                          sentBy: proofRequest["role"],
+                                          timestamp: DateTime.fromMillisecondsSinceEpoch(int.parse(proofRequest["createdMs"])),
+                                          jobID: job["id"],
+                                          id: widget.id,
+                                          status: job["status"]);
+                                        }
                                         else if(job["status"] == 'COMPLETE') {
-                                   
                                           return ProofRequestCompleteWidget(node: proofRequest);
                                         } else {
                                           return ProofRequestWidgetBuyer(

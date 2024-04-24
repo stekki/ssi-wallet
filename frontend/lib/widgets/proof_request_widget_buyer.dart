@@ -6,7 +6,7 @@ import 'package:frontend/utils/constants.dart';
 import 'package:intl/intl.dart';
 import '../utils/styles.dart';
 
-class ProofRequestWidgetBuyer extends StatefulWidget {
+class ProofRequestWidgetBuyer extends ConsumerStatefulWidget {
   final String sentBy;
   final DateTime timestamp;
   final String jobID;
@@ -26,20 +26,7 @@ class ProofRequestWidgetBuyer extends StatefulWidget {
   ProofRequestWidgetBuyerState createState() => ProofRequestWidgetBuyerState();
 }
 
-class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
-  bool acceptDisabled = false;
-  bool declineDisabled = false;
-
-  void doResume(bool accept) async {
-    print("pressed");
-      await JobService.sendResumeJobMutation(widget.jobID, accept);
-      if(!accept) {
-        setState(() {
-          acceptDisabled = true;
-          declineDisabled = true;
-        });
-      }
-  }
+class ProofRequestWidgetBuyerState extends ConsumerState<ProofRequestWidgetBuyer> {
 
   @override
   Widget build(BuildContext context) {
@@ -88,12 +75,25 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
               height: 40,
               child: Row(
                 children: [
-                  ElevatedButton(onPressed: acceptDisabled ? null : () => doResume(true),
+                  ElevatedButton(
+                    onPressed: () async => {
+                      await JobService.sendResumeJobMutation(widget.jobID, true),
+                       ref
+                                        .watch(chatStatusProvider.notifier)
+                                        .updateChatStatus(
+                                            widget.id, ConnectionStatus.confirmed),
+                      },
                     child: const Text('Accept'),
                   ),
                   const SizedBox(width: 40),
                   ElevatedButton(
-                    onPressed: declineDisabled ? null : () => doResume(false),
+                    onPressed: () async => {
+                      await JobService.sendResumeJobMutation(widget.jobID, false),
+                       ref
+                                        .watch(chatStatusProvider.notifier)
+                                        .updateChatStatus(
+                                            widget.id, ConnectionStatus.confirmed),
+                      },
                     child: const Text('Decline'),
                   ),
                 ],
