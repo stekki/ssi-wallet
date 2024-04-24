@@ -33,6 +33,12 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
   void doResume(bool accept) async {
     print("pressed");
       await JobService.sendResumeJobMutation(widget.jobID, accept);
+      if(!accept) {
+        setState(() {
+          acceptDisabled = true;
+          declineDisabled = true;
+        });
+      }
   }
 
   @override
