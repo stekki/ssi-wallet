@@ -5,6 +5,19 @@ import '../models/credential.dart';
 
 import 'package:frontend/utils/styles.dart';
 
+final credentialCardColorProvider =
+    StateProvider.family<Color, String>((ref, issuer) {
+  final iconColors = [
+    const Color.fromARGB(255, 193, 135, 250),
+    const Color.fromARGB(255, 80, 240, 230),
+    const Color.fromARGB(255, 96, 235, 152),
+    const Color.fromARGB(255, 121, 183, 255),
+    Colors.orange,
+  ];
+  Random random = Random(issuer.hashCode);
+  return iconColors[random.nextInt(iconColors.length)];
+});
+
 class CredentialCard extends ConsumerWidget {
   final Credential credential;
 
@@ -22,100 +35,116 @@ class CredentialCard extends ConsumerWidget {
     color: Colors.orange,
   );
 
+  static const List<Color> iconColors = [
+    Color.fromARGB(255, 193, 135, 250),
+    Color.fromARGB(255, 80, 240, 230),
+    Color.fromARGB(255, 96, 235, 152),
+    Color.fromARGB(255, 121, 183, 255),
+    Colors.orange,
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final height = MediaQuery.of(context).size.height;
+    final color = ref.watch(credentialCardColorProvider(
+        credential.issuer)); // Get the color from the provider
 
     return ExpansionTile(
-      title: Text(credential.issuer),
-      subtitle: Text(credential.item),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment:
+            CrossAxisAlignment.center, // Align items vertically center
+        children: <Widget>[
+          CircleAvatar(
+            backgroundColor:
+                color, // Use random color for the background, now consistent across rebuilds
+            radius: 25, // Size of the circle avatar
+            child: Text(
+              credential.issuer.isNotEmpty ? credential.issuer[0] : '?',
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24), // First letter with styling
+            ),
+          ),
+          const SizedBox(width: 8), // Space between icon and text
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min, // Fit content in minimum space
+              children: [
+                Text(credential.issuer),
+                Text(credential.item,
+                    style: TextStyle(color: Colors.grey[600])),
+              ],
+            ),
+          ),
+        ],
+      ),
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+          padding: const EdgeInsets.all(8),
           child: Container(
             decoration: BoxDecoration(
               color: DesignColors.secondaryColor.withOpacity(0),
               borderRadius: BorderRadius.circular(8),
             ),
-            height: max(height * 0.1, 50),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Column(
               children: [
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          bottom: 7,
-                          top: 7,
-                        ),
-                        child: Text(
-                          "Purchase date: ${credential.date}",
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 14),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: SingleChildScrollView(
-                            child: Text(
-                              "Holder: ${credential.holder}",
-                              textAlign: TextAlign.left,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Purchase date: ${credential.date}",
                               style: const TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 14),
                             ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 1),
-                          child: SingleChildScrollView(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text(
-                                  "Status: ${credential.status}\t",
-                                  textAlign: TextAlign.left,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 14),
-                                ),
-                                (credential.status.toLowerCase() == 'valid')
-                                    ? validIcon
-                                    : invalidIcon,
-                              ],
+                            Text(
+                              "Holder: ${credential.holder}",
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 14),
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Status: ${credential.status} ",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  (credential.status.toLowerCase() == 'valid')
+                                      ? validIcon
+                                      : invalidIcon,
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(15, 15, 10, 0),
-                  child: Row(
-                    children: [
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      TextButton(
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 40, 10, 10),
+                      child: TextButton(
                           onPressed: () => {},
                           style: TextButton.styleFrom(
                               backgroundColor: DesignColors.buttonColor),
-                          child: const Text(" Send ")),
-                    ],
-                  ),
-                )
+                          child: const Text("Send")),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

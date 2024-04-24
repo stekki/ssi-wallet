@@ -38,12 +38,18 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
   Uint8List? imageBytes;
   String? stringForConnection;
   bool isLoading = false;
+  bool isCredentialValid = false;
 
   @override
   void initState() {
     super.initState();
     decodeImage();
     _fetchAndSetUsername();
+    checkCredentialValidity();
+  }
+
+  void checkCredentialValidity() {
+    isCredentialValid = true;
   }
 
   void makeQuery() async {
@@ -122,22 +128,15 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.35,
             child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
               children: [
                 Container(
                   decoration: scaffoldBackground,
                 ),
-                Center(
-                  child: imageBytes != null
-                      ? Container(
-                          margin: const EdgeInsets.symmetric(vertical: 15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Colors.transparent,
-                          ),
-                          clipBehavior: Clip.antiAlias,
-                          child: Image.memory(imageBytes!))
-                      : const CircularProgressIndicator(),
-                ),
+                imageBytes != null
+                    ? buildQRCode()
+                    : const Center(child: CircularProgressIndicator()),
               ],
             ),
           ),
@@ -247,6 +246,18 @@ class _ProfileScreen extends ConsumerState<ProfileScreen> {
           )
         ]),
       ),
+    );
+  }
+
+  Widget buildQRCode() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Colors.transparent,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Image.memory(imageBytes!),
     );
   }
 }
