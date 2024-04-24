@@ -102,79 +102,32 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 controller: _scrollController,
                                 itemCount: events.length,
                                 itemBuilder: (context, index) {
-                                  // final event = events[index];
-                                  // final job = event["job"]["node"];
                                   final job = events[index];
-                                  if (job["protocol"] == "BASIC_MESSAGE") {
-                                    final message =
-                                        job["output"]["message"]["node"];
-                                    final messageText = message["message"];
-                                    if ((message["sentByMe"]) &&
-                                        (messageText ==
-                                            'Buyer has accepted your identification request.')) {
-                                      return Container();
-                                    } else if ((message["sentByMe"]) &&
-                                        (messageText ==
-                                            'Buyer has denied your identification request.')) {
-                                      return Container();
-                                    } else {
-                                      // Best if Component builder like BasicChatMessage
-                                      // take the whole node (above) and handle it there.
-                                      final createdAt =
-                                          DateTime.fromMillisecondsSinceEpoch(
-                                              int.parse(message['createdMs']));
-                                      return BasicChatMessageWidget(
-                                          message: message["message"],
-                                          sentBy: message["sentByMe"]
-                                              ? 'me'
-                                              : 'other',
-                                          timestamp: createdAt);
-                                    }
-                                  } else if (job["protocol"] == "PROOF") {
-                                    final proofRequest =
+                                  final protocol = job["protocol"];
+                                  switch (protocol) {
+                                    case 'BASIC_MESSAGE': return BasicChatMessageWidget(
+                                      node: job["output"]["message"]["node"]
+                                    );
+                                    case 'PROOF': {
+                                      final proofRequest =
                                         job["output"]["proof"]["node"];
-                                    final createdAt =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(
-                                                proofRequest['createdMs']));
-                                    /*
-                                    final verifiedAt =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(proofRequest['verifiedMs']));
-                                    final approvedAt =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(proofRequest['approvedMs']));
-                                      */
-                                    if (proofRequest['role'] == 'VERIFIER') {
-                                      return ProofRequestWidget(
-                                        key: ValueKey(job['id']),
-                                        sentBy: proofRequest["role"],
-                                        timestamp: createdAt,
-                                      );
-                                      //verifiedAt: verifiedAt,
-                                      //approvedAt: approvedAt,);
-                                    } else if ((proofRequest['role'] ==
-                                            'PROVER') &&
-                                        (job['status'] == 'COMPLETE')) {
-                                      return ProofRequestCompleteWidget(
-                                        key: ValueKey(job['id']),
-                                        sentBy: proofRequest["role"],
-                                        timestamp: createdAt,
-                                      );
-                                    } else if (proofRequest['role'] ==
-                                        'PROVER') {
-                                      return ProofRequestWidgetBuyer(
+                                      final role = proofRequest['role'];
+                                      if (role == 'VERIFIER') {
+                                        return ProofRequestWidget(node: proofRequest);
+                                      }
+                                      else if (role == "PROVER") {
+                                        return (job["status"] == 'COMPLETE') ? 
+                                        ProofRequestCompleteWidget(node: proofRequest) :
+                                        ProofRequestWidgetBuyer(
                                           key: ValueKey(job['id']),
                                           sentBy: proofRequest["role"],
-                                          timestamp: createdAt,
+                                          timestamp: DateTime.fromMillisecondsSinceEpoch(int.parse(proofRequest["createdMs"])),
                                           jobID: job["id"],
                                           id: widget.id,
                                           status: job["status"]);
-                                    } else {
-                                      return Container();
+                                      }
                                     }
-                                  } else {
-                                    return Container();
+                                    default: return Container();
                                   }
                                 },
                               ),

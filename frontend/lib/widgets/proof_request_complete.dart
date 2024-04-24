@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/widgets/abstract_chat_card.dart';
-import 'package:intl/intl.dart';
 import '../utils/styles.dart';
 
 class ProofRequestCompleteWidget extends AbstractChatCard {
-  const ProofRequestCompleteWidget({
+  ProofRequestCompleteWidget({
     super.key,
-    required super.sentBy,
-    required super.timestamp,
+    super.node
   });
+  
+  @override String getSentBy(Map<String, dynamic>? node) {
+    return node!["role"];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,6 @@ class ProofRequestCompleteWidget extends AbstractChatCard {
       );
     }
 
-    String formattedTime = DateFormat('hh:mm a').format(timestamp);
 
     return Align(
       alignment: sentBy == 'me' ? Alignment.centerRight : Alignment.centerLeft,
@@ -50,7 +51,7 @@ class ProofRequestCompleteWidget extends AbstractChatCard {
             const Text('Identification provided'),
             const SizedBox(height: 4),
             Text(
-              formattedTime,
+              formatTime,
               style: TextStyle(
                 color: DesignColors.textColor.withOpacity(0.6),
                 fontSize: 12,

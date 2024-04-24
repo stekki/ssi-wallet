@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/abstract_chat_card.dart';
-import 'package:intl/intl.dart';
 
 class ProofRequestWidget extends AbstractChatCard {
   //final DateTime verifiedAt;
   //final DateTime approvedAt;
 
-  const ProofRequestWidget({
+  ProofRequestWidget({
     super.key,
-    required super.sentBy,
-    required super.timestamp,
+    super.node
     //required this.verifiedAt,
     //required this.approvedAt,
   });
-
+  
+  @override String getSentBy(Map<String, dynamic>? node) {
+    return node!["role"];
+  }
   @override
   Widget build(BuildContext context) {
     Color color =
@@ -36,8 +37,6 @@ class ProofRequestWidget extends AbstractChatCard {
       );
     }
 
-    String formattedTime = DateFormat('hh:mm a').format(timestamp);
-
     return Align(
       alignment:
           sentBy == 'VERIFIER' ? Alignment.centerRight : Alignment.centerLeft,
@@ -57,7 +56,7 @@ class ProofRequestWidget extends AbstractChatCard {
             const Text('Identification requested'),
             const SizedBox(height: 4),
             Text(
-              formattedTime,
+              formatTime,
               style: TextStyle(
                 color: DesignColors.textColor.withOpacity(0.6),
                 fontSize: 12,

@@ -45,7 +45,7 @@ class JobService {
     final List<Map<String, dynamic>> attributes = [
       {
         'name': 'name',
-        'credDefId': 'EuxiHbKyk7uHWQa8LKrrQh:3:CL:14:SuomenValtio',
+        'credDefId': 'VBywCZLA71hafiMBEMj2Kz:3:CL:14:SuomenValtio',
       },
     ];
     final Map<String, dynamic> variables = {

@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 abstract class AbstractChatCard extends StatelessWidget {
-  final String sentBy;
-  final DateTime timestamp;
+  final Map<String, dynamic>? node;
+  late final String sentBy;
+  late final String formatTime;
 
-  const AbstractChatCard({
+  AbstractChatCard({
     super.key,
-    required this.sentBy,
-    required this.timestamp,
-  });
+    this.node,
+  }) {
+    formatTime = getFormatTime(node!["createdMs"]);
+    sentBy = getSentBy(node);
+  }
+
+  String getFormatTime(createdMs){
+    final timestamp = DateTime.fromMillisecondsSinceEpoch(int.parse(createdMs));
+    final formatTime = DateFormat('hh:mm a').format(timestamp);
+    return formatTime;
+    }
+
+  String getSentBy(Map<String, dynamic>? node);
+
 }

@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/abstract_chat_card.dart';
-import 'package:intl/intl.dart';
 
 class BasicChatMessageWidget extends AbstractChatCard {
-  final String message;
+  late final String message;
 
-  const BasicChatMessageWidget({
+  BasicChatMessageWidget({
     super.key,
-    required this.message,
-    required super.sentBy,
-    required super.timestamp,
-  });
-
+    super.node,
+  }) {
+    message = node!["message"];
+  }
+  
+  @override String getSentBy(Map<String, dynamic>? node) {
+    return node!["sentByMe"] ? "me" : "other";
+  }
   @override
   Widget build(BuildContext context) {
     Color color = sentBy == 'me' ? DesignColors.messageColor : Colors.white;
@@ -33,8 +35,6 @@ class BasicChatMessageWidget extends AbstractChatCard {
         bottomRight: Radius.circular(10),
       );
     }
-
-    String formattedTime = DateFormat('hh:mm a').format(timestamp);
 
     return Align(
       alignment: sentBy == 'me' ? Alignment.centerRight : Alignment.centerLeft,
@@ -60,7 +60,7 @@ class BasicChatMessageWidget extends AbstractChatCard {
             ),
             const SizedBox(height: 4),
             Text(
-              formattedTime,
+              formatTime,
               style: TextStyle(
                 color: DesignColors.textColor.withOpacity(0.6),
                 fontSize: 12,
