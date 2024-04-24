@@ -13,8 +13,8 @@ final profileCredentialProvider = FutureProvider<List<Credential>>(
               Credential(
                   issuer: "Finnish government",
                   item: "SSN",
-                  date: "20.05.2000",
-                  holder: "Testi Terttu",
+                  date: "20.05.2020",
+                  holder: "Jessica S.",
                   status: "valid"),
             ]);
   },

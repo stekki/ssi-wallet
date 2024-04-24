@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/providers/providers.dart';
 import 'package:frontend/services/job_service.dart';
+import 'package:frontend/utils/constants.dart';
 import 'package:intl/intl.dart';
 import '../utils/styles.dart';
 
@@ -28,6 +31,7 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
   bool declineDisabled = false;
 
   void doResume(bool accept) async {
+    print("pressed");
       await JobService.sendResumeJobMutation(widget.jobID, accept);
   }
 
@@ -78,8 +82,7 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
               height: 40,
               child: Row(
                 children: [
-                  ElevatedButton(
-                    onPressed: acceptDisabled ? null : () => doResume(true),
+                  ElevatedButton(onPressed: acceptDisabled ? null : () => doResume(true),
                     child: const Text('Accept'),
                   ),
                   const SizedBox(width: 40),
