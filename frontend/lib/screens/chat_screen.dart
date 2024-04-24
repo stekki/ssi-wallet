@@ -1,12 +1,15 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/utils/constants.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/chat_bottom_sheet.dart';
 import 'package:frontend/widgets/proof_request_complete.dart';
+import 'package:frontend/widgets/proof_request_complete_seller.dart';
 import 'package:frontend/widgets/proof_request_widget.dart';
 import 'package:frontend/widgets/basic_message_widget.dart';
 import 'package:frontend/widgets/proof_request_widget_buyer.dart';
+import '../providers/providers.dart';
 // import 'package:frontend/widgets/message.dart';
 // import '../models/models.dart';
 
@@ -66,6 +69,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     final AsyncValue<List<Map<String, dynamic>>> streamEvents =
         ref.watch(jobStream);
+        final chatStatus = ref.read(chatStatusProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -113,18 +117,40 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                         job["output"]["proof"]["node"];
                                       final role = proofRequest['role'];
                                       if (role == 'VERIFIER') {
-                                        return ProofRequestWidget(node: proofRequest);
+                                        if (job["status"] == 'COMPLETE') {
+                                          /*
+                                           ref
+                                        .watch(chatStatusProvider.notifier)
+                                        .updateChatStatus(
+                                            widget.id, ConnectionStatus.confirmed);
+                                            */
+                                          return ProofRequestCompleteSellerWidget(node: proofRequest);
+                                        }
+                                        else if (job["status"] == 'WAITING') {
+                                          return ProofRequestWidget(node: proofRequest);
+                                        }
+                                        else {
+                                          return Container();
+                                        }
                                       }
                                       else if (role == "PROVER") {
-                                        return (job["status"] == 'COMPLETE') ? 
-                                        ProofRequestCompleteWidget(node: proofRequest) :
-                                        ProofRequestWidgetBuyer(
+                                        if(job["status"] == 'COMPLETE' && chatStatus[widget.id] == ConnectionStatus.receipted) {
+                                          
+                                        }
+                                        else if(job["status"] == 'COMPLETE') {
+                                   
+                                          return ProofRequestCompleteWidget(node: proofRequest);
+                                        } else {
+                                          return ProofRequestWidgetBuyer(
                                           key: ValueKey(job['id']),
                                           sentBy: proofRequest["role"],
                                           timestamp: DateTime.fromMillisecondsSinceEpoch(int.parse(proofRequest["createdMs"])),
                                           jobID: job["id"],
                                           id: widget.id,
                                           status: job["status"]);
+                                        }
+                                        
+                                        
                                       }
                                     }
                                     default: return Container();

@@ -13,6 +13,9 @@ class ChatBottomSheetSeller extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Map<String, ConnectionStatus> chatStateList =
         ref.watch(chatStatusProvider);
+        print("Seller");
+        print(chatStateList[id]);
+        
 
     return Center(
       child: IconButton(
@@ -110,6 +113,8 @@ class ChatBottomSheetBuyer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Map<String, ConnectionStatus> chatStateList =
         ref.watch(chatStatusProvider);
+        print("Buyer");
+        print(chatStateList[id]);
     return Center(
       child: IconButton(
         icon: const Icon(Icons.add),

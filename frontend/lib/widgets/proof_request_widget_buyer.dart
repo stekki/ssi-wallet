@@ -28,28 +28,7 @@ class ProofRequestWidgetBuyerState extends State<ProofRequestWidgetBuyer> {
   bool declineDisabled = false;
 
   void doResume(bool accept) async {
-    final success =
-        await JobService.sendResumeJobMutation(widget.jobID, accept);
-    if (accept && success) {
-      await JobService.sendMessage(
-          widget.id, 'Buyer has accepted your identification request.');
-      if (mounted) {
-        setState(() {
-          acceptDisabled = !accept;
-          declineDisabled = !accept;
-        });
-      }
-    } else {
-      if (mounted) {
-        await JobService.sendMessage(
-            widget.id, 'Buyer has denied your identification request.');
-
-        setState(() {
-          acceptDisabled = false;
-          declineDisabled = false;
-        });
-      }
-    }
+      await JobService.sendResumeJobMutation(widget.jobID, accept);
   }
 
   @override
