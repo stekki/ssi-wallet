@@ -129,7 +129,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                       }
                                       else if (role == "PROVER") {
                                         if(job["status"] == 'COMPLETE' && chatStatus[widget.id] == ConnectionStatus.receipted) {
-                                          
+                                          return Container();
                                         }
                                         else if(job["status"] == 'COMPLETE') {
                                    
@@ -149,6 +149,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                     }
                                     default: return Container();
                                   }
+                                  return Container();
                                 },
                               ),
                             ),
