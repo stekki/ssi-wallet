@@ -22,30 +22,31 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
   Widget build(BuildContext context) {
     final credentialsFuture = ref.watch(credentialsFutureProvider);
     return Scaffold(
+      key: const ValueKey("credentialScreen"),
       body: credentialsFuture.when(
           loading: () => const LoadingScreen(),
           error: (err, stack) => SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: Center(
+            width: double.infinity,
+            height: double.infinity,
+            child: Center(
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
                       const Text("Error loading credentials"),
-                      const SizedBox(height: 20),
-                      if (_detailsOpen && (err is Exception || err is Error))
-                        Text('Details: ${err.toString()}'),
-                      if (!_detailsOpen)
-                        ElevatedButton(
-                            child: const Text("Show details"),
-                            onPressed: () {
-                              setState(() {
+            const SizedBox(height: 20),
+            if (_detailsOpen && (err is Exception || err is Error))
+                Text('Details: ${err.toString()}'),
+            if (!_detailsOpen)
+              ElevatedButton(
+                child: const Text("Show details"),
+                onPressed: () {
+                  setState(() {
                                 _detailsOpen = true;
                               });
-                            })
-                    ]),
-              )),
+                })
+            ]),
+            )),
           data: (credentials) {
             var filteredCredentials = credentials
                 .where((c) =>
@@ -57,6 +58,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
                   child: TextField(
+                    key: const ValueKey('searchReceipt'),
                     controller: _searchController,
                     decoration: InputDecoration(
                       hintText: 'Search receipt',
@@ -83,6 +85,7 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
                   child: ConstrainedBox(
                     constraints: const BoxConstraints(maxHeight: 200),
                     child: ListView.builder(
+                      key: const ValueKey('credentialCardList'),
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
                       itemCount: filteredCredentials.length,

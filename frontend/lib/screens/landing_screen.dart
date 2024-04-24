@@ -84,6 +84,7 @@ class LandingScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           content: TextField(
+            key: const ValueKey('jwtTokenField'),
             controller: tokenController,
             decoration: const InputDecoration(hintText: 'Enter JWT Token'),
           ),
@@ -94,6 +95,7 @@ class LandingScreen extends StatelessWidget {
             ),
             TextButton(
               child: const Text('Sign In'),
+              key: const ValueKey('submitToken'),
               onPressed: () {
                 SecureStorageUtil().writeToken(tokenController.text);
                 GraphQLConfig().createClient();
@@ -239,6 +241,7 @@ class LandingScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: Visibility(
+        key: const ValueKey('openDevSignIn'),
         visible: true,
         child: FloatingActionButton(
           mini: true,

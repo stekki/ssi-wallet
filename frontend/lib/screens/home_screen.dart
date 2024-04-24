@@ -61,6 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         .removeWhere((key, value) => value == ConnectionStatus.deleted);
 
     return Scaffold(
+      key: const ValueKey('homeScreen'),
       body: connectionsAsyncValue.when(
         loading: () => const LoadingScreen(),
         error: (error, stack) => Text("Error: $error"),
@@ -70,6 +71,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 8, 20, 8),
                 child: TextField(
+                  key: const ValueKey('searchChat'),
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText: 'Search chat',
@@ -105,6 +107,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
               ),
               Expanded(
                 child: TabBarView(
+                  key: const ValueKey('connectionList'),
                   controller: _tabController,
                   children: [
                     _buildConnectionListViewOpen(
@@ -131,6 +134,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           const SizedBox(height: 10),
           */
           FloatingActionButton(
+            key: const ValueKey('addButton'),
             onPressed: () => _showTokenInputDialog(context),
             backgroundColor: DesignColors.mainColor,
             heroTag: 'addButton',
@@ -146,9 +150,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          key: const ValueKey('tokenInputDialog'),
           title: const Text('Add via invitation link',
               style: TextStyles.floatingButtonText),
           content: TextField(
+            key: const ValueKey('invitationLinkField'),
             controller: _connectionController,
             decoration: const InputDecoration(
               hintText: 'Invitation link',
@@ -156,10 +162,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
           ),
           actions: [
             TextButton(
+              key: const ValueKey('cancelAddConnection'),
               onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
             ElevatedButton(
+              key: const ValueKey('addConnectionViaLink'),
               onPressed: () async {
                 try {
                   final String messageText = _connectionController.text.trim();
