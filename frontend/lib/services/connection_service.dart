@@ -7,14 +7,9 @@ import '../services/graphql_service.dart';
 import '../services/queries.dart';
 
 class ConnectionService {
-  static final ConnectionService _instance = ConnectionService._();
-  ConnectionService._();
-  factory ConnectionService() {
-    return _instance;
-  }
-  static QueryResult? fullResult;
-  static List<Connection> gqlConnections = [];
-  static Map<String, dynamic> pageInfo = {};
+  List<Connection> gqlConnections = [];
+  Map<String, dynamic> pageInfo = {};
+
   static final acceptConnectionMutation = gql("""
         mutation connect(\$input: ConnectInput!) {
           connect(input: \$input) {
@@ -22,7 +17,7 @@ class ConnectionService {
           }
         }""");
 
-  Future<void> getConnections() async {
+  static Future<void> getConnections() async {
     try {
       await GraphQLService.getQueryResult(
         connectionsQuery,
@@ -33,7 +28,7 @@ class ConnectionService {
     }
   }
 
-  Future<bool> acceptConnection(String? invitation) async {
+  static Future<bool> acceptConnection(String? invitation) async {
     final variables = {
       'input': {
         'invitation': invitation,
@@ -42,11 +37,6 @@ class ConnectionService {
     final result = await GraphQLService.performMutation(
         acceptConnectionMutation, variables);
     return result['connect']['ok'];
-  }
-
-  Future<List<Connection>> fetchConnections() async {
-    await getConnections();
-    return gqlConnections;
   }
 
   StreamProvider<List<Connection>> connectionStreamProvider() =>

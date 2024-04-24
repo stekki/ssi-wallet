@@ -166,7 +166,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   if (messageText
                       .startsWith('didcomm://aries_connection_invitation')) {
                     final bool connectionMade =
-                        await ConnectionService().acceptConnection(messageText);
+                        await ConnectionService.acceptConnection(messageText);
 
                     if (!connectionMade) {
                       showErrorSnackbar("Failed to make the connection");

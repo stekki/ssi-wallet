@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/credential.dart';
+import '../models/credential_model.dart';
 
 import 'package:frontend/utils/styles.dart';
 

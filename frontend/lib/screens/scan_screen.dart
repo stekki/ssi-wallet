@@ -25,7 +25,7 @@ class ScanScreen extends ConsumerStatefulWidget {
 class _ScanScreenState extends ConsumerState<ScanScreen>
     with SingleTickerProviderStateMixin {
   void createConnection(String? link) async {
-    await ConnectionService().acceptConnection(link);
+    await ConnectionService.acceptConnection(link);
   }
 
   bool _bottomSheetErrorOpen = false;

@@ -15,9 +15,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   NavigationHelper.instance;
-  if (Platform.isLinux) {
-    setupFromYAML('authn_cfg.yaml');
-  }
+  // if (Platform.isLinux) {
+  //   setupFromYAML('authn_cfg.yaml');
+  // }
   runApp(MyApp(prefs));
 }
 

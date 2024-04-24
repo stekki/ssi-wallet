@@ -1,4 +1,4 @@
 export 'connection_model.dart';
-export 'credential.dart';
+export 'credential_model.dart';
 export 'message_model.dart';
-export 'proof.dart';
+export 'proof_model.dart';
