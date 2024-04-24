@@ -9,7 +9,7 @@ import 'package:frontend/screens/profile_screen.dart';
 import 'package:frontend/screens/credential_screen.dart';
 
 void main() {
-  testWidgets('Test login',
+  testWidgets('loginTest',
   (WidgetTester tester) async {
     final prefs = await SharedPreferences.getInstance();
     NavigationHelper();
@@ -17,10 +17,9 @@ void main() {
 
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('homeScreen')), findsNothing);
-    await tester.tap(find.byKey(const ValueKey('developerLoginOptions')));
+    await tester.tap(find.byKey(const ValueKey('openDevSignIn')));
     await tester.pumpAndSettle();
 
-    await tester.tap(find.byKey(const ValueKey('devTokenSignIn')));
     const token = String.fromEnvironment('TOKEN');
     await tester.pumpAndSettle();
     await tester.enterText(find.byKey(const ValueKey('jwtTokenField')), token);
@@ -28,7 +27,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('homeScreen')), findsOne);
   });
-  testWidgets('Test navigation',
+  testWidgets('navigationTest',
   (WidgetTester tester) async {
     /*
     final prefs = await SharedPreferences.getInstance();
@@ -56,7 +55,7 @@ void main() {
     expect(find.byKey(const ValueKey('homeScreen')), findsOne);
   }
   );
-  testWidgets('Test homescreen',
+  testWidgets('homescreenTest',
   (WidgetTester tester) async {
     await tester.pumpWidget(const HomeScreen());
     await tester.pumpAndSettle();
@@ -78,7 +77,7 @@ void main() {
   }
   );
 
-  testWidgets('Test profilescreen',
+  testWidgets('profilescreenTest',
   (WidgetTester tester) async {
     await tester.pumpWidget(const ProfileScreen());
     //await tester.tap(find.byIcon(Icons.person));
@@ -89,7 +88,7 @@ void main() {
     expect(find.byKey(const ValueKey('regenerateButton')), findsOne);
   });
 
-  testWidgets('Test credential screen', 
+  testWidgets('credentialScreenTest', 
   (WidgetTester tester) async {
     await tester.pumpWidget(const CredentialScreen());
     //await tester.tap(find.byIcon(Icons.wallet));
