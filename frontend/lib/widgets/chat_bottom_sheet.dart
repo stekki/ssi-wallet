@@ -54,6 +54,7 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                                   },
                                 ),
                               ),
+                              /*
                               const SizedBox(
                                 height: 30,
                               ),
@@ -64,8 +65,8 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                                 child: ElevatedButton(
                                   child: const Text('Delete connection'),
                                   onPressed: () => {
-                                    //Navigator.popUntil(
-                                        //context, (route) => false),
+                                    Navigator.pop(context),
+                                    Navigator.pop(context),
                                     ref
                                         .watch(chatStatusProvider.notifier)
                                         .updateChatStatus(
@@ -73,6 +74,7 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                                   },
                                 ),
                               ),
+                              */
                             ],
                           )
                         : chatStateList[id] == ConnectionStatus.confirmed

@@ -57,8 +57,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ref.watch(connectionStreamProvider);
     final Map<String, ConnectionStatus> chatStateList =
         ref.watch(chatStatusProvider);
-    chatStateList
-        .removeWhere((key, value) => value == ConnectionStatus.deleted);
 
     return Scaffold(
       body: connectionsAsyncValue.when(

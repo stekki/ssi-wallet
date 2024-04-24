@@ -118,12 +118,6 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                       final role = proofRequest['role'];
                                       if (role == 'VERIFIER') {
                                         if (job["status"] == 'COMPLETE') {
-                                          /*
-                                           ref
-                                        .watch(chatStatusProvider.notifier)
-                                        .updateChatStatus(
-                                            widget.id, ConnectionStatus.confirmed);
-                                            */
                                           return ProofRequestCompleteSellerWidget(node: proofRequest);
                                         }
                                         else if (job["status"] == 'WAITING') {

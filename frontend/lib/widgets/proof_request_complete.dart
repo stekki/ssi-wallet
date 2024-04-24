@@ -3,6 +3,7 @@ import 'package:frontend/widgets/abstract_chat_card.dart';
 import '../utils/styles.dart';
 
 class ProofRequestCompleteWidget extends AbstractChatCard {
+  
   ProofRequestCompleteWidget({
     super.key,
     super.node

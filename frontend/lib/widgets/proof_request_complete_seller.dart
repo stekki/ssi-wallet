@@ -14,7 +14,6 @@ class ProofRequestCompleteSellerWidget extends AbstractChatCard {
 
   @override
   Widget build(BuildContext context) {
-    print(node!["values"]);
     String buyerName = node!["values"][0]["value"];
     
     Color color = sentBy == 'me' ? DesignColors.messageColor : Colors.white;

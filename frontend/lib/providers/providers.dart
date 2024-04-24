@@ -37,7 +37,7 @@ class ChatIdsNotifier extends StateNotifier<Map<String, ConnectionStatus>> {
   updateChatStatus(String id, ConnectionStatus status) async {
     state = {...state, id: status};
 
-    prefs.setString("chats", json.encode(state)); //DOES NOT WORK ON CHROME
+    //prefs.setString("chats", json.encode(state)); //DOES NOT WORK ON CHROME
   }
 }
 
