@@ -51,6 +51,7 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                                   },
                                 ),
                               ),
+                              /*
                               const SizedBox(
                                 height: 30,
                               ),
@@ -61,8 +62,8 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                                 child: ElevatedButton(
                                   child: const Text('Delete connection'),
                                   onPressed: () => {
-                                    //Navigator.popUntil(
-                                        //context, (route) => false),
+                                    Navigator.pop(context),
+                                    Navigator.pop(context),
                                     ref
                                         .watch(chatStatusProvider.notifier)
                                         .updateChatStatus(
@@ -70,6 +71,7 @@ class ChatBottomSheetSeller extends ConsumerWidget {
                                   },
                                 ),
                               ),
+                              */
                             ],
                           )
                         : chatStateList[id] == ConnectionStatus.confirmed
@@ -95,7 +97,7 @@ class ChatBottomSheetSeller extends ConsumerWidget {
               );
             },
           );
-        },
+        }, 
       ),
     );
   }
@@ -110,6 +112,7 @@ class ChatBottomSheetBuyer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final Map<String, ConnectionStatus> chatStateList =
         ref.watch(chatStatusProvider);
+
     return Center(
       child: IconButton(
         icon: const Icon(Icons.add),
@@ -135,7 +138,7 @@ class ChatBottomSheetBuyer extends ConsumerWidget {
                                 child: const Text('Get receipt'),
                                 onPressed: () async => {
                                   Navigator.pop(context),
-                                  await JobService.sendProofRequest(id),
+                                  await JobService.sendProofRequestReceipt(id),
                                   /*
                                   ref
                                       .watch(chatStatusProvider.notifier)

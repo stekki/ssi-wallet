@@ -1,36 +1,10 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontend/models/credential.dart';
+import 'package:frontend/models/credential_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/utils/constants.dart';
 
-final credentialsFutureProvider = FutureProvider<List<Credential>>(
-  (ref) async {
-    return await Future.delayed(
-        const Duration(seconds: 1),
-        () => [
-              Credential(
-                  issuer: "Verkkokauppa",
-                  item: "Playstation 5",
-                  date: "20.05.2023",
-                  holder: "Matti Meikäläinen",
-                  status: "valid"),
-              Credential(
-                  issuer: "Aalto University",
-                  item: "Aalto hoodie",
-                  date: "01.02.2024",
-                  holder: "Matti Meikäläinen",
-                  status: "valid"),
-              Credential(
-                  issuer: "Tector",
-                  item: "MacBook Pro",
-                  date: "25.12.2023",
-                  holder: "Matti Meikäläinen",
-                  status: "invalid"),
-            ]);
-  },
-);
-
+final disableProvider = StateProvider<bool>((ref) => false);
 final profileCredentialProvider = FutureProvider<List<Credential>>(
   (ref) async {
     return await Future.delayed(
@@ -39,8 +13,8 @@ final profileCredentialProvider = FutureProvider<List<Credential>>(
               Credential(
                   issuer: "Finnish government",
                   item: "SSN",
-                  date: "20.05.2000",
-                  holder: "Testi Terttu",
+                  date: "20.05.2020",
+                  holder: "Jessica S.",
                   status: "valid"),
             ]);
   },
@@ -63,7 +37,7 @@ class ChatIdsNotifier extends StateNotifier<Map<String, ConnectionStatus>> {
   updateChatStatus(String id, ConnectionStatus status) async {
     state = {...state, id: status};
 
-    //prefs.setString("chats", json.encode(state)); //DOES NOT WORK ON CHROME
+    prefs.setString("chats", json.encode(state)); //DOES NOT WORK ON CHROME
   }
 }
 

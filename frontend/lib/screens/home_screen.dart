@@ -57,8 +57,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
         ref.watch(connectionStreamProvider);
     final Map<String, ConnectionStatus> chatStateList =
         ref.watch(chatStatusProvider);
-    chatStateList
-        .removeWhere((key, value) => value == ConnectionStatus.deleted);
 
     return Scaffold(
       body: connectionsAsyncValue.when(
@@ -166,7 +164,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen>
                   if (messageText
                       .startsWith('didcomm://aries_connection_invitation')) {
                     final bool connectionMade =
-                        await ConnectionService().acceptConnection(messageText);
+                        await ConnectionService.acceptConnection(messageText);
 
                     if (!connectionMade) {
                       showErrorSnackbar("Failed to make the connection");

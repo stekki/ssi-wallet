@@ -1,10 +1,18 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/utils/constants.dart';
 import 'package:frontend/utils/styles.dart';
 import 'package:frontend/widgets/chat_bottom_sheet.dart';
-import 'package:frontend/widgets/message.dart';
+import 'package:frontend/widgets/proof_request_complete.dart';
+import 'package:frontend/widgets/proof_request_complete_seller.dart';
+import 'package:frontend/widgets/proof_request_widget.dart';
+import 'package:frontend/widgets/basic_message_widget.dart';
+import 'package:frontend/widgets/proof_request_widget_buyer.dart';
+import 'package:frontend/widgets/proof_request_widget_seller.dart';
+import '../providers/providers.dart';
+// import 'package:frontend/widgets/message.dart';
+// import '../models/models.dart';
 
 import '../services/job_service.dart';
 
@@ -62,6 +70,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
   Widget build(BuildContext context) {
     final AsyncValue<List<Map<String, dynamic>>> streamEvents =
         ref.watch(jobStream);
+        final chatStatus = ref.read(chatStatusProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -98,75 +107,58 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                                 controller: _scrollController,
                                 itemCount: events.length,
                                 itemBuilder: (context, index) {
-                                  // final event = events[index];
-                                  // final job = event["job"]["node"];
                                   final job = events[index];
-                                  if (job["protocol"] == "BASIC_MESSAGE") {
-                                    final message =
-                                        job["output"]["message"]["node"];
-                                    final messageText = message["message"];
-                                    if ((message["sentByMe"])
-                                        && (messageText == 'Buyer has accepted your identification request.')) {
-                                      return Container();
-                                    } else {
-                                    // Best if Component builder like BasicChatMessage
-                                    // take the whole node (above) and handle it there.
-                                    final createdAt =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(message['createdMs']));
-                                    return BasicChatMessageWidget(
-                                        message: message["message"],
-                                        sentBy: message["sentByMe"]
-                                            ? 'me'
-                                            : 'other',
-                                        timestamp: createdAt);
-                                    }
-                                  } else if (job["protocol"] == "PROOF") {
-                                    final proofRequest =
+                                  final protocol = job["protocol"];
+                                  switch (protocol) {
+                                    case 'BASIC_MESSAGE': return BasicChatMessageWidget(
+                                      node: job["output"]["message"]["node"]
+                                    );
+                                    case 'PROOF': {
+                                      final proofRequest =
                                         job["output"]["proof"]["node"];
-                                    final createdAt =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(
-                                                proofRequest['createdMs']));
-                                    /*
-                                    final verifiedAt =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(proofRequest['verifiedMs']));
-                                    final approvedAt =
-                                        DateTime.fromMillisecondsSinceEpoch(
-                                            int.parse(proofRequest['approvedMs']));
-                                      */
-                                    if (proofRequest['role'] == 'VERIFIER') {
-                                      return ProofRequestWidget(
-                                        key: ValueKey(job['id']),
-                                        sentBy: proofRequest["role"],
-                                        timestamp: createdAt,
-                                      );
-                                      //verifiedAt: verifiedAt,
-                                      //approvedAt: approvedAt,);
-                                    } else if ((proofRequest['role'] ==
-                                            'PROVER') &&
-                                        (job['status'] == 'COMPLETE')) {
-                                      return ProofRequestCompleteWidget(
-                                        key: ValueKey(job['id']),
-                                        sentBy: proofRequest["role"],
-                                        timestamp: createdAt,
-                                      );
-                                    } else if (proofRequest['role'] ==
-                                        'PROVER') {
-                                      return ProofRequestWidgetBuyer(
+                                      final role = proofRequest['role'];
+                                      if (role == 'VERIFIER') {
+                                        if (job["status"] == 'COMPLETE') {
+                                          return ProofRequestCompleteSellerWidget(node: proofRequest);
+                                        }
+                                        else if (job["status"] == 'WAITING') {
+                                          return ProofRequestWidget(node: proofRequest);
+                                        }
+                                        else {
+                                          return Container();
+                                        }
+                                      }
+                                      else if (role == "PROVER") {
+                                        if(job["status"] == 'COMPLETE' && chatStatus[widget.id] == ConnectionStatus.receipted) {
+                                          return Container();
+                                        }
+                                        else if(job["status"] == 'WAITING' && chatStatus[widget.id] == ConnectionStatus.confirmed) {
+                                          return ProofRequestWidgetSeller(
                                           key: ValueKey(job['id']),
                                           sentBy: proofRequest["role"],
-                                          timestamp: createdAt,
+                                          timestamp: DateTime.fromMillisecondsSinceEpoch(int.parse(proofRequest["createdMs"])),
                                           jobID: job["id"],
                                           id: widget.id,
                                           status: job["status"]);
-                                    } else {
-                                      return Container();
+                                        }
+                                        else if(job["status"] == 'COMPLETE') {
+                                          return ProofRequestCompleteWidget(node: proofRequest);
+                                        } else {
+                                          return ProofRequestWidgetBuyer(
+                                          key: ValueKey(job['id']),
+                                          sentBy: proofRequest["role"],
+                                          timestamp: DateTime.fromMillisecondsSinceEpoch(int.parse(proofRequest["createdMs"])),
+                                          jobID: job["id"],
+                                          id: widget.id,
+                                          status: job["status"]);
+                                        }
+                                        
+                                        
+                                      }
                                     }
-                                  } else {
-                                    return Container();
+                                    default: return Container();
                                   }
+                                  return Container();
                                 },
                               ),
                             ),

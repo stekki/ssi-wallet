@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/credential.dart';
+import '../models/credential_model.dart';
 
 import 'package:frontend/utils/styles.dart';
 
@@ -99,7 +99,7 @@ class CredentialCard extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Purchase date: ${credential.date}",
+                              "Issuance date: ${credential.date}",
                               style: const TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 14),
                             ),
@@ -131,6 +131,7 @@ class CredentialCard extends ConsumerWidget {
                         ),
                       ),
                     ),
+                    /*
                     Padding(
                       padding: const EdgeInsets.fromLTRB(10, 40, 10, 10),
                       child: TextButton(
@@ -139,6 +140,7 @@ class CredentialCard extends ConsumerWidget {
                               backgroundColor: DesignColors.buttonColor),
                           child: const Text("Send")),
                     ),
+                    */
                   ],
                 ),
               ],

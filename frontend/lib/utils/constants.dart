@@ -4,4 +4,4 @@ class Constants {
   static const lpLoginButtonSpacing = 40.0;
 }
 
-enum ConnectionStatus { confirmed, receipted, deleted }
+enum ConnectionStatus { confirmed, receipted, disabled }

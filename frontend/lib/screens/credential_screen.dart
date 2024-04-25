@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:frontend/models/credential_model.dart';
+import 'package:frontend/services/credential_service.dart';
 
 import '../utils/styles.dart';
-import '../providers/providers.dart';
 import '../widgets/credential_card.dart';
 import '../screens/loading_screen.dart';
 
@@ -17,35 +18,42 @@ class _CredentialScreenState extends ConsumerState<CredentialScreen> {
   bool _detailsOpen = false;
   final TextEditingController _searchController = TextEditingController();
   String filterValue = "";
+  late StreamProvider<List<Credential>> credentialsStreamProvider;
+  
+  @override
+  void initState() {
+    super.initState();
+    credentialsStreamProvider = CredentialService().credentialStreamProvider();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final credentialsFuture = ref.watch(credentialsFutureProvider);
+    final credentialsFuture = ref.watch(credentialsStreamProvider);
     return Scaffold(
       body: credentialsFuture.when(
           loading: () => const LoadingScreen(),
           error: (err, stack) => SizedBox(
-              width: double.infinity,
-              height: double.infinity,
-              child: Center(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Text("Error loading credentials"),
-                      const SizedBox(height: 20),
-                      if (_detailsOpen && (err is Exception || err is Error))
-                        Text('Details: ${err.toString()}'),
-                      if (!_detailsOpen)
-                        ElevatedButton(
-                            child: const Text("Show details"),
-                            onPressed: () {
-                              setState(() {
-                                _detailsOpen = true;
-                              });
-                            })
-                    ]),
-              )),
+            width: double.infinity,
+            height: double.infinity,
+            child: Center(child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: 
+            [const Text("Error loading credentials"),
+            const SizedBox(height: 20),
+            if (_detailsOpen && (err is Exception || err is Error))
+                Text('Details: ${err.toString()}')
+            ,
+            if (!_detailsOpen)
+              ElevatedButton(
+                child: const Text("Show details"),
+                onPressed: () {
+                  setState((){_detailsOpen = true;});
+                }
+              )
+            ]),
+            )
+          ),
           data: (credentials) {
             var filteredCredentials = credentials
                 .where((c) =>
